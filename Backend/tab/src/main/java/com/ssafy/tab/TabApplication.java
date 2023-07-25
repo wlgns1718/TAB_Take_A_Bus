@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StopbusApplication {
+public class TabApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(StopbusApplication.class, args);
+		SpringApplication.run(TabApplication.class, args);
 	}
 }
