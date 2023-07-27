@@ -20,7 +20,7 @@ public class BusStationController {
 
     private final BusStationService busStationService;
 
-    @GetMapping("/api/stops/{cityCode}/{stationId}")
+    @GetMapping("/api/stops/{cityCode}/{stationId}") // CITY_CODE = "25", NODE_ID = "DJB8001793"
     public ResponseEntity<Map<String,Object>> searchBus(@PathVariable("cityCode")String cityCode, @PathVariable("stationId")String stationId){
 
         Map<String,Object> resultMap = new HashMap<>();
