@@ -20,7 +20,7 @@ public class Comment {
 
     @Id @GeneratedValue
     @Column(name = "COMMENT_NO")
-    private Comment comment;
+    private Long id;
 
     @Column(name = "USER_NO")
     private User user;
