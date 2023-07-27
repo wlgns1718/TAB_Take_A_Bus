@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class BusStationData {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DATA_NO")
     private Long id;
 
@@ -21,7 +21,6 @@ public class BusStationData {
     private LocalDateTime boardingTime; // 탑승시간
 
 
-    @Column(name = "STATION_NO")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATION_NO")
     private BusStation busStation;

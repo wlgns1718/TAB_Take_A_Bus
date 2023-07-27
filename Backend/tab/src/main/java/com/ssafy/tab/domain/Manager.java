@@ -9,12 +9,12 @@ import javax.persistence.*;
 @Getter @Setter
 public class Manager {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MANAGER_NO")
     private Long id;
 
     @Column(name = "MANAGER_KEY",length = 30)
-    @OneToOne @JoinColumn(name = "USER_NO")
+
     private String key;
 
     @Column(name = "MANAGER_NAME",length = 20)
@@ -23,8 +23,7 @@ public class Manager {
     @Column(name = "MANAGER_AREA",length = 20)
     private String area;
 
-    @OneToOne
-    @JoinColumn(name = "USER_ID")
+    @OneToOne @JoinColumn(name = "USER_NO")
     private User user;
 
 

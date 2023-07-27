@@ -19,11 +19,10 @@ public class Board {
     createTime : 작성 시간
      */
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_NO")
     private Long id;
 
-    @Column(name = "USER_NO")
     @ManyToOne @JoinColumn(name = "USER_NO")
     private User user;
 

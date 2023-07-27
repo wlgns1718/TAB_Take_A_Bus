@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@Table(name = "COMMENT")
+@Table(name = "ANNOUNCEMENT")
 public class Announcement {
 
     /*
@@ -20,11 +20,10 @@ public class Announcement {
     createTime: 공지사항 작성시간
      */
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ANNOUNCEMENT_NO")
     private Long id;
 
-    @Column(name = "USER_NO")
     @ManyToOne @JoinColumn(name = "USER_NO")
     private User user;
 

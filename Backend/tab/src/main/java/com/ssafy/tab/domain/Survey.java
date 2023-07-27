@@ -20,11 +20,10 @@ public class Survey {
     destinationLongtitude : 목적지 경도
      */
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SURVEY_NO")
     private Long id;
 
-    @Column(name = "USER_NO")
     @ManyToOne @JoinColumn(name = "USER_NO")
     private User user;
 
