@@ -1,5 +1,6 @@
 package com.ssafy.stopbus;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class StopbusApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(StopbusApplication.class, args);
 	}
 
