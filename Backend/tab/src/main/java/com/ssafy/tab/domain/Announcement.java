@@ -25,7 +25,7 @@ public class Announcement {
     private Long id;
 
     @Column(name = "USER_NO")
-    @JoinColumn(name = "USER_NO")
+    @ManyToOne @JoinColumn(name = "USER_NO")
     private User user;
 
     @Column(name = "TITLE", columnDefinition="TEXT")

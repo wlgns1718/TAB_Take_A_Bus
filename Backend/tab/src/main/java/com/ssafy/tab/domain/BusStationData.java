@@ -21,6 +21,7 @@ public class BusStationData {
     private LocalDateTime boardingTime; // 탑승시간
 
 
+    @Column(name = "STATION_NO")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATION_NO")
     private BusStation busStation;

@@ -14,6 +14,7 @@ public class Manager {
     private Long id;
 
     @Column(name = "MANAGER_KEY",length = 30)
+    @OneToOne @JoinColumn(name = "USER_NO")
     private String key;
 
     @Column(name = "MANAGER_NAME",length = 20)
