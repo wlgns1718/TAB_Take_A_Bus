@@ -15,10 +15,10 @@ public class BusStationData {
     private Long id;
 
     @Column(name = "COUNT")
-    private int count;
+    private int count; // 탑승인원
 
     @Column(name = "BOARDING_TIME")
-    private LocalDateTime boardingTime;
+    private LocalDateTime boardingTime; // 탑승시간
 
 
     @ManyToOne(fetch = FetchType.LAZY)
