@@ -24,6 +24,7 @@ public class Board {
     private Long id;
 
     @Column(name = "USER_NO")
+    @JoinColumn(name = "USER_NO")
     private User user;
 
     @Column(name = "TITLE", columnDefinition="TEXT")

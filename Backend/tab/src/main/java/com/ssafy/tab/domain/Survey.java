@@ -25,6 +25,7 @@ public class Survey {
     private Long id;
 
     @Column(name = "USER_NO")
+    @JoinColumn(name = "USER_NO")
     private User user;
 
     @Column(name = "CREATE_DATE")

@@ -12,11 +12,20 @@ import java.time.LocalDateTime;
 @Table(name = "COMMENT")
 public class Announcement {
 
+    /*
+    id: 공지사항 글 번호
+    user: 작성자 NO
+    title: 공지사항 제목
+    content: 공지사항 내용
+    createTime: 공지사항 작성시간
+     */
+
     @Id @GeneratedValue
     @Column(name = "ANNOUNCEMENT_NO")
     private Long id;
 
     @Column(name = "USER_NO")
+    @JoinColumn(name = "USER_NO")
     private User user;
 
     @Column(name = "TITLE", columnDefinition="TEXT")

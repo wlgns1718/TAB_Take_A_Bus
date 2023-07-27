@@ -23,9 +23,11 @@ public class Comment {
     private Long id;
 
     @Column(name = "USER_NO")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @Column(name = "BOARD_NO")
+    @JoinColumn(name = "BOARD_NO")
     private Long boardNo;
 
     @Column(name = "CONTENT", length = 200)
