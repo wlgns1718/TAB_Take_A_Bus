@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Bus {
+public class BusAPI {
 
     private int remainingStops; // 도착예정버스 남은 정류장 수
     private int eta; // 도착예정버스 도착예상시간

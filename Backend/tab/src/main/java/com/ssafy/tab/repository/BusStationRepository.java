@@ -1,16 +1,14 @@
 package com.ssafy.tab.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.tab.domain.Bus;
+import com.ssafy.tab.domain.BusAPI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -30,7 +28,7 @@ public class BusStationRepository {
     private static String CITY_CODE;
     private static String NODE_ID;
 
-    public List<Bus> findAll(String cityCode, String stationId) throws IOException {
+    public List<BusAPI> findAll(String cityCode, String stationId) throws IOException {
         CITY_CODE = cityCode;
         NODE_ID = stationId;
 
@@ -42,7 +40,7 @@ public class BusStationRepository {
                 "&pageNo=" + PAGE_NO +
                 "&_type=" + TYPE_JSON;
 
-        List<Bus> finalResult = new ArrayList<>();
+        List<BusAPI> finalResult = new ArrayList<>();
 
 
         URL url1 = new URL(apiUrl1);
@@ -78,14 +76,14 @@ public class BusStationRepository {
         return finalResult;
     }
 
-    private void setBus(List<Bus> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m) throws IOException {
-        Bus bus = new Bus();
-        bus.setRemainingStops(arrprevstationcnt);
-        bus.setEta(arrtime);
-        bus.setRouteId(routeid.toString());
-        bus.setBusNo(routeno.toString());
-        bus.setRouteType(routetp.toString());
-        bus.setVehicleType(vehicletp.toString());
+    private void setBus(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m) throws IOException {
+        BusAPI busAPI = new BusAPI();
+        busAPI.setRemainingStops(arrprevstationcnt);
+        busAPI.setEta(arrtime);
+        busAPI.setRouteId(routeid.toString());
+        busAPI.setBusNo(routeno.toString());
+        busAPI.setRouteType(routetp.toString());
+        busAPI.setVehicleType(vehicletp.toString());
 
         String apiUrl2 = API_BASE_URL + "/1613000/BusLcInfoInqireService/getRouteAcctoBusLcList" +
                 "?serviceKey=" + SERVICE_KEY2 +
@@ -124,18 +122,18 @@ public class BusStationRepository {
                     if (ob2 instanceof List) {
                         List<Map<String, Object>> tmp = (List<Map<String, Object>>) ob2;
                         Map<String, Object> stringObjectMap = tmp.get(tmp.size() - 1);
-                        bus.setStationOrder((int) stringObjectMap.get("nodeord"));
-                        bus.setVehicleNo(stringObjectMap.get("vehicleno").toString());
-                        bus.setStationId(stringObjectMap.get("nodeid").toString());
-                        bus.setStationName(stringObjectMap.get("nodenm").toString());
-                        finalResult.add(bus);
+                        busAPI.setStationOrder((int) stringObjectMap.get("nodeord"));
+                        busAPI.setVehicleNo(stringObjectMap.get("vehicleno").toString());
+                        busAPI.setStationId(stringObjectMap.get("nodeid").toString());
+                        busAPI.setStationName(stringObjectMap.get("nodenm").toString());
+                        finalResult.add(busAPI);
                     } else if (ob2 instanceof Map) {
                         Map<String, Object> tmp = (Map<String, Object>) ob2;
-                        bus.setStationOrder((int) tmp.get("nodeord"));
-                        bus.setVehicleNo(tmp.get("vehicleno").toString());
-                        bus.setStationId(tmp.get("nodeid").toString());
-                        bus.setStationName(tmp.get("nodenm").toString());
-                        finalResult.add(bus);
+                        busAPI.setStationOrder((int) tmp.get("nodeord"));
+                        busAPI.setVehicleNo(tmp.get("vehicleno").toString());
+                        busAPI.setStationId(tmp.get("nodeid").toString());
+                        busAPI.setStationName(tmp.get("nodenm").toString());
+                        finalResult.add(busAPI);
                     }
                 }
 

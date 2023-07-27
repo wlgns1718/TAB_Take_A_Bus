@@ -1,6 +1,6 @@
 package com.ssafy.tab.controller;
 
-import com.ssafy.tab.domain.Bus;
+import com.ssafy.tab.domain.BusAPI;
 import com.ssafy.tab.service.BusStationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class BusStationController {
         HttpStatus status = HttpStatus.ACCEPTED;
 
         try{
-            List<Bus> result = busStationService.findAll(cityCode,stationId);
+            List<BusAPI> result = busStationService.findAll(cityCode,stationId);
 
             if(result != null && !result.isEmpty()) {
                 resultMap.put("data",result);

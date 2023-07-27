@@ -1,6 +1,6 @@
 package com.ssafy.tab.service;
 
-import com.ssafy.tab.domain.Bus;
+import com.ssafy.tab.domain.BusAPI;
 import com.ssafy.tab.repository.BusStationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class BusStationService {
 
     private final BusStationRepository busStationRepository;
 
-    public List<Bus> findAll(String cityCode, String stationId) throws IOException {
+    public List<BusAPI> findAll(String cityCode, String stationId) throws IOException {
         return busStationRepository.findAll(cityCode,stationId);
     }
 
