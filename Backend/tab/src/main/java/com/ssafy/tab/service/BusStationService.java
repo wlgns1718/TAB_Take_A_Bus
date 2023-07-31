@@ -19,6 +19,4 @@ public class BusStationService {
     public List<BusAPI> findAll(String cityCode, String stationId) throws IOException {
         return busStationRepository.findAll(cityCode,stationId);
     }
-
-
 }
