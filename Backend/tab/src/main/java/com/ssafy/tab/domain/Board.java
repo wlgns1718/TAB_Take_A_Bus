@@ -23,7 +23,7 @@ public class Board {
     @Column(name = "BOARD_NO")
     private Long id;
 
-    @Column(name = "USER_NO")
+    @ManyToOne
     @JoinColumn(name = "USER_NO")
     private User user;
 

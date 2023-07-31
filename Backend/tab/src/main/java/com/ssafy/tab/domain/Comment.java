@@ -18,17 +18,15 @@ public class Comment {
     createTime : 작성날짜
      */
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMENT_NO")
     private Long id;
 
-    @Column(name = "USER_NO")
-    @JoinColumn(name = "USER_ID")
+    @ManyToOne @JoinColumn(name = "USER_NO")
     private User user;
 
-    @Column(name = "BOARD_NO")
-    @JoinColumn(name = "BOARD_NO")
-    private Long boardNo;
+    @ManyToOne @JoinColumn(name = "BOARD_NO")
+    private Board boardNo;
 
     @Column(name = "CONTENT", length = 200)
     private String content;

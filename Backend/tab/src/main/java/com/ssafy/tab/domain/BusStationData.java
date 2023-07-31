@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class BusStationData {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DATA_NO")
     private Long id;
 
@@ -20,6 +20,8 @@ public class BusStationData {
     @Column(name = "BOARDING_TIME")
     private LocalDateTime boardingTime; // 탑승시간
 
+    @Column(name = "VEHICLE_NO")
+    private String vehicleNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATION_NO")
