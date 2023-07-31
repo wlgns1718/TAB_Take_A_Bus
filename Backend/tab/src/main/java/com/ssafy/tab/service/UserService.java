@@ -1,5 +1,6 @@
 package com.ssafy.tab.service;
 
+import com.ssafy.tab.domain.User;
 import com.ssafy.tab.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,19 +23,28 @@ public class UserService {
     }*/
 
     @Transactional
-    public void joinUser(UserDto userDto) throws Exception { // 회원가입
-        String salt = makeSalt();
-        userDto.setPw(hashing(userDto.getPw(),salt));
-        userDto.setSalt(salt);
-        userRepository.joinUser(userDto);
-    }
+    public Long joinUser(User user) throws Exception { // 회원가입
 
-    public UserDto loginUser(UserDto userDto) throws Exception {
+        validateDuplicateUser(user);
+
+        String salt = makeSalt();
+        user.setUserPw(hashing(user.getUserPw(),salt));
+        user.setSalt(salt);
+        userRepository.joinUser(user);
+        return user.getId();
+    }
+    private void validateDuplicateUser(User user) {
+        List<User> findMembers = userRepository.findByUserId(user.getUserId());
+        if(!findMembers.isEmpty()){
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
+    }
+    /*public UserDto loginUser(UserDto userDto) throws Exception {
         String userId = userDto.getId();
         String salt = userRepository.getSalt(userId);
         userDto.setPw(hashing(userDto.getPw(),salt));
         return userRepository.loginUser(userDto);
-    }
+    }*/
 
     /*public UserDto getUser(String userId) throws Exception {
         return userRepository.getUser(userId);
