@@ -22,10 +22,10 @@ public class Comment {
     @Column(name = "COMMENT_NO")
     private Long id;
 
-    @ManyToOne @JoinColumn(name = "USER_NO")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "USER_NO")
     private User user;
 
-    @ManyToOne @JoinColumn(name = "BOARD_NO")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "BOARD_NO")
     private Board boardNo;
 
     @Column(name = "CONTENT", length = 200)
