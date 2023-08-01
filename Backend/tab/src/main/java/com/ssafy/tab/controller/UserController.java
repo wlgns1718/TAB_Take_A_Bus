@@ -2,6 +2,7 @@ package com.ssafy.tab.controller;
 
 import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.User;
+import com.ssafy.tab.dto.UserDto;
 import com.ssafy.tab.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -100,12 +101,5 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }*/
 
-    @Data
-    static class UserDto {
-        private String id;
-        private String pw;
-        private String name;
-        private String email;
-        private Role role;
-    }
+
 }

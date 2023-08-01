@@ -1,4 +1,4 @@
-package com.ssafy.tab.service;
+package com.ssafy.tab.dto;
 
 import lombok.Getter;
 import lombok.Setter;
