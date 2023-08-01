@@ -18,3 +18,4 @@ public class BusAPI {
     private String stationId; // 현재 위치 정류소ID
     private String stationName; // 현재 위치 정류소명
 }
+

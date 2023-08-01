@@ -9,6 +9,19 @@ import javax.persistence.*;
 @Getter @Setter
 public class User {
 
+
+    /*
+    id : primary key
+    userId : 아이디
+    userPw : 비밀번호
+    name : 이름
+    salt : 해싱을 위한 salt
+    token : 토큰
+    refreshToken : 리프레시 토큰
+    email : 이메일
+    role : 역할
+     */
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_NO")
     private Long id;
@@ -31,6 +44,9 @@ public class User {
     @Column(name = "REFRESH_TOKEN", length = 500)
     private String refreshToken;
 
+    @Column(name = "EMAIL", length = 100)
+    private String email;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private Role role;
@@ -38,3 +54,4 @@ public class User {
 
 
 }
+
