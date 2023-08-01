@@ -31,8 +31,7 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입 진행.", response = Map.class)
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserDto userDto,
-                                                        HttpServletRequest request){
+    public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserDto userDto){
         //logger.debug("join user : {} ", userDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
