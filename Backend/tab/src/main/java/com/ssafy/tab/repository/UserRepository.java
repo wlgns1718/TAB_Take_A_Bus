@@ -2,8 +2,11 @@ package com.ssafy.tab.repository;
 
 import com.ssafy.tab.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -23,7 +26,8 @@ public class UserRepository {
         return user.getSalt();
     }
 
-    public List<User> findByUserId(String userId) {
+
+    public List<User> findByUserId(@Param("userId") String userId) {
         return em.createQuery("select u from User u where u.userId = :userId",User.class)
                 .setParameter("userId", userId)
                 .getResultList();

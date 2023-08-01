@@ -62,6 +62,8 @@ public class UserController {
 
 
 
+
+
     /*@ApiOperation(value = "이메일 인증코드 전송", notes = "전송한 인증코드를 반환한다.", response = Map.class)
     @PostMapping("/sendmail")
     public ResponseEntity<Map<String, Object>> sendMail(@RequestBody EmailDto emailDto){

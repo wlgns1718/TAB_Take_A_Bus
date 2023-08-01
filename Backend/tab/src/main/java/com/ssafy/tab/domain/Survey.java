@@ -31,16 +31,16 @@ public class Survey {
     private LocalDateTime createDate;
 
     @Column(name = "START_LATITUDE")
-    private float startLatitude;
+    private double startLatitude;
 
     @Column(name = "START_LONGTITUDE")
-    private float startLontitude;
+    private double startLontitude;
 
     @Column(name = "DESTINATION_LATITUDE")
-    private float destinationLatitude;
+    private double destinationLatitude;
 
     @Column(name = "DESTINATION_LONGTITUDE")
-    private float destinationLongtitude;
+    private double destinationLongtitude;
 
 }
 

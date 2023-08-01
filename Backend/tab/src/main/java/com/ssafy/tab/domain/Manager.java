@@ -23,7 +23,7 @@ public class Manager {
     @Column(name = "MANAGER_AREA",length = 20)
     private String area;
 
-    @OneToOne @JoinColumn(name = "USER_NO")
+    @OneToOne(fetch = FetchType.LAZY) @JoinColumn(name = "USER_NO")
     private User user;
 
 
