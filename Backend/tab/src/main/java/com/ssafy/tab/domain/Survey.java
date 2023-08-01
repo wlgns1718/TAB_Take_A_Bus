@@ -43,3 +43,4 @@ public class Survey {
     private float destinationLongtitude;
 
 }
+

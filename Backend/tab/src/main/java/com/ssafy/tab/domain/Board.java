@@ -23,7 +23,9 @@ public class Board {
     @Column(name = "BOARD_NO")
     private Long id;
 
-    @ManyToOne @JoinColumn(name = "USER_NO")
+
+    @ManyToOne
+    @JoinColumn(name = "USER_NO")
     private User user;
 
     @Column(name = "TITLE", columnDefinition="TEXT")
