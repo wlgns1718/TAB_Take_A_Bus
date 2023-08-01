@@ -14,7 +14,6 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
     /*
     수요조사 등록, 모두 가져오기 및 내가 작성한 수요조사만 가져오기
      */
-
     @Query("select s from Survey s where s.user.id = :user_no")
     List<Survey> findMySurvey(@Param("user_no") Long id);
 }
