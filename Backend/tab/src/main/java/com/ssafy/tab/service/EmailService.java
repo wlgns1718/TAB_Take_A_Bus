@@ -8,11 +8,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.tab.service.EmailDto;
+import com.ssafy.tab.dto.EmailDto;
 
 @Service
 public class EmailService  {

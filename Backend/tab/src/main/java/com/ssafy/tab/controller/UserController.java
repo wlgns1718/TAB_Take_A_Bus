@@ -2,6 +2,7 @@ package com.ssafy.tab.controller;
 
 import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.User;
+import com.ssafy.tab.dto.UserDto;
 import com.ssafy.tab.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,8 +31,7 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입 진행.", response = Map.class)
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserDto userDto,
-                                                        HttpServletRequest request){
+    public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserDto userDto){
         //logger.debug("join user : {} ", userDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -102,12 +102,5 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }*/
 
-    @Data
-    static class UserDto {
-        private String id;
-        private String pw;
-        private String name;
-        private String email;
-        private Role role;
-    }
+
 }
