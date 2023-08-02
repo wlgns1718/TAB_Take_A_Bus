@@ -16,7 +16,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    //게시글 등록, 수정, 삭제, 게시글 클릭 시 자세히 보기, 게시글 머리말대로 가져오기
+    //게시글 등록, 수정, 삭제, 게시글 클릭 시 자세히 보기, 게시글 머리말대로 가져오기, 게시글 검색어로 가져오기,
 
     //게시글 등록
     public Board createBoard(Board board){
@@ -39,7 +39,15 @@ public class BoardService {
         return originBoard;
     }
 
+    //게시글 자세히보기
+    public Board selectBoard(Long id) {
+        Optional<Board> selectBoard = boardRepository.findById(id);
+        Board board = selectBoard.get();
+        return board;
+    }
+
     //게시글 머리말대로 가져오기
+    public List<Board>
 
 
 }
