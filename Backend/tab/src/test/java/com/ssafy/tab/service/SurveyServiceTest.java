@@ -1,5 +1,6 @@
 package com.ssafy.tab.service;
 
+import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.Survey;
 import com.ssafy.tab.domain.User;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,7 @@ class SurveyServiceTest {
 
     @Test
     void createSurvey() throws Exception {
-
-        User user = new User();
+        User user = new User("mc.thd","123","송","thd@naver.com", Role.USER);
         user.setName("song");
         user.setUserId("mc.thd");
         user.setUserPw("123");
@@ -60,10 +60,7 @@ class SurveyServiceTest {
     
     @Test
     public void findMySurvey() throws Exception{
-        User user = new User();
-        user.setName("song");
-        user.setUserId("mc.thd");
-        user.setUserPw("123");
+        User user = new User("mc.thd","123","송","thd@naver.com", Role.USER);
         userService.joinUser(user);
 
         Survey survey1 = new Survey();
