@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@Table(name = "ANNOUNCEMENT")
-public class Announcement {
+@Table(name = "NOTICE")
+public class Notice {
 
     /*
     id: 공지사항 글 번호
@@ -21,7 +21,7 @@ public class Announcement {
      */
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ANNOUNCEMENT_NO")
+    @Column(name = "NOTICE_NO")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
