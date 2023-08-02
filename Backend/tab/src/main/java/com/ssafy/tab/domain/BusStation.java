@@ -22,14 +22,14 @@ public class BusStation {
     @Column(name = "CITY_CODE")
     private int cityCode; // 도시코드
 
-    @Column(name = "STATION_NAME", length = 10)
+    @Column(name = "STATION_NAME", length = 30)
     private String stationName; // 정류장 명
 
     @Column(name = "LATITUDE")
-    private Float latitude; // 위도
+    private Double latitude; // 위도
 
     @Column(name = "LONGTITUDE")
-    private Float longtitude; // 경도
+    private Double longtitude; // 경도
 
     @OneToMany(mappedBy = "busStation",cascade = CascadeType.ALL)
     List<BusStationData> data = new ArrayList<>();

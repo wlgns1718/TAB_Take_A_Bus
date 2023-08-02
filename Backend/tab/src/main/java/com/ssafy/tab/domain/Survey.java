@@ -24,7 +24,7 @@ public class Survey {
     @Column(name = "SURVEY_NO")
     private Long id;
 
-    @ManyToOne @JoinColumn(name = "USER_NO")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "USER_NO")
     private User user;
 
     @Column(name = "CREATE_DATE")
