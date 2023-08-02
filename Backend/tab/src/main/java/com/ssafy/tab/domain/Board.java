@@ -23,7 +23,6 @@ public class Board {
     @Column(name = "BOARD_NO")
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_NO")
     private User user;
@@ -37,4 +36,15 @@ public class Board {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createTime;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "SORT")
+    private Sort sort;
+
+    public Board(User user, String title, String content, LocalDateTime createTime, Sort sort) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createTime = createTime;
+        this.sort = sort;
+    }
 }

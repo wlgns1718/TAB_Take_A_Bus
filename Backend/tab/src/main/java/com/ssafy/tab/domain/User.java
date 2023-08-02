@@ -12,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
-
     /*
     id : primary key
     userId : 아이디
@@ -53,8 +52,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private Role role;
-
-
 
     public User(String userId, String userPw, String name, String email, Role role) {
         this.userId = userId;

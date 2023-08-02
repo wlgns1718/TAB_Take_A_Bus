@@ -29,17 +29,7 @@ class UserServiceTest {
     @Test
     public void 회원가입() throws Exception{
         //given
-<<<<<<< HEAD
-        User user = new User();
-        user.setName("song");
-        user.setUserId("mc.the.max");
-        user.setUserPw("123");
-        user.setName("이수");
-        user.setEmail("1234@1234");
-        user.setRole(Role.USER);
-=======
         User user = new User("mc.thd","123","송","thd@naver.com", Role.USER);
->>>>>>> peter
 
         //when
         Long id = userService.joinUser(user);
