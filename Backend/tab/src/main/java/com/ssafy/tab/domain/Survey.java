@@ -1,6 +1,7 @@
 package com.ssafy.tab.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @Table(name = "SURVEY")
+@NoArgsConstructor
 public class Survey {
 
     /*
