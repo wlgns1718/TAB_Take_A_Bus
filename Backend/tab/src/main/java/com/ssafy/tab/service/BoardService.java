@@ -47,7 +47,4 @@ public class BoardService {
     }
 
     //게시글 머리말대로 가져오기
-    public List<Board>
-
-
 }

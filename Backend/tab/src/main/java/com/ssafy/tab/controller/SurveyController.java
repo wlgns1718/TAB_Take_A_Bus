@@ -15,7 +15,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SurveyController {
 
-    SurveyService surveyService;
+    private final SurveyService surveyService;
 
     //나의 수요조사
     @GetMapping("/survey")
