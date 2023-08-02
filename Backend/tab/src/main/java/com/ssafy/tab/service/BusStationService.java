@@ -95,6 +95,8 @@ public class BusStationService {
 
         return finalResult;
     }
+
+
     private void setBus(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m) throws IOException {
         BusAPI busAPI = new BusAPI();
         busAPI.setRemainingStops(arrprevstationcnt);
@@ -163,16 +165,22 @@ public class BusStationService {
         conn2.disconnect();
     }
 
+    @Transactional
     public boolean busStationData( String cityName){
         try (
             Connection connection = DriverManager.getConnection(url, username, password);
             CSVReader reader = new CSVReader(new FileReader(CSV_FILE_PATH))) {
-
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            String insertSQL = "INSERT INTO " + TABLE_NAME + " (station_no, city_code, city_name, latitude, longtitude, station_name) VALUES (?, ?, ?, ?, ?, ?)";
+            //미리 테이블 한 번 초기화해서 중복 제거
+            String truncateSQL = "DELETE FROM bus_station";
+            PreparedStatement preparedStatement = connection.prepareStatement(truncateSQL);
 
-            PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
+            preparedStatement.executeUpdate();
+            
+            //INSERT할 쿼리
+            String insertSQL = "INSERT INTO " + TABLE_NAME + " (station_no, city_code, city_name, latitude, longtitude, station_name) VALUES (?, ?, ?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(insertSQL);
 
             String[] nextLine;
             reader.readNext(); // Skip header row
