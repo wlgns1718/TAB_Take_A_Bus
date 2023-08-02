@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-@Api("사용자 컨트롤러  API V1")
+@Api("사용자 컨트롤러  API")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class UserController {
@@ -37,13 +37,10 @@ public class UserController {
         HttpStatus status = null;
 
         try {
-            User user = new User();
-            user.setUserId(userDto.getId());
-            user.setUserPw(userDto.getPw());
-            user.setName(userDto.getName());
-            user.setRole(userDto.getRole());
-            user.setEmail(userDto.getEmail());
+            User user = new User(userDto.getId(),userDto.getPw(),userDto.getName(),userDto.getEmail(),userDto.getRole());
+
             us.joinUser(user);
+
             resultMap.put("code", "200");
             resultMap.put("msg","회원가입 성공");
             status = HttpStatus.ACCEPTED;

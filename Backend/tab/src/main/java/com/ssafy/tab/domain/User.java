@@ -1,12 +1,15 @@
 package com.ssafy.tab.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
 
@@ -52,6 +55,12 @@ public class User {
     private Role role;
 
 
-
+    public User(String userId, String userPw, String name, String email, Role role) {
+        this.userId = userId;
+        this.userPw = userPw;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
 }
 

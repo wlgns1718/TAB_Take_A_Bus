@@ -25,12 +25,12 @@ public class UserService {
     @Transactional
     public Long joinUser(User user) throws Exception { // 회원가입
 
-        validateDuplicateUser(user);
+        validateDuplicateUser(user); // 중복검사
 
         String salt = makeSalt();
-        user.setUserPw(hashing(user.getUserPw(),salt));
+        user.setUserPw(hashing(user.getUserPw(),salt)); // 해싱 적용하여 비밀번호 설정
         user.setSalt(salt);
-        userRepository.joinUser(user);
+        userRepository.save(user);
         return user.getId();
     }
     private void validateDuplicateUser(User user) {
