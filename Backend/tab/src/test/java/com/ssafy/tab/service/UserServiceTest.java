@@ -1,5 +1,6 @@
 package com.ssafy.tab.service;
 
+import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.User;
 import com.ssafy.tab.repository.UserRepository;
 import org.junit.Assert;
@@ -30,8 +31,11 @@ class UserServiceTest {
         //given
         User user = new User();
         user.setName("song");
-        user.setUserId("mc.thd");
+        user.setUserId("mc.the.max");
         user.setUserPw("123");
+        user.setName("이수");
+        user.setEmail("1234@1234");
+        user.setRole(Role.USER);
 
         //when
         Long id = userService.joinUser(user);

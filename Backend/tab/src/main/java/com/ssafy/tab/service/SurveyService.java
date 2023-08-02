@@ -23,15 +23,20 @@ public class SurveyService{
 
     //모든 사용자의 수요 가져오기
     @Transactional(readOnly = true)
-    public List<Survey> readAllSurvey(){
+    public List<Survey> selectAllSurvey(){
         List<Survey> surveyList= surveyRepository.findAll();
         return surveyList;
     }
 
     //내가 작성한 수요조사만 가져오기.
     @Transactional(readOnly = true)
-    public List<Survey> findMySurvey(Long id){
+    public List<Survey> selectSurvey(Long id){
         List<Survey> mySurveyList = surveyRepository.findMySurvey(id);
         return mySurveyList;
+    }
+
+    //내 수요조사 삭제하기
+    public void deleteSurvey(Long id){
+        surveyRepository.deleteById(id);
     }
 }

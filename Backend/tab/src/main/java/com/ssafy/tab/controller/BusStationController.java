@@ -23,7 +23,6 @@ public class BusStationController {
     public ResponseEntity<Map<String, Object>> searchBus(@PathVariable("cityCode") String cityCode, @PathVariable("stationId") String stationId) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
 
         try {
             List<BusAPI> result = busStationService.findAll(cityCode, stationId);
@@ -42,9 +41,13 @@ public class BusStationController {
             resultMap.put("code", "500");
             resultMap.put("msg", "해당 정류장 버스 정보를 가져오지 못했습니다.");
         } finally {
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         }
     }
+
+    /*
+    도시를 입력하면 그에 해당하는 버스 정류장을 DB에 저장해주는 REST API
+     */
     @GetMapping("/api/busstationdata/{cityName}")
     public ResponseEntity<Map<String, Object>> busStationData(@PathVariable("cityName") String cityName) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -59,6 +62,6 @@ public class BusStationController {
             resultMap.put("code", "500");
             resultMap.put("msg", "DB를 불러오지 못했습니다.");
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 }

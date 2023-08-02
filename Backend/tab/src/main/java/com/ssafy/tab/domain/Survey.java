@@ -30,6 +30,15 @@ public class Survey {
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
 
+    public Survey(User user, LocalDateTime createDate, double startLatitude, double startLontitude, double destinationLatitude, double destinationLongtitude) {
+        this.user = user;
+        this.createDate = createDate;
+        this.startLatitude = startLatitude;
+        this.startLontitude = startLontitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongtitude = destinationLongtitude;
+    }
+
     @Column(name = "START_LATITUDE")
     private double startLatitude;
 

@@ -19,11 +19,13 @@ public class SurveyDto {
     double destinationLatitude;
     double destinationLongtitude;
 
+    public SurveyDto() {}
+
     public SurveyDto(LocalDateTime createDate, double startLatitude, double startLongtitude, double destinationLatitude, double destinationLongtitude) {
         this.createDate = createDate;
         this.startLatitude = startLatitude;
+        this.startLongtitude = startLongtitude;
         this.destinationLatitude = destinationLatitude;
         this.destinationLongtitude = destinationLongtitude;
-        this.startLongtitude = startLongtitude;
     }
 }

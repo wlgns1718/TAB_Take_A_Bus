@@ -52,7 +52,7 @@ class SurveyServiceTest {
     @Test
     void readAllSurvey() {
         //수요 조사 모두 불러오기
-        List<Survey> surveyList = surveyService.readAllSurvey();
+        List<Survey> surveyList = surveyService.selectAllSurvey();
         for (Survey survey : surveyList) {
             System.out.println("survey.getUser().getUserId() = " + survey.getUser().getUserId());
         }
@@ -76,7 +76,7 @@ class SurveyServiceTest {
         surveyService.createSurvey(survey2);
         surveyService.createSurvey(survey3);
         System.out.println("user = " + user.getId());
-        List<Survey> mySurveyList = surveyService.findMySurvey(user.getId());
+        List<Survey> mySurveyList = surveyService.selectSurvey(user.getId());
         System.out.println("mySurveyList.size() = " + mySurveyList.size());
         for (Survey survey : mySurveyList) {
             System.out.println("survey = " + survey.getId());

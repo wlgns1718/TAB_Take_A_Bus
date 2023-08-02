@@ -34,7 +34,6 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserDto userDto){
         //logger.debug("join user : {} ", userDto);
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
 
         try {
             User user = new User();
@@ -46,15 +45,13 @@ public class UserController {
             us.joinUser(user);
             resultMap.put("code", "200");
             resultMap.put("msg","회원가입 성공");
-            status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
             //logger.error("정보조회 실패 : {}", e);
             resultMap.put("code", "500");
             resultMap.put("msg","회원가입 실패");
-            status = HttpStatus.ACCEPTED;
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
     //@ApiOperation(value = "로그인", notes = "token 과 로그인 결과를 반환한다.", response = Map.class)
