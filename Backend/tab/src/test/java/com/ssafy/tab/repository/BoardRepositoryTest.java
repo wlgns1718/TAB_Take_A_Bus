@@ -25,7 +25,6 @@ import static com.ssafy.tab.domain.Role.USER;
 @TestPropertySource(locations="classpath:/application-test.properties")
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 class BoardRepositoryTest {
 
     @Autowired

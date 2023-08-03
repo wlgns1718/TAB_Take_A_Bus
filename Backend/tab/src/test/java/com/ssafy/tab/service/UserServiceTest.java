@@ -17,9 +17,7 @@ import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Transactional
-@Rollback(value = false)
 class UserServiceTest {
     @Autowired
     UserService userService;
