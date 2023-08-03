@@ -1,9 +1,13 @@
 package com.ssafy.tab.domain;
 
 
+<<<<<<< HEAD
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+=======
+import lombok.*;
+>>>>>>> peter
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -39,5 +43,32 @@ public class Notice {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createTime;
 
+    public void changeTitle(String title){
+        this.title = title;
+    }
 
+    public void changeContent(String content){
+        this.content = content;
+    }
+
+    public void changeTime(LocalDateTime createTime){
+        this.createTime = createTime;
+    }
+
+    public Notice(User user, String title, String content, LocalDateTime createTime) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Notice{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createTime=" + createTime +
+                '}';
+    }
 }

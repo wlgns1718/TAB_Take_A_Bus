@@ -12,7 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
+<<<<<<< HEAD
 import org.springframework.test.context.ActiveProfiles;
+=======
+>>>>>>> peter
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,11 @@ import static com.ssafy.tab.domain.Role.USER;
 @TestPropertySource(locations="classpath:/application-test.properties")
 @SpringBootTest
 @Transactional
+<<<<<<< HEAD
+=======
+@TestPropertySource(locations="classpath:/application-test.properties")
+@Rollback(value = false)
+>>>>>>> peter
 class BoardRepositoryTest {
 
     @Autowired
