@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ComingSoonBusListProps } from '.';
-import { BusData } from '../../../store/slice/kiosk-slice';
+import { BusData } from "../../../store/slice/kiosk-slice";
 import './ComingSoonBusList.css'
 
 interface ComingSoonBusListItemProps {

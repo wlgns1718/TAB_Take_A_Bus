@@ -19,21 +19,23 @@ import { changeBusStop } from "../../../store/slice/web-slice";
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   const [busDatas, setBusData] = useState<BusData[]>([]);
   const [comingSoonBusList, setComingSoonBusList] = useState<BusData[]>([]);
-  
-  const dispatch = useDispatch()
 
-  const data: KioskState = useSelector((state : {
-    kiosk : KioskState,
-    web : object
-  }) => {
-    return state.kiosk;
-  });
+  // const dispatch = useDispatch()
+  const data: KioskState = useSelector(
+    (state: { kiosk: KioskState; web: object }) => {
+      console.log(state.kiosk);
+      return state.kiosk;
+    }
+  );
 
+  useEffect(() => {
+    setBusData(data.busData);
+  }, [data.busData]);
 
   useEffect(() => {
     // 12분 이내 도착 예정인 버스 리스트
     setComingSoonBusList(
-      busDatas.slice(0,5).filter((el: BusData) => {
+      busDatas.slice(0, 5).filter((el: BusData) => {
         // 임시로 120분
         return el.eta <= 900;
       })
