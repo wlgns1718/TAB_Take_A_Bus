@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios, {AxiosError} from "axios";
 
 export type BusData = {
   busNo: string;
@@ -26,8 +27,8 @@ export interface KioskState {
 }
 
 const initialState: KioskState = {
-  citycode: 37050,
-  busStopId: "GMB383",
+  citycode: 22,
+  busStopId: "DGB7001004100",
   busData: [],
   nowBusListPage: 0,
   loading: false,
