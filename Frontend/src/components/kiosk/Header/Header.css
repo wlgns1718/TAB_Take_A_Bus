@@ -1,0 +1,33 @@
+.Header{
+  display: flex;
+  height: 390px;
+  width: 2140px;
+  background-color: #208EF4;
+  padding: 10px;
+  border-radius: 0 0 40px 40px;
+  margin-bottom: 20px;
+}
+
+.busstop-title {
+  position: relative;
+  font-size: 100px;
+  color: white;
+}
+.busstop-name {
+  color: #FFD704;
+}
+
+#logo{
+  position: relative;
+  
+  left: 20px;
+
+}
+
+.time-box{
+  font-size: xx-large;
+  color: white;
+  position: relative;
+  top: 35px;
+}
+

@@ -1,0 +1,56 @@
+.bus-item-container {
+  width: 2000px;
+  height: 370px;
+  padding: 30px;
+  margin: 0 0 35px 0 ;
+  background-color: lightgray;
+  border-radius: 30px;
+}
+
+/* 버스 정보 상단부 */
+.bus-item-top{
+  display: flex;
+  justify-content: space-around;
+}
+
+.bus-detail{
+  width: 400px;
+  height: 250px;
+  display: flex;
+}
+.bus-eta{
+  width: 250px;
+  height: 250px;
+}
+.bus-routeinfo{
+  width: 850px;
+  height: 250px;
+}
+.tap-button{
+  width: 250px;
+  height: 250px;
+}
+
+.tap-on{
+  background-color: red;
+}
+
+.tap-off{
+  background-color: blue;
+}
+
+.bg-white{
+  background-color: white;
+}
+
+.round-10{
+  border-radius: 10px;
+}
+.guide-message{
+  font-size: 50px;
+  text-align: center;
+}
+
+.text-center{
+  text-align: center;
+}
