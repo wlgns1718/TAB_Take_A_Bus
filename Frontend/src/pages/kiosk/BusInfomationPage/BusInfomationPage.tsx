@@ -12,7 +12,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { busAPI } from "../../../store/api/api";
 import { useQuery } from "react-query";
 import { AxiosError } from 'axios'
-import { changeBusStop } from "../../../store/slice/web-slice";
 
 
 
@@ -20,7 +19,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   const [busDatas, setBusData] = useState<BusData[]>([]);
   const [comingSoonBusList, setComingSoonBusList] = useState<BusData[]>([]);
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const data: KioskState = useSelector(
     (state: { kiosk: KioskState; web: object }) => {
       console.log(state.kiosk);
