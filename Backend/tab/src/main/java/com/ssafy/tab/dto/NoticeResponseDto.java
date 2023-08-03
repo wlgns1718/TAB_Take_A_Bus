@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class NoticeResponseDto {
+public class NoticeResponseDto { // 공지사항 응답에 사용되는 DTO
     String userName;
     String title;
     String content;

@@ -1,14 +1,9 @@
 package com.ssafy.tab.domain;
 
 
-<<<<<<< HEAD
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-=======
-import lombok.*;
->>>>>>> peter
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -45,15 +40,15 @@ public class Notice {
 
     public void changeTitle(String title){
         this.title = title;
-    }
+    } // setter대신 사용
 
     public void changeContent(String content){
         this.content = content;
-    }
+    } // setter대신 사용
 
     public void changeTime(LocalDateTime createTime){
         this.createTime = createTime;
-    }
+    } // setter대신 사용
 
     public Notice(User user, String title, String content, LocalDateTime createTime) {
         this.user = user;
@@ -63,7 +58,7 @@ public class Notice {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // toString에 연관관계는 제거
         return "Notice{" +
                 "id=" + id +
                 ", title='" + title + '\'' +

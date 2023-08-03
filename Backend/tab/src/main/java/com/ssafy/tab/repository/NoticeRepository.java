@@ -11,7 +11,8 @@ import java.util.List;
 
 public interface NoticeRepository  extends JpaRepository<Notice,Long> {
 
+
     @Query("select new com.ssafy.tab.dto.NoticeResponseDto(n.user.name,n.title,n.content,n.createTime) from Notice n")
-    Page<NoticeResponseDto> list(Pageable pageable);
+    Page<NoticeResponseDto> list(Pageable pageable);  // 공지사항 전체 페이징 결과 (dto에 담아서 리턴)
 
 }

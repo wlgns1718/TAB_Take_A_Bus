@@ -3,7 +3,7 @@ package com.ssafy.tab.dto;
 import lombok.Data;
 
 @Data
-public class NoticeRequestDto {
+public class NoticeRequestDto { // 공지사항 요청에 사용되는 DTO
     String title;
     String content;
 

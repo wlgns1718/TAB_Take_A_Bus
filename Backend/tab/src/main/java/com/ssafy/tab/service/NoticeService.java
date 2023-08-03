@@ -19,29 +19,30 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
-    public Page<NoticeResponseDto> list(Pageable pageable){
+    @Transactional(readOnly = true) // 공지사항 전체 조회
+    public Page<NoticeResponseDto> list(Pageable pageable){ // 공지사항 전체 조회(페이징)
         return noticeRepository.list(pageable);
     }
 
-    public Long createNotice(Notice notice){ // 게시글 생성
+    public Long createNotice(Notice notice){ // 공지사항 생성
         Notice result = noticeRepository.save(notice);
         return result.getId();
     }
     public void deleteNotice(Notice notice){ // 게시글 삭제
         noticeRepository.delete(notice);
-    }
+    } // 공지사항 삭제
 
-    public Long modifyNotice(Notice notice){ // 게시글 수정
+    public Long modifyNotice(Notice notice){ // 공지사항 수정
         Notice result = noticeRepository.save(notice);
         return result.getId();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // 공지사항 상세 조회
     public Notice findById(Long id){
         Optional<Notice> notice = noticeRepository.findById(id);
-        if(notice.isPresent()){
+        if(notice.isPresent()){ // 결과가 있으면 return
             return notice.get();
-        }else{
+        }else{ // 없으면 null
             return null;
         }
     }
