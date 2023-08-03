@@ -4,7 +4,6 @@ package com.ssafy.tab.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -39,5 +38,32 @@ public class Notice {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createTime;
 
+    public void changeTitle(String title){
+        this.title = title;
+    } // setter대신 사용
 
+    public void changeContent(String content){
+        this.content = content;
+    } // setter대신 사용
+
+    public void changeTime(LocalDateTime createTime){
+        this.createTime = createTime;
+    } // setter대신 사용
+
+    public Notice(User user, String title, String content, LocalDateTime createTime) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() { // toString에 연관관계는 제거
+        return "Notice{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createTime=" + createTime +
+                '}';
+    }
 }

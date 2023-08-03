@@ -28,8 +28,10 @@ import org.springframework.beans.factory.annotation.Value;
 public class BusStationService {
 
     private static final String API_BASE_URL = "http://apis.data.go.kr";
-    private static final String SERVICE_KEY1 = "9WA%2BHUFdIqFxDd8muGKZJDVzIL%2FBvVkrto0IUImEsO10U9o2pDVezaGaRz0q8M4FduewWGEB5DwcT0LHVBTkkA%3D%3D";
-    private static final String SERVICE_KEY2 = "zkCODX6NOK7DinFf2%2FT%2F%2BZjMmV3bl1nrS19hmRFlQN6AIDc83oY3AspWzKXaV%2BFTzme8ixiMnpkTrpp6MEoh%2BA%3D%3D";
+    @Value("${public.api.key1}")
+    private String SERVICE_KEY1;
+    @Value("${public.api.key2}")
+    private String SERVICE_KEY2;
     private static final String TYPE_JSON = "json";
     private static final int NUM_OF_ROWS = 10;
     private static final int PAGE_NO = 1;
@@ -51,7 +53,6 @@ public class BusStationService {
     public List<BusAPI> findAll(String cityCode, String stationId) throws IOException {
         CITY_CODE = cityCode;
         NODE_ID = stationId;
-
         String apiUrl1 = API_BASE_URL + "/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList" +
                 "?serviceKey=" + SERVICE_KEY1 +
                 "&cityCode=" + CITY_CODE +
