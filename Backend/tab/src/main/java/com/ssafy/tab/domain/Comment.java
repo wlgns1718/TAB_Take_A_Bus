@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@Table(name = "COMMENT")
 public class Comment {
     
     /*

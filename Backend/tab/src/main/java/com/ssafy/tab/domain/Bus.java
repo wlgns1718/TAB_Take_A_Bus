@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@Table(name = "BUS")
 public class Bus {
 
     /*

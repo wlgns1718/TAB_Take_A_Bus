@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,6 +39,10 @@ public class UserService {
         if(!findMembers.isEmpty()){
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
+    }
+
+    public Optional<User> findById(Long id){
+        return userRepository.findById(id);
     }
     /*public UserDto loginUser(UserDto userDto) throws Exception {
         String userId = userDto.getId();
