@@ -9,12 +9,15 @@ import com.ssafy.tab.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.ssafy.tab.domain.Role.USER;
 
@@ -103,5 +106,29 @@ class BoardRepositoryTest {
         Board board = boardService.selectBoard(board1.getId());
         System.out.println("board.getContent() = " + board.getContent());
         System.out.println("board 생성 시간은 = " + board.getCreateTime());
+    }
+
+    @Test
+    public void selectBoardSort() throws Exception{
+        //유저 생성 및 게시글 등록
+        User user = new User("qweqwe13", "1234", "홍길동", "qwe@naver.com", USER);
+        userService.joinUser(user);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for (int i = 0; i < 10; i++) {
+            boardService.createBoard(new Board(user, "제목"+i+"입니다.", "내용"+i+"입니다", now, Sort.REPORT));
+        }
+
+        for (int i = 0; i < 10; i++) {
+            boardService.createBoard(new Board(user, "불만제목"+i+"입니다.", "불만내용"+i+"입니다", now, Sort.COMPLAIN));
+        }
+
+        PageRequest pageable = PageRequest.of(2, 5);
+
+        Page<Board> boards = boardService.selectBoardSort(Sort.REPORT, pageable);
+        for (Board board : boards) {
+            System.out.println("board의 제목 = " + boards.getContent());
+        }
     }
 }
