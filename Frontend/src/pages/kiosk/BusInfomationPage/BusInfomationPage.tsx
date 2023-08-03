@@ -33,12 +33,12 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   useEffect(() => {
     // 12분 이내 도착 예정인 버스 리스트
     setComingSoonBusList(
-      data.busData.slice(0,5).filter((el: BusData) => {
+      data.busData.slice(0, 5).filter((el: BusData) => {
         // 임시로 120분
         return el.eta <= 900;
       })
     );
-  }, [busDatas]);
+  }, [data.busData]);
 
   const fetchBusData = useQuery(
     "fetchBus",
@@ -65,7 +65,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           throw err;
         });
     },
-    { staleTime: 100, refetchInterval: 10000 }
+    { staleTime: 1000, refetchInterval: 10000 }
   );
 
   useEffect(()=>{
