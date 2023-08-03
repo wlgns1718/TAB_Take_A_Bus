@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios, {AxiosError} from "axios";
 
 export type BusData = {
   busNo: string;
@@ -29,7 +28,56 @@ export interface KioskState {
 const initialState: KioskState = {
   citycode: 22,
   busStopId: "DGB7001004100",
-  busData: [],
+  busData: [
+    {
+      busNo: "105",
+      eta: 200,
+      remainingStops: 1,
+      routeId: "temp1",
+      routeType: "저상버스",
+      vehicleNo: "temp1",
+      vehicleType: "temp1",
+      stationId: "temp1",
+      stationName: "temp1",
+      stationOrder: 10,
+    },
+    {
+      busNo: "115",
+      eta: 200,
+      remainingStops: 2,
+      routeId: "temp1",
+      routeType: "급행버스",
+      vehicleNo: "temp1",
+      vehicleType: "temp1",
+      stationId: "temp1",
+      stationName: "temp2",
+      stationOrder: 10,
+    },
+    {
+      busNo: "200",
+      eta: 300,
+      remainingStops: 4,
+      routeId: "temp1",
+      routeType: "간선버스",
+      vehicleNo: "temp1",
+      vehicleType: "temp1",
+      stationId: "temp1",
+      stationName: "temp2",
+      stationOrder: 10,
+    },
+    {
+      busNo: "500",
+      eta: 500,
+      remainingStops: 6,
+      routeId: "temp1",
+      routeType: "일반버스",
+      vehicleNo: "temp1",
+      vehicleType: "temp1",
+      stationId: "temp1",
+      stationName: "temp2",
+      stationOrder: 10,
+    },
+  ],
   nowBusListPage: 0,
   loading: false,
   error: null,

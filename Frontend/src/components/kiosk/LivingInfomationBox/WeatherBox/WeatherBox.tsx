@@ -26,7 +26,7 @@ interface WeatherData {
   };
 }
 
-const useTempData = false;
+const useTempData = true;
 
 const tempdata: WeatherData = {
   weather: [

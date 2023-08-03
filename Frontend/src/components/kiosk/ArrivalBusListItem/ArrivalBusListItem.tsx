@@ -18,17 +18,46 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
           </div>
         </div>
         <div className="bus-eta bg-white round-10">
-          <div className="text-center">도착예정시간</div>
-          <div>{Math.round(item?.eta / 60)} 분후 도착</div>
-        </div>
-        <div className="bus-routeinfo bg-white round-10">
-          <div>
-            {item?.remainingStops} 정거장 남음 <br />
-            현재 {item.stationName}
+          <div className="bus-eta-title text-center flex-1">도착예정시간</div>
+          <div className="bus-eta-text flex-2">
+            <div className="bus-eta-num flex-2">
+              {Math.round(item?.eta / 60)}
+            </div>
+            <div className="bus-eta-min flex-1"> 분 </div>
           </div>
         </div>
+        <div className="bus-routeinfo bg-white round-10">
+          <div className="bus-map-line"> d</div>
+          {[
+            item.remainingStops >= 4 ? item.remainingStops : 4,
+            3,
+            2,
+            1,
+            "현",
+          ].map((station) => (
+            <div
+              key={station}
+              className={`station-circle ${
+                station === item.remainingStops ? "current-station" : ""
+              }`}
+            >
+              {station}
+            </div>
+          ))}
+          <img
+            className="bus-icon"
+            src="..\..\src\assets\image\bus_side_icon.png"
+            style={{
+              left: `${
+                ((item.remainingStops >= 4 ? 0 : 4 - item.remainingStops) / 5) *
+                  750 +
+                75
+              }px`,
+            }}
+          ></img>
+        </div>
         <button
-          className={`tap-button round-10 ${isStopHere ? "tap-on" : "tap-off"}`}
+          className={`tap-button ${isStopHere ? "tap-on" : "tap-off"}`}
           onClick={() => setIsStopHere(true)}
         >
           {isStopHere ? "정차 예정" : "탑승"}
