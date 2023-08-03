@@ -20,7 +20,6 @@ import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Transactional
 class UserServiceTest {
     @Autowired

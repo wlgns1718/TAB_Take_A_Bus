@@ -2,7 +2,9 @@ package com.ssafy.tab.repository;
 
 import com.ssafy.tab.domain.Board;
 import com.ssafy.tab.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,12 +19,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     //게시글 pageable은 pageable 인터페이스 사용할 것.
     
     //머리말로 검색하기
-    @Query("select b from Board b where b.sort = :sort")
-    List<Board> findBoardSort(@Param("sort") Sort sort, PageRequest pageRequest);
+    Page<Board> findBySort(Sort sort, Pageable paging);
 
 //    //제목으로 검색하기
 //    @Query("select b from Board b where b.sort = :sort")
-//    List<Board> findBoardSearchTitle(@Param("sort") Sort sort);
+//    List<Board> findBySortContaining(@Param("sort") Sort sort);
 //
 //    //작성자로 검색하기
 //    @Query("select b from Board b where b.sort = :sort")
