@@ -20,25 +20,23 @@ import { AxiosError } from 'axios'
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   const [busDatas, setBusData] = useState<BusData[]>([]);
   const [comingSoonBusList, setComingSoonBusList] = useState<BusData[]>([]);
-  
+
   // const dispatch = useDispatch()
+  const data: KioskState = useSelector(
+    (state: { kiosk: KioskState; web: object }) => {
+      console.log(state.kiosk);
+      return state.kiosk;
+    }
+  );
 
-  const data: KioskState = useSelector((state : {
-    kiosk : KioskState,
-    web : object
-  }) => {
-    console.log(state.kiosk);
-    return state.kiosk;
-  });
-
-  useEffect(()=>{
-    setBusData(data.busData)
-  }, [data.busData])
+  useEffect(() => {
+    setBusData(data.busData);
+  }, [data.busData]);
 
   useEffect(() => {
     // 12분 이내 도착 예정인 버스 리스트
     setComingSoonBusList(
-      busDatas.slice(0,5).filter((el: BusData) => {
+      busDatas.slice(0, 5).filter((el: BusData) => {
         // 임시로 120분
         return el.eta <= 900;
       })
@@ -62,7 +60,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                 return a.eta - b.eta;
               })
             );
-            return response.data
+            return response.data;
           }
         })
         .catch((error) => {
@@ -74,12 +72,11 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     { staleTime: 100, refetchInterval: 10000 }
   );
 
-  useEffect(()=>{
-    console.log(fetchBusData,new Date().toLocaleTimeString())
+  useEffect(() => {
+    console.log(fetchBusData, new Date().toLocaleTimeString());
     // dispatch
     // dispatch(changeBusStop(fetchBusData))
-
-  },[fetchBusData])
+  }, [fetchBusData]);
 
   // function useInterval(callback: () => void, delay: number | null) {
   //   const savedCallback = useRef<typeof callback>(callback);
@@ -100,7 +97,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   //     }
   //   }, [delay]);
   // }
-  
+
   // 30초마다
   // useInterval(updateBusData, 30000);
 
