@@ -26,6 +26,8 @@ interface WeatherData {
   };
 }
 
+const useTempData = false;
+
 const tempdata: WeatherData = {
   weather: [
     {
@@ -92,8 +94,8 @@ export const WeatherBox: FC<WeatherBoxProps> = (props) => {
     setWeatherData(tempdata);
   };
 
-  // useInterval(fetchWeatherData, 600000);
-  useInterval(tempFetchWeatherData, 600000);
+  const func = useTempData? tempFetchWeatherData : fetchWeatherData
+  useInterval(func, 600000);
   // console.log(fetchWeatherData);
 
   return (

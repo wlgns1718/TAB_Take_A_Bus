@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { BusData } from "../../../pages/kiosk/BusInfomationPage";
+import { BusData } from "../../../store/slice/kiosk-slice";
 import { ArrivalBusListItem } from "../ArrivalBusListItem";
 import Carousel from "react-material-ui-carousel";
 import "./ArrivalBusList.css";

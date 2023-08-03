@@ -19,6 +19,8 @@ export const DustBox: FC<DustBoxProps> = (props) => {
   // const latitude: number = 36.12;
   // const longitude: number = 128.34;
 
+  const useTempData = false
+
   const tempDustData = {
     pm25Grade1h: "1",
     pm10Value24: "31",
@@ -112,8 +114,9 @@ export const DustBox: FC<DustBoxProps> = (props) => {
     });
   };
 
-  // useInterval(fetchDustInfo, 30 * 60 * 1000);
-  useInterval(tempFetchDustInfo, 30 * 60 * 1000);
+  const func = useTempData ? tempFetchDustInfo : fetchDustInfo;
+  useInterval(func, 30 * 60 * 1000);
+  // useInterval(tempFetchDustInfo, 30 * 60 * 1000);
   // console.log(fetchDustInfo);
 
   return (
