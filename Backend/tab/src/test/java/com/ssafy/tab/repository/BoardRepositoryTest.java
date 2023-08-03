@@ -18,10 +18,11 @@ import java.time.LocalDateTime;
 
 import static com.ssafy.tab.domain.Role.USER;
 
+
+@TestPropertySource(locations="classpath:/application-test.properties")
 @SpringBootTest
 @Transactional
 @Rollback(value = false)
-@ActiveProfiles("test")
 class BoardRepositoryTest {
 
     @Autowired
@@ -41,6 +42,7 @@ class BoardRepositoryTest {
 
         Board board1 = new Board(user, "제목입니다.", "내용입니다", now, Sort.REPORT);
         boardService.createBoard(board1);
+        System.out.println("board1.getId() = " + board1.getId());
     }
     
     //게시글 삭제
@@ -54,9 +56,12 @@ class BoardRepositoryTest {
 
         Board board1 = new Board(user, "제목입니다.", "내용입니다", now, Sort.REPORT);
         boardService.createBoard(board1);
+        System.out.println("board1.getId() = " + board1.getId());
         
         //생성 된 게시글 삭제
         boardService.deleteBoard(board1);
+        System.out.println("board1.getId() = " + board1.getId());
+
     }
 
     //게시글 수정
@@ -79,6 +84,8 @@ class BoardRepositoryTest {
 
         Board board = boardService.modifyBoard(board1.getId(), boardDto);
         System.out.println("수정된 board의 id = " + board.getId());
+        System.out.println("board = " + board.getContent());
+        System.out.println("board = " + board.getTitle());
     }
 
     //게시글 자세히보기

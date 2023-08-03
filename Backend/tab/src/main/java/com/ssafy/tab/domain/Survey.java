@@ -1,12 +1,14 @@
 package com.ssafy.tab.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 @Table(name = "SURVEY")
 public class Survey {
 
@@ -29,8 +31,6 @@ public class Survey {
 
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
-
-    public Survey() {}
 
     public Survey(User user, LocalDateTime createDate, double startLatitude, double startLontitude, double destinationLatitude, double destinationLongtitude) {
         this.user = user;
