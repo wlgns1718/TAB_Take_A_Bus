@@ -9,23 +9,17 @@ import java.time.LocalDateTime;
 public class BoardDto {
     
     /*
+    id : 게시글 id
     title : 제목
     content :  내용
     createTime : 작성시간
     sort : 머리말(종류)(
      */
-    
+    Long id;
     String title;
     String content;
     LocalDateTime createTime;
     Sort sort;
 
     public BoardDto() {}
-
-    public BoardDto(String title, String content, LocalDateTime createTime, Sort sort) {
-        this.title = title;
-        this.content = content;
-        this.createTime = createTime;
-        this.sort = sort;
-    }
 }

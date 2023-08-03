@@ -2,6 +2,7 @@ package com.ssafy.tab.repository;
 
 import com.ssafy.tab.domain.Board;
 import com.ssafy.tab.domain.Sort;
+import com.ssafy.tab.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,18 +22,13 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     //머리말로 검색하기
     Page<Board> findBySort(Sort sort, Pageable paging);
 
-//    //제목으로 검색하기
-//    @Query("select b from Board b where b.sort = :sort")
-//    List<Board> findBySortContaining(@Param("sort") Sort sort);
-//
-//    //작성자로 검색하기
-//    @Query("select b from Board b where b.sort = :sort")
-//    List<Board> findBoardSearchTitle(@Param("sort") Sort sort);
-//
-//    //내용으로 검색하기
-////    @Query("select b from Board b where b.sort = :sort")
-////    List<Board> findBoardSearchContent@Param("sort") Sort sort);
+    //제목으로 검색하기
+    Page<Board> findByTitleContaining(String title, Pageable paging);
 
+    //작성자로 검색하기
+    @Query("select b from Board b where b.user.userId like %:userId%")
+    Page<Board> findByUserContaining(@Param("userId") String userId, Pageable paging);
 
-    
+    //내용으로 검색하기
+    Page<Board> findByContentContaining(String cotent, Pageable paging);
 }
