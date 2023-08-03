@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios, {AxiosError} from "axios";
 
 export type BusData = {
   busNo: string;
