@@ -1,24 +1,17 @@
 package com.ssafy.tab.controller;
 
-import com.ssafy.tab.domain.Notice;
-import com.ssafy.tab.domain.User;
-import com.ssafy.tab.dto.NoticeDto;
+import com.ssafy.tab.dto.NoticeResponseDto;
 import com.ssafy.tab.service.NoticeService;
 import com.ssafy.tab.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/notice")
@@ -30,6 +23,15 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final UserService userService;
 //    private JwtTokenProvider jwtTokenProvider; // 토큰을 생성하고 검증하는 @Component (jjwt라이브러리로 구현할 수 있음)
+
+
+    @ApiOperation(value = "공지사항 목록", notes = "공지사항의 글을 작성한다.", response = Map.class)
+    @GetMapping("/list")
+    public Page<NoticeResponseDto> list(Pageable pageable){
+        return noticeService.list(pageable);
+    }
+
+
 /*
     @ApiOperation(value = "공지사항 글쓰기", notes = "공지사항의 글을 작성한다.", response = Map.class)
     @PostMapping("/write")

@@ -29,9 +29,9 @@ public class BusStationService {
 
     private static final String API_BASE_URL = "http://apis.data.go.kr";
     @Value("${public.api.key1}")
-    private static String SERVICE_KEY1;
+    private String SERVICE_KEY1;
     @Value("${public.api.key2}")
-    private static String SERVICE_KEY2;
+    private String SERVICE_KEY2;
     private static final String TYPE_JSON = "json";
     private static final int NUM_OF_ROWS = 10;
     private static final int PAGE_NO = 1;
@@ -53,7 +53,6 @@ public class BusStationService {
     public List<BusAPI> findAll(String cityCode, String stationId) throws IOException {
         CITY_CODE = cityCode;
         NODE_ID = stationId;
-
         String apiUrl1 = API_BASE_URL + "/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList" +
                 "?serviceKey=" + SERVICE_KEY1 +
                 "&cityCode=" + CITY_CODE +

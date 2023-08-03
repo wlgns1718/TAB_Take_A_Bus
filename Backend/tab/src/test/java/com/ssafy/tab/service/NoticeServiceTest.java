@@ -3,25 +3,23 @@ package com.ssafy.tab.service;
 import com.ssafy.tab.domain.Notice;
 import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.User;
-import com.ssafy.tab.dto.NoticeDto;
+import com.ssafy.tab.dto.NoticeRequestDto;
+import com.ssafy.tab.dto.NoticeResponseDto;
 import com.ssafy.tab.repository.NoticeRepository;
 import com.ssafy.tab.repository.UserRepository;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -44,7 +42,7 @@ class NoticeServiceTest {
         User user = new User("thd", "123", "송민철", "thdalscjf05@naver.com", Role.USER);
         Long userId = userService.joinUser(user);
 
-        NoticeDto noticeDto = new NoticeDto("title1","content");
+        NoticeRequestDto noticeDto = new NoticeRequestDto("title1","content");
 
         Notice notice = new Notice(user,noticeDto.getTitle(),noticeDto.getContent(), LocalDateTime.now());
 
@@ -61,28 +59,27 @@ class NoticeServiceTest {
         User user = new User("thd", "123", "송민철", "thdalscjf05@naver.com", Role.USER);
         Long userId = userService.joinUser(user);
 
-        NoticeDto noticeDto1 = new NoticeDto("title1","content1");
-        NoticeDto noticeDto2 = new NoticeDto("title2","content2");
-        NoticeDto noticeDto3 = new NoticeDto("title3","content3");
-
-
-        Notice notice1 = new Notice(user,noticeDto1.getTitle(),noticeDto1.getContent(), LocalDateTime.now());
-        Notice notice2 = new Notice(user,noticeDto2.getTitle(),noticeDto2.getContent(), LocalDateTime.now());
-        Notice notice3 = new Notice(user,noticeDto3.getTitle(),noticeDto3.getContent(), LocalDateTime.now());
-
+        for(int i=1;i<=100;i++){
+            Notice notice = new Notice(user,"title"+i,"content"+i,LocalDateTime.now());
+            noticeService.createNotice(notice);
+        }
+        PageRequest pageRequest = PageRequest.of(1,10);
 
         //when
-        Long noticeId1 = noticeService.createNotice(notice1);
-        Long noticeId2 = noticeService.createNotice(notice2);
-        Long noticeId3 = noticeService.createNotice(notice3);
-
+        Page<NoticeResponseDto> page = noticeService.list(pageRequest);
+        List<NoticeResponseDto> content = page.getContent();
 
         //then
-        List<Notice> noticeList = noticeService.getNotice();
-
-        for (Notice notice : noticeList) {
-            System.out.println(notice);
+        for (NoticeResponseDto noticeResponseDto : content) {
+            System.out.println(noticeResponseDto);
         }
+        Assertions.assertEquals(content.size(),10);
+        Assertions.assertEquals(page.getTotalElements(),100);
+        Assertions.assertEquals(page.getNumber(),1);
+        Assertions.assertEquals(page.getTotalPages(),10);
+
+        Assertions.assertTrue(page.hasNext());
+
 
     }
 
@@ -92,7 +89,7 @@ class NoticeServiceTest {
         User user = new User("thd", "123", "송민철", "thdalscjf05@naver.com", Role.USER);
         Long userId = userService.joinUser(user);
 
-        NoticeDto noticeDto = new NoticeDto("title1","content1");
+        NoticeRequestDto noticeDto = new NoticeRequestDto("title1","content1");
         Notice notice = new Notice(user,noticeDto.getTitle(),noticeDto.getContent(), LocalDateTime.now());
         Long noticeId = noticeService.createNotice(notice);
 
@@ -125,14 +122,6 @@ class NoticeServiceTest {
         Notice notice3 = new Notice(user,"title3","content3", LocalDateTime.now());
         Notice notice4 = new Notice(user,"title4","content4", LocalDateTime.now());
 
-        Long noticeId = noticeService.createNotice(notice);
-
-
-        //when
-        List<Notice> nList = noticeService.getNotice();
-        for (Notice notice1 : nList) {
-            System.out.println(notice1);
-        }
 
 
         //then
