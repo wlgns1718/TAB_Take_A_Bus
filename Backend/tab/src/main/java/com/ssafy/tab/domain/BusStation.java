@@ -1,8 +1,6 @@
 package com.ssafy.tab.domain;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -33,5 +31,5 @@ public class BusStation {
     private Double longtitude; // 경도
 
     @OneToMany(mappedBy = "busStation",cascade = CascadeType.ALL)
-    List<BusStationData> data = new ArrayList<>();
+    List<BusData> data = new ArrayList<>();
 }
