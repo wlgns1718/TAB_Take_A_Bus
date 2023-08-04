@@ -12,20 +12,20 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
     <div className="bus-item-container">
       <div className="bus-item-top">
         <div>
-          <Grid container direction ="column" justifyContent={"center"} alignItems={"center"} className="bus-detail bg-white round-10" style={{width:'350px'}} >
+          <Grid container direction ="column" justifyContent={"center"} alignItems={"center"} className="bus-detail bg-white round-10" style={{width:'420px'}} >
 
             <Grid container direction="row" justifyContent={"space-around"} alignItems={"center"} >
               <Grid item xs={5} >
                 
               <img src={`/${item.routeType}.png?url`}/>
-   
+  
               </Grid>
               <Grid item xs={6}>
-             
+            
               <div className="slide-container"  style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
 
                   <h1 style={{ fontSize: '70px', margin: '0', padding: '0' }}>{item.busNo}</h1>
-             
+            
               </div>
               </Grid>
             </Grid>
