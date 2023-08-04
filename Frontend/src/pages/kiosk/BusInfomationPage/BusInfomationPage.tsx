@@ -42,7 +42,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     () => {
       busAPI
         .get(`/${data.citycode}/${data.busStopId}`, {
-          timeout: 10000,
+          timeout: 5000,
         })
         .then((response) => {
           if (response.data.code == "500") {

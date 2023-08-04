@@ -12,32 +12,39 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
     <div className="bus-item-container">
       <div className="bus-item-top">
         <div>
-          <Grid container direction ="column" justifyContent={"center"} alignItems={"center"} className="bus-detail bg-white round-10" style={{width:'420px'}} >
+
+          
+          <Grid container direction ="column" justifyContent={"center"} alignItems={"center"} className="bus-detail bg-white round-10" style={{width:'380px'}} >
 
             <Grid container direction="row" justifyContent={"space-around"} alignItems={"center"} >
-              <Grid item xs={5} >
-                
-              <img src={`/${item.routeType}.png?url`}/>
-  
+              <Grid display={"flex"} item xs={6} justifyContent={"center"}> 
+                <img src={`/${item.routeType}.png?url`} alt = {item.routeType} />
               </Grid>
-              <Grid item xs={6}>
-            
-              <div className="slide-container"  style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-
-                  <h1 style={{ fontSize: '70px', margin: '0', padding: '0' }}>{item.busNo}</h1>
-            
-              </div>
+              <Grid display={"flex"} item xs={6} justifyContent={"start"}>
+                  {item.busNo.length >= 3? 
+                    <div className="marquee">
+                        <div className="outer">
+                            <div className="inner">
+                                <span className="content">{item.busNo}</span>
+                            </div>
+                        </div>
+                    </div>
+                    :
+                    <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                        <h1 style={{ fontSize: '75px', marginLeft: '15px', padding: '0' }}>{item.busNo}</h1>
+                    </div>
+                }
               </Grid>
             </Grid>
-            <Grid container direction="row" justifyContent={"flex-start"} alignItems={"baes-line"}>
-              <Grid item style={{fontSize:'35px' , fontWeight:"bolder"}}>
+            <Grid container direction="row" justifyContent={"space-between"} alignItems={"baes-line"}>
+              <Grid xs={6} item style={{fontSize:'35px' , fontWeight:"bolder" , marginLeft:"25px"}}>
                 {item.routeType}
+                
               </Grid>
-              <Grid item>
-                {item.vehicleType == '저상버스' && <img src="/src/assets/image/wheelchair.png"/>}
+              <Grid xs={3}>
+                {item.vehicleType === '저상버스' && <img style={{zIndex:3,position:"absolute", width:'110px', height:'80px'}} src={`/wheelchair.png?url`}/>}
               </Grid>
-            </Grid>  
-
+            </Grid>
           </Grid>
         </div>
         <div className="bus-eta bg-white round-10">
