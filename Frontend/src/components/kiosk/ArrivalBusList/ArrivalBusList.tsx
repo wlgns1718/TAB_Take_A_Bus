@@ -9,7 +9,7 @@ interface ArrivalBusListProps {
   data: BusData[];
 }
 
-export const ArrivalBusList: FC<ArrivalBusListProps> = (props) => {
+export const ArrivalBusList: FC<ArrivalBusListProps> = () => {
 
   const data : KioskState = useSelector((state : {
     kiosk : KioskState,
