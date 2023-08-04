@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.ssafy.tab.domain.BusAPI;
+import com.ssafy.tab.domain.BusStation;
+import com.ssafy.tab.repository.BusStationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,19 +20,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class BusStationService {
 
+    private final BusStationRepository busStationRepository;
+
     private static final String API_BASE_URL = "http://apis.data.go.kr";
-    private static final String SERVICE_KEY1 = "9WA%2BHUFdIqFxDd8muGKZJDVzIL%2FBvVkrto0IUImEsO10U9o2pDVezaGaRz0q8M4FduewWGEB5DwcT0LHVBTkkA%3D%3D";
-    private static final String SERVICE_KEY2 = "zkCODX6NOK7DinFf2%2FT%2F%2BZjMmV3bl1nrS19hmRFlQN6AIDc83oY3AspWzKXaV%2BFTzme8ixiMnpkTrpp6MEoh%2BA%3D%3D";
+
+    @Value("#{'${public.api.key}'.split(',')}")
+    private List<String> keyList;
+
     private static final String TYPE_JSON = "json";
     private static final int NUM_OF_ROWS = 10;
     private static final int PAGE_NO = 1;
@@ -48,12 +54,12 @@ public class BusStationService {
     final String CSV_FILE_PATH = "src/main/resources/2022년_전국버스정류장 위치정보_데이터.csv";
     final String TABLE_NAME = "bus_station";
 
-    public List<BusAPI> findAll(String cityCode, String stationId) throws IOException {
+
+    public List<BusAPI> findAll(String cityCode, String stationId, int keyIndex) throws IOException {
         CITY_CODE = cityCode;
         NODE_ID = stationId;
-
         String apiUrl1 = API_BASE_URL + "/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList" +
-                "?serviceKey=" + SERVICE_KEY1 +
+                "?serviceKey=" + keyList.get(keyIndex) +
                 "&cityCode=" + CITY_CODE +
                 "&nodeId=" + NODE_ID +
                 "&numOfRows=" + NUM_OF_ROWS +
@@ -80,11 +86,11 @@ public class BusStationService {
                 LinkedHashMap items1 = (LinkedHashMap) items.get("items");
                 if(items1.get("item") instanceof LinkedHashMap){ // 도착 예정버스의 갯수에 따라서 type이 달라짐, 예외 발생가능
                     LinkedHashMap m = (LinkedHashMap) items1.get("item");
-                    setBus(finalResult, (int)m.get("arrprevstationcnt"), (int)m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m);
+                    setBus(finalResult, (int)m.get("arrprevstationcnt"), (int)m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
                 }else if(items1.get("item") instanceof List){
                     List<Map<String, Object>> src = (List<Map<String, Object>>) items1.get("item");
                     for (Map<String, Object> m : src) {
-                        setBus(finalResult, (int) m.get("arrprevstationcnt"), (int) m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m);
+                        setBus(finalResult, (int) m.get("arrprevstationcnt"), (int) m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
                     }
                 }
             }
@@ -97,7 +103,7 @@ public class BusStationService {
     }
 
 
-    private void setBus(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m) throws IOException {
+    private void setBus(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m, int keyIndex) throws IOException {
         BusAPI busAPI = new BusAPI();
         busAPI.setRemainingStops(arrprevstationcnt);
         busAPI.setEta(arrtime);
@@ -107,7 +113,7 @@ public class BusStationService {
         busAPI.setVehicleType(vehicletp.toString());
 
         String apiUrl2 = API_BASE_URL + "/1613000/BusLcInfoInqireService/getRouteAcctoBusLcList" +
-                "?serviceKey=" + SERVICE_KEY2 +
+                "?serviceKey=" + keyList.get(keyIndex) +
                 "&pageNo=" + PAGE_NO +
                 "&numOfRows=" + NUM_OF_ROWS +
                 "&_type=" + TYPE_JSON +
@@ -166,7 +172,7 @@ public class BusStationService {
     }
 
     @Transactional
-    public boolean busStationData( String cityName){
+    public boolean busStationData(String cityName){
         try (
             Connection connection = DriverManager.getConnection(url, username, password);
             CSVReader reader = new CSVReader(new FileReader(CSV_FILE_PATH))) {
@@ -200,7 +206,6 @@ public class BusStationService {
                 preparedStatement.setString(6, station_name);
                 preparedStatement.addBatch();
             }
-
             int[] batchResult = preparedStatement.executeBatch();
 
             int totalRecordsInserted = 0;
@@ -208,10 +213,15 @@ public class BusStationService {
                 totalRecordsInserted += count;
             }
             return true;
-
         } catch (ClassNotFoundException | SQLException | IOException | CsvValidationException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Transactional
+    public String presentStationName(String stationNo) {
+        BusStation busStation = busStationRepository.findById(stationNo).get();
+        return busStation.getStationName();
     }
 }

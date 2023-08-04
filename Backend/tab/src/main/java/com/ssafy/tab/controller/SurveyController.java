@@ -22,7 +22,8 @@ public class SurveyController {
     public ResponseEntity<Map<String, Object>> selectMySurvey(HttpServletRequest requset) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
-        System.out.println(requset.getHeader("TOKEN"));
+//        토큰을 받고 토큰으로 이용자를 받아오는 로직 수행.
+//        System.out.println(requset.getHeader("TOKEN"));
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
@@ -30,7 +31,6 @@ public class SurveyController {
     @PostMapping("/survey")
     public ResponseEntity<Map<String, Object>> insertSurvey(@RequestBody SurveyDto surveyDto, HttpServletRequest requset) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
         System.out.println(requset.getHeader("TOKEN"));
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }

@@ -1,14 +1,18 @@
 package com.ssafy.tab.service;
 
 import com.ssafy.tab.domain.User;
+import com.ssafy.tab.dto.UserLoginDto;
 import com.ssafy.tab.repository.UserRepository;
+//import com.ssafy.tab.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -17,6 +21,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private static final int SALT_SIZE = 16;
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    private Long expiredMs = 1000 * 60 * 60l; // 1시간
 
     /*public int idCheck(String userId) throws Exception {
         return userRepository.idCheck(userId);
@@ -39,12 +47,16 @@ public class UserService {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
-    /*public UserDto loginUser(UserDto userDto) throws Exception {
-        String userId = userDto.getId();
-        String salt = userRepository.getSalt(userId);
-        userDto.setPw(hashing(userDto.getPw(),salt));
-        return userRepository.loginUser(userDto);
-    }*/
+
+    public Optional<User> findById(Long id){
+        return userRepository.findById(id);
+    }
+    /*
+    public String login(String userName, String password, String role) throws Exception {
+        // 인증과정 생략
+        return JwtUtil.createJwt(userName,role,secretKey,expiredMs);
+    }
+    */
 
     /*public UserDto getUser(String userId) throws Exception {
         return userRepository.getUser(userId);

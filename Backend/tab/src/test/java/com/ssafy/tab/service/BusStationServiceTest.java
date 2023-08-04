@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-@Transactional()
+@Transactional
 class BusStationServiceTest {
 
     @Autowired BusStationService busStationService;
