@@ -5,7 +5,16 @@
 
 .bottom-button{
     width: 380px;
-    height: 247px;
+    height: 300px;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.button-page {
+    display: flex;
+    justify-content: start;
+    gap : 120px;
+    padding-left: 140px;
 }
 
 
