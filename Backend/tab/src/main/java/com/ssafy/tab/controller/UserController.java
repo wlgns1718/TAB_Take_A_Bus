@@ -52,6 +52,7 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
+    /*
     //@ApiOperation(value = "로그인", notes = "token 과 로그인 결과를 반환한다.", response = Map.class)
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody @ApiParam(value = "로그인", required = true) UserLoginDto userLoginDto){
@@ -69,7 +70,7 @@ public class UserController {
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
-    }
+    }*/
 
 
 

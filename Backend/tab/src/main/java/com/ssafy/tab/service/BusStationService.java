@@ -28,10 +28,10 @@ import org.springframework.beans.factory.annotation.Value;
 public class BusStationService {
 
     private static final String API_BASE_URL = "http://apis.data.go.kr";
-    @Value("${public.api.key1}")
-    private String SERVICE_KEY1;
-    @Value("${public.api.key2}")
-    private String SERVICE_KEY2;
+
+    @Value("#{'${public.api.key}'.split(',')}")
+    private List<String> keyList;
+
     private static final String TYPE_JSON = "json";
     private static final int NUM_OF_ROWS = 10;
     private static final int PAGE_NO = 1;
@@ -50,11 +50,12 @@ public class BusStationService {
     final String CSV_FILE_PATH = "src/main/resources/2022년_전국버스정류장 위치정보_데이터.csv";
     final String TABLE_NAME = "bus_station";
 
-    public List<BusAPI> findAll(String cityCode, String stationId) throws IOException {
+
+    public List<BusAPI> findAll(String cityCode, String stationId, int keyIndex) throws IOException {
         CITY_CODE = cityCode;
         NODE_ID = stationId;
         String apiUrl1 = API_BASE_URL + "/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList" +
-                "?serviceKey=" + SERVICE_KEY1 +
+                "?serviceKey=" + keyList.get(keyIndex) +
                 "&cityCode=" + CITY_CODE +
                 "&nodeId=" + NODE_ID +
                 "&numOfRows=" + NUM_OF_ROWS +
@@ -81,11 +82,11 @@ public class BusStationService {
                 LinkedHashMap items1 = (LinkedHashMap) items.get("items");
                 if(items1.get("item") instanceof LinkedHashMap){ // 도착 예정버스의 갯수에 따라서 type이 달라짐, 예외 발생가능
                     LinkedHashMap m = (LinkedHashMap) items1.get("item");
-                    setBus(finalResult, (int)m.get("arrprevstationcnt"), (int)m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m);
+                    setBus(finalResult, (int)m.get("arrprevstationcnt"), (int)m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
                 }else if(items1.get("item") instanceof List){
                     List<Map<String, Object>> src = (List<Map<String, Object>>) items1.get("item");
                     for (Map<String, Object> m : src) {
-                        setBus(finalResult, (int) m.get("arrprevstationcnt"), (int) m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m);
+                        setBus(finalResult, (int) m.get("arrprevstationcnt"), (int) m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
                     }
                 }
             }
@@ -98,7 +99,7 @@ public class BusStationService {
     }
 
 
-    private void setBus(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m) throws IOException {
+    private void setBus(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m, int keyIndex) throws IOException {
         BusAPI busAPI = new BusAPI();
         busAPI.setRemainingStops(arrprevstationcnt);
         busAPI.setEta(arrtime);
@@ -108,7 +109,7 @@ public class BusStationService {
         busAPI.setVehicleType(vehicletp.toString());
 
         String apiUrl2 = API_BASE_URL + "/1613000/BusLcInfoInqireService/getRouteAcctoBusLcList" +
-                "?serviceKey=" + SERVICE_KEY2 +
+                "?serviceKey=" + keyList.get(keyIndex) +
                 "&pageNo=" + PAGE_NO +
                 "&numOfRows=" + NUM_OF_ROWS +
                 "&_type=" + TYPE_JSON +

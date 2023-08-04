@@ -3,7 +3,7 @@ package com.ssafy.tab.service;
 import com.ssafy.tab.domain.User;
 import com.ssafy.tab.dto.UserLoginDto;
 import com.ssafy.tab.repository.UserRepository;
-import com.ssafy.tab.utils.JwtUtil;
+//import com.ssafy.tab.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -51,10 +51,12 @@ public class UserService {
     public Optional<User> findById(Long id){
         return userRepository.findById(id);
     }
+    /*
     public String login(String userName, String password, String role) throws Exception {
         // 인증과정 생략
         return JwtUtil.createJwt(userName,role,secretKey,expiredMs);
     }
+    */
 
     /*public UserDto getUser(String userId) throws Exception {
         return userRepository.getUser(userId);
