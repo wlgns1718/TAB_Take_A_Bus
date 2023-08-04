@@ -39,6 +39,9 @@ dependencies {
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail'
+	// javax.xml.bind.DatatypeConverter 에러 발생 시 필요한 dependencies
+	implementation group: 'javax.xml.bind', name: 'jaxb-api-osgi', version: '2.2.7'
+
 }
 
 tasks.named('test') {

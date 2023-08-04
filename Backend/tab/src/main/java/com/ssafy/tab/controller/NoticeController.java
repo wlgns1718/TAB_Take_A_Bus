@@ -25,7 +25,7 @@ public class NoticeController {
 //    private JwtTokenProvider jwtTokenProvider; // 토큰을 생성하고 검증하는 @Component (jjwt라이브러리로 구현할 수 있음)
 
 
-    @ApiOperation(value = "공지사항 목록", notes = "공지사항의 글을 작성한다.", response = Map.class)
+    @ApiOperation(value = "공지사항 목록", notes = "공지사항 전체 목록을 보여줌(페이징)", response = Map.class)
     @GetMapping("/list")
     public Page<NoticeResponseDto> list(Pageable pageable){
         return noticeService.list(pageable);
