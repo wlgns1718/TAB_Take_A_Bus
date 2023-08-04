@@ -40,7 +40,7 @@ const initialState: KioskState = {
       eta: 200,
       remainingStops: 1,
       routeId: "temp1",
-      routeType: "저상버스",
+      routeType: "간선버스",
       vehicleNo: "temp1",
       vehicleType: "temp1",
       stationId: "temp1",

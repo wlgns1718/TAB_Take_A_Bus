@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { HeaderProps } from ".";
 import './Header.css'
-import kioskSlice from "../../../store/slice/kiosk-slice";
 
 
 export const Header: FC<HeaderProps> = (props) => {
