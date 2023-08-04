@@ -16,20 +16,20 @@ export type BusData = {
   stationOrder: number;
 };
 
-type BusStoreData = BusData & {
+export type BusStoreData = BusData & {
   isStopHere: boolean;
   passengerNumber: number;
-  isVulnerable:boolean;
+  isVulnerable: boolean;
 };
 
-type ErrorType = string | null
-type BusStopId = string | null
+type ErrorType = string | null;
+type BusStopId = string | null;
 
 export interface KioskState {
   citycode: number;
   busStopId: BusStopId;
   busData: BusStoreData[];
-  nowBusListPage: number;
+  nowCarouselPage: number;
   loading: boolean;
   error: ErrorType;
   masterkey: string;
@@ -76,7 +76,7 @@ const initialState: KioskState = {
       remainingStops: 4,
       routeId: "temp1",
       routeType: "간선버스",
-      vehicleNo: "temp1",
+      vehicleNo: "temp3",
       vehicleType: "temp1",
       stationId: "temp1",
       stationName: "temp2",
@@ -90,8 +90,38 @@ const initialState: KioskState = {
       eta: 500,
       remainingStops: 6,
       routeId: "temp1",
-      routeType: "일반버스",
-      vehicleNo: "temp1",
+      routeType: "간선버스",
+      vehicleNo: "temp15",
+      vehicleType: "temp1",
+      stationId: "temp1",
+      stationName: "temp2",
+      stationOrder: 10,
+      isStopHere: false,
+      passengerNumber: 0,
+      isVulnerable: false,
+    },
+    {
+      busNo: "500",
+      eta: 500,
+      remainingStops: 6,
+      routeId: "temp1",
+      routeType: "간선버스",
+      vehicleNo: "temp31",
+      vehicleType: "temp1",
+      stationId: "temp1",
+      stationName: "temp2",
+      stationOrder: 10,
+      isStopHere: false,
+      passengerNumber: 0,
+      isVulnerable: false,
+    },
+    {
+      busNo: "500",
+      eta: 500,
+      remainingStops: 6,
+      routeId: "temp1",
+      routeType: "간선버스",
+      vehicleNo: "temp12",
       vehicleType: "temp1",
       stationId: "temp1",
       stationName: "temp2",
@@ -101,7 +131,7 @@ const initialState: KioskState = {
       isVulnerable: false,
     },
   ],
-  nowBusListPage: 0,
+  nowCarouselPage: 0,
   loading: false,
   error: null,
 };
@@ -114,15 +144,34 @@ const kioskSlice = createSlice({
     updateBusData(state, action) {
       state.busData = action.payload;
     },
-    checkMaster(state,action){
-        state.busStopId = action.payload
-        console.log(state.busStopId)
-      }
-    }
-    
+    increasePassenger(state, action) {
+      const vehicleNo = action.payload.vehicleNo;
+      state.busData.forEach((el)=>{
+        if (el.vehicleNo == vehicleNo) {
+          el.passengerNumber += 1;
+          el.isStopHere = true;
+          return;
+        }
+      })
+      console.log(action.payload.vehicleNo);
+    },
+    syncCarouselPage(state, action) {
+      state.nowCarouselPage = action.payload.now;
+    },
+    SetVulnerable(state, action) {
+      const vehicleNo = action.payload.vehicleNo;
+      state.busData.forEach((el) => {
+        if (el.vehicleNo == vehicleNo) {
+          el.isVulnerable = true;
+          el.isStopHere = true;
+          return
+        }
+      });
+    },
   },
 );
 
-export const { updateBusData,checkMaster } = kioskSlice.actions;
+export const { updateBusData, increasePassenger, SetVulnerable, syncCarouselPage } =
+  kioskSlice.actions;
 
 export default kioskSlice;

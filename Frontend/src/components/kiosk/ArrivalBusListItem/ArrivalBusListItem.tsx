@@ -2,13 +2,15 @@ import { FC, useState } from "react";
 import { ArrivalBusListItemProps } from ".";
 import "./ArrivalBusListItem.css";
 import { Grid } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { BusStoreData, KioskState, increasePassenger } from "@/store/slice/kiosk-slice";
 
 export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
-  const [isStopHere, setIsStopHere] = useState(false);
+
+  const dispatch = useDispatch();
 
   const busIconURL = `/bus_side_icon.png?url`;
   return (
-
     <div className="bus-item-container">
       <div className="bus-item-top">
         <div>
@@ -101,14 +103,14 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
           </div>
         </div>
         <div
-          className={`tap-button ${isStopHere ? "tap-on" : "tap-off"}`}
-          onClick={() => setIsStopHere(true)}
+          className={`tap-button ${item.isStopHere ? "tap-on" : "tap-off"}`}
+          onClick={() => {dispatch(increasePassenger({ vehicleNo: item.vehicleNo }));}}
         >
-          {isStopHere ? "정차 예정" : "탑승"}
+          {item.isStopHere ? "정차 예정" : "탑승"}
         </div>
       </div>
       <div className="guide-message">
-        {isStopHere ? (
+        {item.isStopHere ? (
           <span>이 버스는 현 정류장에 정차할 예정입니다.</span>
         ) : (
           <span>이 버스에 탑승하시려면 탑승 버튼을 눌러주세요.</span>
