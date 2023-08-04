@@ -1,21 +1,43 @@
 import { FC, useState } from "react";
 import { ArrivalBusListItemProps } from ".";
 import "./ArrivalBusListItem.css";
+import { Grid } from "@mui/material";
 
 export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
   const [isStopHere, setIsStopHere] = useState(false);
+  
   return (
+
     <div className="bus-item-container">
       <div className="bus-item-top">
-        <div className="bus-detail bg-white round-10">
-          <div className="">
-            <div className="">대충 아이콘</div>
-            <div>{item.routeType}</div>
-          </div>
-          <div className="">
-            <h1>{item.busNo}</h1>
-            <div className="">{item.vehicleType}</div>
-          </div>
+        <div>
+          <Grid container direction ="column" justifyContent={"center"} alignItems={"center"} className="bus-detail bg-white round-10" style={{width:'350px'}} >
+
+            <Grid container direction="row" justifyContent={"space-around"} alignItems={"center"} >
+              <Grid item xs={5} >
+                
+              <img src={`/${item.routeType}.png?url`}/>
+   
+              </Grid>
+              <Grid item xs={6}>
+             
+              <div className="slide-container"  style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
+
+                  <h1 style={{ fontSize: '70px', margin: '0', padding: '0' }}>{item.busNo}</h1>
+             
+              </div>
+              </Grid>
+            </Grid>
+            <Grid container direction="row" justifyContent={"flex-start"} alignItems={"baes-line"}>
+              <Grid item style={{fontSize:'35px' , fontWeight:"bolder"}}>
+                {item.routeType}
+              </Grid>
+              <Grid item>
+                {item.vehicleType == '저상버스' && <img src="/src/assets/image/wheelchair.png"/>}
+              </Grid>
+            </Grid>  
+
+          </Grid>
         </div>
         <div className="bus-eta bg-white round-10">
           <div className="text-center">도착예정시간</div>
