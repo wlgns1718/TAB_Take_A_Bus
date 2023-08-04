@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
-
-
 export type BusData = {
   busNo: string;
   eta: number;
@@ -137,7 +134,6 @@ const initialState: KioskState = {
 };
 
 const kioskSlice = createSlice({
-  
   name: "kiosk",
   initialState,
   reducers: {
@@ -146,13 +142,13 @@ const kioskSlice = createSlice({
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
-      state.busData.forEach((el)=>{
+      state.busData.forEach((el) => {
         if (el.vehicleNo == vehicleNo) {
           el.passengerNumber += 1;
           el.isStopHere = true;
           return;
         }
-      })
+      });
       console.log(action.payload.vehicleNo);
     },
     syncCarouselPage(state, action) {
@@ -164,14 +160,23 @@ const kioskSlice = createSlice({
         if (el.vehicleNo == vehicleNo) {
           el.isVulnerable = true;
           el.isStopHere = true;
-          return
+          return;
         }
       });
     },
+    checkMaster(state, action) {
+      state.busStopId = action.payload;
+      console.log(state.busStopId);
+    },
   },
-);
+});
 
-export const { updateBusData, increasePassenger, SetVulnerable, syncCarouselPage } =
-  kioskSlice.actions;
+export const {
+  updateBusData,
+  increasePassenger,
+  SetVulnerable,
+  syncCarouselPage,
+  checkMaster,
+} = kioskSlice.actions;
 
 export default kioskSlice;
