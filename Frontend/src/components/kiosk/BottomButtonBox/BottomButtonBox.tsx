@@ -1,90 +1,80 @@
 import { FC } from "react";
 import { BottomButtonBoxProps } from ".";
 import "./BottomButtonBox.css";
-import { useState } from "react";
+import {
+  BusStoreData,
+  KioskState,
+  SetVulnerable,
+} from "@/store/slice/kiosk-slice";
+import { useDispatch, useSelector } from "react-redux";
 
-type BusState = {
-  busNo: number;
-  redLight: boolean;
-  wheelchair: boolean;
-};
 
-export const BottomButtonBox: FC<BottomButtonBoxProps> = (props) => {
-  const [bus, setBus] = useState<Array<BusState>>([
-    { busNo: 123, redLight: false, wheelchair: false },
-    { busNo: 501, redLight: false, wheelchair: false },
-    { busNo: 305, redLight: false, wheelchair: false },
-  ]);
-
-  const onBusClick = (busName) => {
-    const temp = [...bus];
-
-    setBus(
-      temp.map((element) => {
-        if (element.busNo === busName) {
-          console.log(element);
-          element.redLight = true;
-          element.wheelchair = true;
-          console.log(element);
-        }
-        return element;
-      })
-    );
-  };
+export const BottomButtonBox: FC<BottomButtonBoxProps> = ({ pages }) => {
+  const nowPage: number = useSelector(
+    (state: { kiosk: KioskState; web: object }) => {
+      return state.kiosk.nowCarouselPage;
+    }
+  );
   return (
-    <div {...props}>
-      <div>
+    <div>
+      <div
+        className="setbtn"
+        style={{
+          backgroundColor: "#208EF4",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "40px 40px 0 0",
+        }}
+      >
         <div
-          className="setbtn"
           style={{
-            backgroundColor: "#208EF4",
+            justifyContent: "center",
             display: "flex",
-            flexDirection: "column",
-            borderRadius: "40px 40px 0 0",
+            height: "180px",
+            marginBottom: "50px",
           }}
         >
-          <div
-            style={{
-              justifyContent: "center",
-              display: "flex",
-              height: "180px",
-              marginBottom: "50px",
-            }}
-          >
-            <h1 style={{ fontSize: "80px", color: "white" }}>
-              교통약자 탑승버튼
-            </h1>
-            <img
-              style={{ height: "160px", width: "180", margin: "20px" }}
-              src="/wheelchair_big.png?url"
-              alt="실패"
-            />
-          </div>
+          <h1 style={{ fontSize: "80px", color: "white" }}>
+            교통약자 탑승버튼
+          </h1>
+          <img
+            style={{ height: "160px", width: "180", margin: "20px" }}
+            src="/wheelchair_big.png?url"
+            alt="실패"
+          />
+        </div>
 
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            {bus.map((element: object, index: number) => {
-              return <Btn props={{ element, onBusClick }} key={index} />;
-            })}
-          </div>
+        <div className="button-pages">
+          {pages.map((page, pagenumber) => {
+            return (
+              pagenumber == nowPage && (
+                <div key={pagenumber} className="button-page">
+                  {page.map((item: BusStoreData, index: number) => {
+                    return <Btn item={item} key={index} />;
+                  })}
+                </div>
+              )
+            );
+          })}
         </div>
       </div>
     </div>
   );
 };
 
-function Btn({ props: { element, onBusClick } }) {
+function Btn({ item }: { item: BusStoreData }) {
+  const dispatch = useDispatch();
   return (
     <button
       className="bottom-button"
       style={{
-        fontSize: "55px",
-        backgroundColor: !element.redLight ? "white" : "red",
+        backgroundColor: !item.isStopHere ? "white" : "red",
       }}
       onClick={() => {
-        onBusClick(element.busNo);
+        dispatch(SetVulnerable({ vehicleNo: item.vehicleNo }));
       }}
     >
-      {element.busNo}
+      {item.busNo}
     </button>
   );
 }
