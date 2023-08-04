@@ -3,6 +3,7 @@ package com.ssafy.tab.controller;
 import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.User;
 import com.ssafy.tab.dto.UserDto;
+import com.ssafy.tab.dto.UserLoginDto;
 import com.ssafy.tab.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,7 +52,25 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
+    /*
     //@ApiOperation(value = "로그인", notes = "token 과 로그인 결과를 반환한다.", response = Map.class)
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody @ApiParam(value = "로그인", required = true) UserLoginDto userLoginDto){
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try{
+            String token = us.login(userLoginDto.getId(), userLoginDto.getPw(), userLoginDto.getRole()); // 발행된 토큰
+
+            resultMap.put("data",token);
+            resultMap.put("code", "200");
+            resultMap.put("msg","로그인 성공");
+        }catch (Exception e){
+            resultMap.put("code", "500");
+            resultMap.put("msg","로그인 실패");
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }*/
 
 
 

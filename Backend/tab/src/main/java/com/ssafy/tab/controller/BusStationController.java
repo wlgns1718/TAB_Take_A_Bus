@@ -20,14 +20,14 @@ import java.util.Map;
 public class BusStationController {
 
     private final BusStationService busStationService;
-
+    private int keyIndex = 0;
     @GetMapping("/api/stops/{cityCode}/{stationId}") // CITY_CODE = "37050", NODE_ID = "GMB383"
     public ResponseEntity<Map<String, Object>> searchBus(@PathVariable("cityCode") String cityCode, @PathVariable("stationId") String stationId) {
 
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            List<BusAPI> result = busStationService.findAll(cityCode, stationId);
+            List<BusAPI> result = busStationService.findAll(cityCode, stationId, keyIndex);
 
             if (result != null && !result.isEmpty()) {
                 resultMap.put("data", result);
@@ -39,6 +39,7 @@ public class BusStationController {
             }
 
         } catch (IOException e) {
+            keyIndex = (keyIndex + 1)%5; // key 호출횟수가 만료되면 키를 바꿈 (0, 1, 2, 3, 4, 0, 1, 2, 3, 4 ... 이렇게 순회)
             e.printStackTrace();
             resultMap.put("code", "500");
             resultMap.put("msg", "해당 정류장 버스 정보를 가져오지 못했습니다.");

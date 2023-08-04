@@ -21,7 +21,8 @@ public class NoticeService {
 
     @Transactional(readOnly = true) // 공지사항 전체 조회
     public Page<NoticeResponseDto> list(Pageable pageable){ // 공지사항 전체 조회(페이징)
-        return noticeRepository.list(pageable);
+        Page<Notice> page = noticeRepository.findAll(pageable);
+        return page.map(b -> new NoticeResponseDto(b.getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime()));
     }
 
     public Long createNotice(Notice notice){ // 공지사항 생성
