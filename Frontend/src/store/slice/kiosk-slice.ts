@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+
+
 export type BusData = {
   busNo: string;
   eta: number;
@@ -29,11 +32,13 @@ export interface KioskState {
   nowCarouselPage: number;
   loading: boolean;
   error: ErrorType;
+  masterkey: string;
 }
 
 const initialState: KioskState = {
   citycode: 22,
-  busStopId: "DGB7001004100",
+  busStopId: "DGB357000098",
+  masterkey: "123123123",
   busData: [
     {
       busNo: "105",
@@ -42,7 +47,7 @@ const initialState: KioskState = {
       routeId: "temp1",
       routeType: "간선버스",
       vehicleNo: "temp1",
-      vehicleType: "temp1",
+      vehicleType: "저상버스",
       stationId: "temp1",
       stationName: "temp1",
       stationOrder: 10,
@@ -56,8 +61,8 @@ const initialState: KioskState = {
       remainingStops: 2,
       routeId: "temp1",
       routeType: "급행버스",
-      vehicleNo: "temp2",
-      vehicleType: "temp1",
+      vehicleNo: "temp1",
+      vehicleType: "저상버스",
       stationId: "temp1",
       stationName: "temp2",
       stationOrder: 10,
@@ -132,6 +137,7 @@ const initialState: KioskState = {
 };
 
 const kioskSlice = createSlice({
+  
   name: "kiosk",
   initialState,
   reducers: {
@@ -163,7 +169,7 @@ const kioskSlice = createSlice({
       });
     },
   },
-});
+);
 
 export const { updateBusData, increasePassenger, SetVulnerable, syncCarouselPage } =
   kioskSlice.actions;
