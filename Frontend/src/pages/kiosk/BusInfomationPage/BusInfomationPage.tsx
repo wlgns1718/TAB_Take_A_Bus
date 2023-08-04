@@ -6,18 +6,15 @@ import { ArrivalBusList } from "../../../components/kiosk/ArrivalBusList";
 import { LivingInformationBox } from "../../../components/kiosk/LivingInfomationBox";
 import { BottomButtonBox } from "../../../components/kiosk/BottomButtonBox";
 import { BusData, KioskState, updateBusData } from "../../../store/slice/kiosk-slice";
-// import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { busAPI } from "../../../store/api/api";
 import { useQuery } from "react-query";
 import { AxiosError } from 'axios'
-// import { changeBusStop } from "../../../store/slice/web-slice";
 
 
 
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
-  const [busDatas, setBusData] = useState<BusData[]>([]);
   const [comingSoonBusList, setComingSoonBusList] = useState<BusData[]>([]);
   
   const dispatch = useDispatch()
@@ -80,7 +77,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
       <ComingSoonBusList data={comingSoonBusList ? comingSoonBusList : []} />
       <ArrivalBusList data={data.busData ? data.busData : []} />
       <LivingInformationBox />
-      <BottomButtonBox />
+      <BottomButtonBox  />
     </div>
   );
 };

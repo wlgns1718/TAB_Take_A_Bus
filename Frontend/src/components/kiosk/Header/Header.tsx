@@ -11,7 +11,7 @@ export const Header: FC<HeaderProps> = (props) => {
   const min = time.getMinutes();
 
   const busStop = "우리집 앞"
-  const logoURL = "../../src/assets/image/대구광역시_logo.png";
+  const logoURL = `/대구광역시_logo.png?url`;
 
   const fillZero = ( num : number ) : string => {
     return num.toString().padStart(2, "0");

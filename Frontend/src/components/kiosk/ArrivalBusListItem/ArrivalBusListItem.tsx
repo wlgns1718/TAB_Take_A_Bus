@@ -5,7 +5,8 @@ import { Grid } from "@mui/material";
 
 export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
   const [isStopHere, setIsStopHere] = useState(false);
-  
+
+  const busIconURL = `/bus_side_icon.png?url`;
   return (
 
     <div className="bus-item-container">
@@ -40,16 +41,18 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
           </Grid>
         </div>
         <div className="bus-eta bg-white round-10">
-          <div className="bus-eta-title text-center flex-1">도착예정시간</div>
-          <div className="bus-eta-text flex-2">
-            <div className="bus-eta-num flex-2">
-              {Math.round(item?.eta / 60)}
+          <div className="bus-eta-title text-center ">도착예정시간</div>
+          <div className="bus-eta-eta text-center">ETA</div>
+          <div className="bus-eta-text ">
+            <div className="bus-eta-num ">{Math.round(item?.eta / 60)}</div>
+            <div className="bus-eta-min ">
+              <div>분</div>
+              <div className="bus-eta-min-eng"> min</div>
             </div>
-            <div className="bus-eta-min flex-1"> 분 </div>
           </div>
         </div>
         <div className="bus-routeinfo bg-white round-10">
-          <div className="bus-map-line"> d</div>
+          <div className="bus-map-line"> </div>
           {[
             item.remainingStops >= 4 ? item.remainingStops : 4,
             3,
@@ -68,22 +71,34 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
           ))}
           <img
             className="bus-icon"
-            src="..\..\src\assets\image\bus_side_icon.png"
+            src={busIconURL}
             style={{
               left: `${
                 ((item.remainingStops >= 4 ? 0 : 4 - item.remainingStops) / 5) *
-                  750 +
-                75
+                  720 +
+                85
               }px`,
             }}
           ></img>
+          <div
+            className="current-station-name"
+            style={{
+              left: `${
+                ((item.remainingStops >= 4 ? 0 : 4 - item.remainingStops) / 5) *
+                  720 +
+                85
+              }px`,
+            }}
+          >
+            {item.stationName}
+          </div>
         </div>
-        <button
+        <div
           className={`tap-button ${isStopHere ? "tap-on" : "tap-off"}`}
           onClick={() => setIsStopHere(true)}
         >
           {isStopHere ? "정차 예정" : "탑승"}
-        </button>
+        </div>
       </div>
       <div className="guide-message">
         {isStopHere ? (
@@ -92,14 +107,6 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
           <span>이 버스에 탑승하시려면 탑승 버튼을 눌러주세요.</span>
         )}
       </div>
-      {/* <div>busNo : {item.busNo} </div>
-      <div>routeId : {item.routeId}</div>
-      <div>routeType : {item.routeType}</div>
-      <div>vehicleType : {item.vehicleType}</div>
-      <div>vehicleNo : {item.vehicleNo}</div>
-      <div>stationOrder : {item.stationOrder}</div>
-      <div>stationName : {item.stationName}</div>
-      <div>stationId : {item.stationId}</div> */}
     </div>
   );
 };
