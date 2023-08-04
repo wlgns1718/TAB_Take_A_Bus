@@ -1,14 +1,22 @@
 import { FC, useState, useEffect } from "react";
-import { BusData } from "../../../store/slice/kiosk-slice";
 import { ArrivalBusListItem } from "../ArrivalBusListItem";
 import Carousel from "react-material-ui-carousel";
 import "./ArrivalBusList.css";
+import { BusData, KioskState } from "../../../store/slice/kiosk-slice";
+import { useSelector } from "react-redux";
 
 interface ArrivalBusListProps {
   data: BusData[];
 }
 
 export const ArrivalBusList: FC<ArrivalBusListProps> = (props) => {
+
+  const data : KioskState = useSelector((state : {
+    kiosk : KioskState,
+    web : object
+  }) => {
+    return state.kiosk;
+  });
 
   const [pages, setPage] = useState([]);
 
@@ -23,8 +31,8 @@ export const ArrivalBusList: FC<ArrivalBusListProps> = (props) => {
 
   useEffect(() => {
     // 페이지 지정
-    setPage(paginateArray(props.data, 4));
-  }, [props.data]);
+    setPage(paginateArray(data.busData, 4));
+  }, [data.busData]);
 
   return (
     <div className="bus-list-container">
