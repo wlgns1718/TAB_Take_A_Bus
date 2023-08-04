@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -43,7 +44,7 @@ public class BoardController {
     }
 
     //게시글 등록
-    @PostMapping("/board")
+    @PostMapping("")
     public ResponseEntity<Map<String, Object>> createBoard(@RequestBody BoardDto boardDto ,HttpServletRequest request) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -66,7 +67,7 @@ public class BoardController {
     }
 
     //게시글 삭제
-    @DeleteMapping("/board/{boardId}")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity<Map<String, Object>> deleteBoard(@PathParam("boardId")Long boardId, HttpServletRequest request) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -80,16 +81,18 @@ public class BoardController {
             resultMap.put("msg", "삭제 권한이 없습니다.");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         }
-        try{
-            boardService.deleteBoard(findBoard);
-            resultMap.put("code", "500");
-            resultMap.put("msg", "게시글 삭제 완료!");
-        } catch(Exception e){
-            e.printStackTrace();
-            resultMap.put("code", "200");
-            resultMap.put("msg", "게시글 등록 실패!");
-        }finally {
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        else{
+            try{
+                boardService.deleteBoard(findBoard);
+                resultMap.put("code", "500");
+                resultMap.put("msg", "게시글 삭제 완료!");
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            }catch(Exception e){
+                e.printStackTrace();
+                resultMap.put("code", "200");
+                resultMap.put("msg", "게시글 등록 실패!");
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            }
         }
     }
 
