@@ -13,16 +13,22 @@ export type BusData = {
   stationOrder: number;
 };
 
+type BusStoreData = BusData & {
+  isStopHere: boolean;
+  passengerNumber: number;
+  isVulnerable:boolean;
+};
+
 type ErrorType = string | null
 type BusStopId = string | null
 
 export interface KioskState {
-  citycode : number,
-  busStopId : BusStopId,
-  busData: BusData[],
-  nowBusListPage: number,
-  loading : boolean,
-  error : ErrorType ,
+  citycode: number;
+  busStopId: BusStopId;
+  busData: BusStoreData[];
+  nowBusListPage: number;
+  loading: boolean;
+  error: ErrorType;
 }
 
 const initialState: KioskState = {
@@ -40,6 +46,9 @@ const initialState: KioskState = {
       stationId: "temp1",
       stationName: "temp1",
       stationOrder: 10,
+      isStopHere: true,
+      passengerNumber: 1,
+      isVulnerable: false,
     },
     {
       busNo: "115",
@@ -52,6 +61,9 @@ const initialState: KioskState = {
       stationId: "temp1",
       stationName: "temp2",
       stationOrder: 10,
+      isStopHere: true,
+      passengerNumber: 1,
+      isVulnerable: true,
     },
     {
       busNo: "200",
@@ -64,6 +76,9 @@ const initialState: KioskState = {
       stationId: "temp1",
       stationName: "temp2",
       stationOrder: 10,
+      isStopHere: false,
+      passengerNumber: 0,
+      isVulnerable: false,
     },
     {
       busNo: "500",
@@ -76,6 +91,9 @@ const initialState: KioskState = {
       stationId: "temp1",
       stationName: "temp2",
       stationOrder: 10,
+      isStopHere: false,
+      passengerNumber: 0,
+      isVulnerable: false,
     },
   ],
   nowBusListPage: 0,
