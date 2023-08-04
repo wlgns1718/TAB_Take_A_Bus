@@ -11,12 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-<<<<<<< HEAD
-@Transactional()
-=======
 @Transactional
-@Rollback(value = false)
->>>>>>> peter
 class BusStationServiceTest {
 
     @Autowired BusStationService busStationService;

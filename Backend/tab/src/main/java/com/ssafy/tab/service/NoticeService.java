@@ -24,7 +24,7 @@ public class NoticeService {
         return noticeRepository.list(pageable);
     }
 
-    public Long createNotice(Notice notice){ // 공지사항 생성
+        public Long createNotice(Notice notice){ // 공지사항 생성
         Notice result = noticeRepository.save(notice);
         return result.getId();
     }

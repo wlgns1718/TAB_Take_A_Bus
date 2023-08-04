@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.ssafy.tab.domain.BusAPI;
+import com.ssafy.tab.domain.BusStation;
+import com.ssafy.tab.repository.BusStationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +20,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class BusStationService {
+
+    private final BusStationRepository busStationRepository;
 
     private static final String API_BASE_URL = "http://apis.data.go.kr";
     @Value("${public.api.key1}")
@@ -167,7 +171,7 @@ public class BusStationService {
     }
 
     @Transactional
-    public boolean busStationData( String cityName){
+    public boolean busStationData(String cityName){
         try (
             Connection connection = DriverManager.getConnection(url, username, password);
             CSVReader reader = new CSVReader(new FileReader(CSV_FILE_PATH))) {
@@ -201,7 +205,6 @@ public class BusStationService {
                 preparedStatement.setString(6, station_name);
                 preparedStatement.addBatch();
             }
-
             int[] batchResult = preparedStatement.executeBatch();
 
             int totalRecordsInserted = 0;
@@ -209,10 +212,15 @@ public class BusStationService {
                 totalRecordsInserted += count;
             }
             return true;
-
         } catch (ClassNotFoundException | SQLException | IOException | CsvValidationException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Transactional
+    public String presentStationName(String stationNo) {
+        BusStation busStation = busStationRepository.findById(stationNo).get();
+        return busStation.getStationName();
     }
 }

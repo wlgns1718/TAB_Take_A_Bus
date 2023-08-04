@@ -15,7 +15,7 @@ public class Board {
 
     /*
     id : 게시판 번호
-    userNo : 글 작성자
+    userNo : 글 작성자 id
     title : 제목
     content : 내용
     createTime : 작성 시간

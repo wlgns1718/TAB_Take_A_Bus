@@ -12,14 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
-<<<<<<< HEAD
-import org.springframework.test.context.ActiveProfiles;
-=======
->>>>>>> peter
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
@@ -31,11 +26,6 @@ import static com.ssafy.tab.domain.Role.USER;
 @TestPropertySource(locations="classpath:/application-test.properties")
 @SpringBootTest
 @Transactional
-<<<<<<< HEAD
-=======
-@TestPropertySource(locations="classpath:/application-test.properties")
-@Rollback(value = false)
->>>>>>> peter
 class BoardRepositoryTest {
 
     @PersistenceContext
@@ -49,7 +39,7 @@ class BoardRepositoryTest {
 
     //게시글 등록
     @Test
-    public void createBoard() throws Exception{
+    public void createBoard2() throws Exception{
         //유저 생성 및 게시글 등록
         User user = new User("qweqwe13", "1234", "홍길동", "qwe@naver.com", USER);
         userService.joinUser(user);
@@ -117,7 +107,7 @@ class BoardRepositoryTest {
         Board board1 = new Board(user, "제목입니다.", "내용입니다", now, Sort.REPORT);
         boardService.createBoard(board1);
 
-        Board board = boardService.selectBoard(board1.getId());
+        Board board = boardService.findBoard(board1.getId());
         System.out.println("board.getContent() = " + board.getContent());
         System.out.println("board 생성 시간은 = " + board.getCreateTime());
     }
@@ -248,6 +238,37 @@ class BoardRepositoryTest {
         for (Board board : content) {
             System.out.println("board의 제목 = " + board.getTitle());
             System.out.println("board를 작성한 사람의 아이디 = " + board.getUser().getUserId());
+        }
+    }
+
+    @Test
+    public void createBoard() throws Exception{
+        //유저 생성 및 게시글 등록
+        User user1 = new User("qweqwe13", "1234", "홍길동", "qwe@naver.com", USER);
+        User user2 = new User("태조", "25152", "이성계", "zxcas@naver.com", USER);
+        User user3 = new User("정조", "231322", "이산", "ghmhghmg@naver.com", USER);
+        userService.joinUser(user1);
+        userService.joinUser(user2);
+        userService.joinUser(user3);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for (int i = 0; i < 10; i++) {
+            boardService.createBoard(new Board(user1, "일반인이 작성한 제목"+i+"입니다.", "일반인이 작성한 내용"+i+"입니다", now, Sort.REPORT));
+        }
+        for (int i = 0; i < 13; i++) {
+            boardService.createBoard(new Board(user2, "태조가 작성한 제목"+i+"입니다.", "태조가 작성한 내용"+i+"입니다", now, Sort.COMPLAIN));
+        }
+        for (int i = 0; i < 5; i++) {
+            boardService.createBoard(new Board(user3, "정조가 작성한 제목"+i+"입니다.", "장조가 작성한 내용"+i+"입니다", now, Sort.COMPLAIN));
+        }
+
+        PageRequest pageable = PageRequest.of(0, 100);
+
+        Page<BoardDto> page = boardService.selectBoard(pageable);
+        List<BoardDto> content = page.getContent();
+        for (BoardDto board : content) {
+            System.out.println(board);
         }
     }
 }
