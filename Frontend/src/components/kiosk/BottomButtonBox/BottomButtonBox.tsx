@@ -56,7 +56,7 @@ export const BottomButtonBox: FC<BottomButtonBoxProps> = (props) => {
             </h1>
             <img
               style={{ height: "160px", width: "180", margin: "20px" }}
-              src="/src/assets/image/wheelchair_big.png"
+              src="/wheelchair_big.png?url"
               alt="실패"
             />
           </div>
