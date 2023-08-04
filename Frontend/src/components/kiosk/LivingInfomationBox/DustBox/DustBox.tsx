@@ -19,7 +19,7 @@ export const DustBox: FC<DustBoxProps> = (props) => {
   // const latitude: number = 36.12;
   // const longitude: number = 128.34;
 
-  const useTempData = false;
+  const useTempData = true;
 
   const tempDustData = {
     pm25Grade1h: "1",
