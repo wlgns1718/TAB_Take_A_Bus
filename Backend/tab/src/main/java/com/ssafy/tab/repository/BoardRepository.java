@@ -2,14 +2,11 @@ package com.ssafy.tab.repository;
 
 import com.ssafy.tab.domain.Board;
 import com.ssafy.tab.domain.Sort;
-import com.ssafy.tab.domain.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -26,8 +23,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByTitleContaining(String title, Pageable paging);
 
     //작성자로 검색하기
-    @Query("select b from Board b where b.user.userId like %:userId%")
-    Page<Board> findByUserContaining(@Param("userId") String userId, Pageable paging);
+    @Query("select b from Board b where b.user.name like %:userName%")
+    Page<Board> findByUserContaining(@Param("userName") String userName, Pageable paging);
 
     //내용으로 검색하기
     Page<Board> findByContentContaining(String cotent, Pageable paging);

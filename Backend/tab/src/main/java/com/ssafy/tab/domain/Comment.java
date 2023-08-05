@@ -1,14 +1,18 @@
 package com.ssafy.tab.domain;
 
 import com.ssafy.tab.dto.CommentDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Table(name = "COMMENT")
 public class Comment {
 
@@ -19,6 +23,7 @@ public class Comment {
     content : 내용
     createTime : 작성날짜
      */
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMENT_NO")
     private Long id;
@@ -27,6 +32,7 @@ public class Comment {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "BOARD_NO")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
     @Column(name = "CONTENT", length = 200)
@@ -35,16 +41,19 @@ public class Comment {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createTime;
 
-    public Comment(User user, Board board, String content, LocalDateTime createTime) {
-        this.user = user;
-        this.board = board;
-        this.content = content;
-        this.createTime = createTime;
-    }
-
     //게시글의 내용을 수정하는 기능
     public void changeComment(CommentDto commentDto) {
         this.content = commentDto.getContent();
         this.createTime = commentDto.getCreateTime();
+    }
+
+    public static Comment toEntity(CommentDto commentDto, User user, Board board){
+        return Comment.builder()
+                .id(commentDto.getId())
+                .user(user)
+                .board(board)
+                .content(commentDto.getContent())
+                .createTime(commentDto.getCreateTime())
+                .build();
     }
 }

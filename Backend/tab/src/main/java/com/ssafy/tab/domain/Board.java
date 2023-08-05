@@ -1,15 +1,18 @@
 package com.ssafy.tab.domain;
 
 import com.ssafy.tab.dto.BoardDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Table(name = "BOARD")
 public class Board {
 
@@ -42,19 +45,23 @@ public class Board {
     @Column(name = "SORT")
     private Sort sort;
 
-    public Board(User user, String title, String content, LocalDateTime createTime, Sort sort) {
-        this.user = user;
-        this.title = title;
-        this.content = content;
-        this.createTime = createTime;
-        this.sort = sort;
-    }
-
     //게시글의 내용을 수정하는 기능.
-    public void changeBoard(BoardDto boardDto) {
+    public Board changeBoard(BoardDto boardDto) {
         this.title = boardDto.getTitle();
         this.content = boardDto.getContent();
         this.createTime = boardDto.getCreateTime();
         this.sort = boardDto.getSort();
+        return this;
+    }
+
+    public static Board toEntity(BoardDto boardDto, User user) {
+        return Board.builder()
+                .id(boardDto.getId())
+                .user(user)
+                .title(boardDto.getTitle())
+                .content(boardDto.getContent())
+                .createTime(boardDto.getCreateTime())
+                .sort(boardDto.getSort())
+                .build();
     }
 }
