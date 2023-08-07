@@ -19,7 +19,7 @@ function App() {
           <Route path="/" element={<WebMain />}></Route>
           <Route path="/mobile/" element={<MobileMain />}></Route>
           <Route path='/kiosk/'>
-            <Route path="info/" element={<BusInfomationPage />}></Route>
+            <Route path="info/:id" element={<BusInfomationPage />}></Route>
             <Route path="Auth/" element={<AuthPage />}></Route>
           </Route>
         </Routes>

@@ -8,10 +8,11 @@ import { BusStoreData, KioskState, increasePassenger } from "@/store/slice/kiosk
 export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
 
   const dispatch = useDispatch();
-
+  
   const busIconURL = `/bus_side_icon.png?url`;
   return (
-    <div className="bus-item-container">
+    
+    <div className="bus-item-container" style={{backgroundColor : item.isStopHere ? "#FF8282" : "E4E1E1"}}>
       <div className="bus-item-top">
         <div>
 
@@ -39,7 +40,7 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
               </Grid>
             </Grid>
             <Grid container direction="row" justifyContent={"space-between"} alignItems={"baes-line"}>
-              <Grid xs={6} item style={{fontSize:'35px' , fontWeight:"bolder" , marginLeft:"25px"}}>
+              <Grid xs={6} item style={{fontSize:'36px' , fontWeight:"bold" , marginLeft:"24px"}}>
                 {item.routeType}
                 
               </Grid>
@@ -102,18 +103,18 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
             {item.stationName}
           </div>
         </div>
-        <div
+        <button
           className={`tap-button ${item.isStopHere ? "tap-on" : "tap-off"}`}
           onClick={() => {dispatch(increasePassenger({ vehicleNo: item.vehicleNo }));}}
         >
-          {item.isStopHere ? "정차 예정" : "탑승"}
-        </div>
+          <p>탑승</p>
+        </button>
       </div>
-      <div className="guide-message">
+      <div className="guide-message" >
         {item.isStopHere ? (
-          <span>이 버스는 현 정류장에 정차할 예정입니다.</span>
+          <span className="stopbusText">이 버스는 현 정류장에 정차할 예정입니다.</span>
         ) : (
-          <span>이 버스에 탑승하시려면 탑승 버튼을 눌러주세요.</span>
+          <span style={{fontFamily:'Noto Sans KR'}}>이 버스에 탑승하시려면 탑승 버튼을 눌러주세요.</span>
         )}
       </div>
     </div>

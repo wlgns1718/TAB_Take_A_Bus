@@ -45,9 +45,10 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     () => {
       busAPI
         .get(`/${data.citycode}/${data.busStopId}`, {
-          timeout: 60000,
+          timeout: 5000,
         })
         .then((response) => {
+          console.log(response.data)
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
@@ -71,7 +72,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   );
 
   useEffect(() => {
-    console.log(fetchBusData);
+    // console.log(fetchBusData);
   }, [fetchBusData]);
 
   const paginateArray = (arr: BusStoreData[], pageSize: number) => {
@@ -89,7 +90,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   }, [data.busData]);
 
   return (
-    <div {...props}>
+    <div style={{backgroundColor:"#ECF0F3",maxWidth:'2160px'}} {...props}>
       <Header />
       <ComingSoonBusList data={comingSoonBusList ? comingSoonBusList : []} />
       <ArrivalBusList pages={pages ? pages : []} />

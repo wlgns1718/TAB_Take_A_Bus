@@ -16,7 +16,7 @@ export const BottomButtonBox: FC<BottomButtonBoxProps> = ({ pages }) => {
     }
   );
   return (
-    <div>
+    <div className="font">
       <div
         className="setbtn"
         style={{
@@ -49,6 +49,7 @@ export const BottomButtonBox: FC<BottomButtonBoxProps> = ({ pages }) => {
             return (
               pagenumber == nowPage && (
                 <div key={pagenumber} className="button-page">
+                  
                   {page.map((item: BusStoreData, index: number) => {
                     return <Btn item={item} key={index} />;
                   })}
@@ -68,13 +69,29 @@ function Btn({ item }: { item: BusStoreData }) {
     <button
       className="bottom-button"
       style={{
-        backgroundColor: !item.isStopHere ? "white" : "red",
+        backgroundColor: !item.isStopHere ? "white" : "#FF0505", alignItems:"center",display:"flex",justifyContent:"center",
+        color: !item.isStopHere ? "black" : "white"
       }}
       onClick={() => {
         dispatch(SetVulnerable({ vehicleNo: item.vehicleNo }));
       }}
     >
-      {item.busNo}
+      <div className="kmarquee">
+            <div className="outer">
+                <div className="inner">
+                  {item.isStopHere ? 
+                      <div className="incontent" style={{lineHeight:"20%"}}>
+                      <p>{item.busNo}</p>
+                      <p style={{fontSize:"38px",left:"3px",position:"relative"}}>정차예정</p>
+                      </div> 
+                    : <div className="incontent" style={{lineHeight:"20%"}}>
+                    <p>{item.busNo}</p>
+                    <p style={{fontSize:"38px",left:"3px",position:"relative"}}>탑승하기</p>
+                    </div>  }
+                    
+                </div>
+            </div>
+        </div>
     </button>
   );
 }
