@@ -38,6 +38,10 @@ public class UserController {
 
             resultMap.put("code", "200");
             resultMap.put("msg","회원가입 성공");
+        }catch (IllegalStateException e){
+            resultMap.put("data","중복된 아이디 입니다.");
+            resultMap.put("msg","회원가입 실패");
+            resultMap.put("code", "401");
         } catch (Exception e) {
             //logger.error("정보조회 실패 : {}", e);
             resultMap.put("code", "500");
