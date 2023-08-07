@@ -5,7 +5,6 @@ import com.ssafy.tab.dto.BoardDto;
 import com.ssafy.tab.dto.CommentDto;
 import com.ssafy.tab.service.BoardService;
 import com.ssafy.tab.service.CommentService;
-import com.ssafy.tab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,20 +17,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("tab/board")
 @RequiredArgsConstructor
 public class BoardController {
 
-    private final UserService userService;
     private final BoardService boardService;
     private final CommentService commentService;
 
     //게시판에 접속 시 전체 게시글 가져오기
     @GetMapping("")
+    //파라미터로 설정 가능 한 것
+    ///board?page=0&size=3&sort=id,desc&sort=username,dec
     public ResponseEntity<Map<String, Object>> board(Pageable pageable, HttpServletRequest request) {
         Map<String, Object> resultMap = new HashMap<>();
-        //파라미터로 설정 가능 한 것
-        ///board?page=0&size=3&sort=id,desc&sort=username,dec
 
         /*
         로그인 하지 않았을 시 접근 불가

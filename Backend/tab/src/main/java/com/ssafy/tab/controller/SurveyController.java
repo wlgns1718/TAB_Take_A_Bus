@@ -12,13 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("tab/survey")
 @RequiredArgsConstructor
 public class SurveyController {
 
     private final SurveyService surveyService;
 
     //나의 수요조사
-    @GetMapping("/survey")
+    @GetMapping("")
     public ResponseEntity<Map<String, Object>> selectMySurvey(HttpServletRequest requset) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;

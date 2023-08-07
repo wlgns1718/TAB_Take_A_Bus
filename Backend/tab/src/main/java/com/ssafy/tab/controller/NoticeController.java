@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/notice")
+@RequestMapping("tab/notice")
 @Api("공지사항 컨트롤러 API")
 @RequiredArgsConstructor
 @CrossOrigin("*")
