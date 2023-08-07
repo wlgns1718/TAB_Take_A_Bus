@@ -1,6 +1,6 @@
-.Header{
+.kiosk-header{
   display: flex;
-  height: 390px;
+  height: 440px;
   width: 2140px;
   background-color: #208EF4;
   padding: 10px;

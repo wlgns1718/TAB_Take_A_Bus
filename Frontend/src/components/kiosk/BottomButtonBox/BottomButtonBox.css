@@ -3,11 +3,14 @@
     width: 2160px;
 }
 
+
 .bottom-button{
     width: 380px;
     height: 300px;
-    font-size: 50px;
-    font-weight: bold;
+    font-weight: 400;
+    border-radius: 7%;
+    color: rgb(34, 28, 28);
+    white-space: nowrap;
 }
 
 .button-page {
@@ -15,6 +18,38 @@
     justify-content: start;
     gap : 120px;
     padding-left: 140px;
+    
 }
 
 
+
+
+@keyframes marquee {
+    0% {
+        left: 20%;
+    }
+    100% {
+        left: -20%;
+    }
+  }
+  
+  .kmarquee .outer {
+    overflow: hidden;
+  }
+  
+  .kmarquee .outer .inner {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    width: 200%;
+  }
+  
+  .kmarquee .outer .inner:nth-child(1) {
+    animation: marquee 5s linear infinite;
+  }
+  
+  .kmarquee .outer .inner .incontent {
+    margin: 0;
+    font-size: 105px;
+    font-weight: bolder;
+  }

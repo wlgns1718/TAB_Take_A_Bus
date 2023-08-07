@@ -1,7 +1,7 @@
-
-body{
-    background-color: #ECF0F3;
-    max-width: 2160px;
+.mainbox{
+    background-color:#ECF0F3;
+    height: 3600px;
+    width: 2160px;
 }
 
 .textfiled{
@@ -21,4 +21,26 @@ body{
 .button{
     width: 300px;
     height: 150px;
+}
+
+.Authkey{
+    justify-content: center;
+    display: flex;
+}
+.Buskey{
+    justify-content: center;
+    display: flex;
+}
+
+
+.keyboardinput{
+    width: 1300px;
+    height: 200px;
+    margin-bottom: 50px;
+    font-size: 80px;
+}
+.hg-button{
+    font-size: 50px;
+    height: 110px !important;
+    margin: 5px;
 }

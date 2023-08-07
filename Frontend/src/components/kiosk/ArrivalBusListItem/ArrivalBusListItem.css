@@ -1,10 +1,12 @@
+
 .bus-item-container {
   width: 2000px;
-  height: 370px;
+  height: 340px;
   padding: 30px;
-  margin: 0 0 35px 0 ;
-  background-color: lightgray;
+  margin: 20px 0 40px 0 ;
+  background-color: #E4E1E1;
   border-radius: 30px;
+  box-shadow: 0px 6px 11px rgb(122, 119, 119);
 }
 
 /* 버스 정보 상단부 */
@@ -65,20 +67,25 @@
 }
 
 .tap-button{
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 250px;
   height: 250px;
-  color: white;
-  font-size: 30px;
+  color: rgb(243, 236, 236);
+  font-size: 50px;
   border-radius: 10px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); /* 그림자 효과 추가 */
+  box-shadow: 5px 6px 16px rgba(36, 35, 35, 0.5); /* 그림자 효과 추가 */
 }
 
 .tap-on{
-  background-color: red;
+  background-color: #ff0000;
+ 
 }
 
 .tap-off{
-  background-color: blue;
+  background-color: #f30b0b;
 }
 
 .bg-white{
@@ -156,3 +163,44 @@
   border-radius: 50%;
   top: 10px;
 }
+
+@keyframes marquee {
+  0% {
+      left: 20%;
+  }
+  100% {
+      left: -60%;
+  }
+}
+
+.marquee .outer {
+  overflow: hidden;
+}
+
+.marquee .outer .inner {
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  width: 200%;
+}
+
+.marquee .outer .inner:nth-child(1) {
+  animation: marquee 5s linear infinite;
+}
+
+.marquee .outer .inner .content {
+  font-size: 80px;
+  font-weight: 600;
+  margin-left: 15px;
+}
+
+@keyframes blink-effect { 50% { opacity: 0; } } 
+.stopbusText{
+  font-size: 55px;
+  font-family:'Noto Sans KR', sans-serif;
+  font-weight: bold;
+  animation: blink-effect 1.5s step-end infinite; 
+  color: rgb(255, 255, 255);
+}
+
+  

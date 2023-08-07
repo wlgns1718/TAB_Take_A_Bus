@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { BusInfomationPageProps } from ".";
-import { Header } from "../../../components/kiosk/Header";
+import { KioskHeader } from "../../../components/kiosk/KioskHeader";
 import { ComingSoonBusList } from "../../../components/kiosk/ComingSoonBusList";
 import { ArrivalBusList } from "../../../components/kiosk/ArrivalBusList";
 import { LivingInformationBox } from "../../../components/kiosk/LivingInfomationBox";
@@ -45,9 +45,10 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     () => {
       busAPI
         .get(`/${data.citycode}/${data.busStopId}`, {
-          timeout: 60000,
+          timeout: 5000,
         })
         .then((response) => {
+          console.log(response.data)
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
@@ -71,7 +72,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   );
 
   useEffect(() => {
-    console.log(fetchBusData);
+    // console.log(fetchBusData);
   }, [fetchBusData]);
 
   const paginateArray = (arr: BusStoreData[], pageSize: number) => {
@@ -89,8 +90,8 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   }, [data.busData]);
 
   return (
-    <div {...props}>
-      <Header />
+    <div style={{ backgroundColor: "#ECF0F3", maxWidth: "2160px" }} {...props}>
+      <KioskHeader />
       <ComingSoonBusList data={comingSoonBusList ? comingSoonBusList : []} />
       <ArrivalBusList pages={pages ? pages : []} />
       <LivingInformationBox />

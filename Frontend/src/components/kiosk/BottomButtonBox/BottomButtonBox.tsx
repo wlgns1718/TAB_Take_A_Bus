@@ -8,7 +8,6 @@ import {
 } from "@/store/slice/kiosk-slice";
 import { useDispatch, useSelector } from "react-redux";
 
-
 export const BottomButtonBox: FC<BottomButtonBoxProps> = ({ pages }) => {
   const nowPage: number = useSelector(
     (state: { kiosk: KioskState; web: object }) => {
@@ -16,7 +15,7 @@ export const BottomButtonBox: FC<BottomButtonBoxProps> = ({ pages }) => {
     }
   );
   return (
-    <div>
+    <div className="font">
       <div
         className="setbtn"
         style={{
@@ -68,13 +67,57 @@ function Btn({ item }: { item: BusStoreData }) {
     <button
       className="bottom-button"
       style={{
-        backgroundColor: !item.isStopHere ? "white" : "red",
+        backgroundColor: !item.isVulnerable ? "white" : "#FF0505",
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "center",
+        color: !item.isVulnerable ? "black" : "white",
       }}
       onClick={() => {
-        dispatch(SetVulnerable({ vehicleNo: item.vehicleNo }));
+        dispatch(
+          SetVulnerable({
+            vehicleNo: item.vehicleNo,
+            remainingStops: item.remainingStops,
+          })
+        );
       }}
     >
-      {item.busNo}
+      <div className="kmarquee">
+        <div className="outer">
+          <div className="inner">
+            {item.isVulnerable ? (
+              <div className="incontent" style={{ lineHeight: "0%" }}>
+                <p>{item.busNo}</p>
+              </div>
+            ) : (
+              <div className="incontent" style={{ lineHeight: "0%" }}>
+                <p>{item.busNo}</p>
+              </div>
+            )}
+          </div>
+        </div>
+        {item.isVulnerable ? (
+          <p
+            style={{
+              fontSize: "38px",
+              left: "3px",
+              position: "relative",
+            }}
+          >
+            정차예정
+          </p>
+        ) : (
+          <p
+            style={{
+              fontSize: "38px",
+              left: "3px",
+              position: "relative",
+            }}
+          >
+            탑승하기
+          </p>
+        )}
+      </div>
     </button>
   );
 }
