@@ -41,9 +41,6 @@ public class User {
     @Column(name = "SALT", length = 32)
     private String salt;
 
-    @Column(name = "TOKEN", length = 500)
-    private String token;
-
     @Column(name = "REFRESH_TOKEN", length = 500)
     private String refreshToken;
 
@@ -62,7 +59,6 @@ public class User {
                 ", userPw='" + userPw + '\'' +
                 ", name='" + name + '\'' +
                 ", salt='" + salt + '\'' +
-                ", token='" + token + '\'' +
                 ", refreshToken='" + refreshToken + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
