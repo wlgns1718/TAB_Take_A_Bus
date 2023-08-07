@@ -49,8 +49,7 @@
   }
   
   .kmarquee .outer .inner .incontent {
+    margin: 0;
     font-size: 105px;
     font-weight: bolder;
-  
-
   }

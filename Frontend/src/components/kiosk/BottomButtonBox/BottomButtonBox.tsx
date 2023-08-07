@@ -8,7 +8,6 @@ import {
 } from "@/store/slice/kiosk-slice";
 import { useDispatch, useSelector } from "react-redux";
 
-
 export const BottomButtonBox: FC<BottomButtonBoxProps> = ({ pages }) => {
   const nowPage: number = useSelector(
     (state: { kiosk: KioskState; web: object }) => {
@@ -49,7 +48,6 @@ export const BottomButtonBox: FC<BottomButtonBoxProps> = ({ pages }) => {
             return (
               pagenumber == nowPage && (
                 <div key={pagenumber} className="button-page">
-                  
                   {page.map((item: BusStoreData, index: number) => {
                     return <Btn item={item} key={index} />;
                   })}
@@ -69,29 +67,57 @@ function Btn({ item }: { item: BusStoreData }) {
     <button
       className="bottom-button"
       style={{
-        backgroundColor: !item.isStopHere ? "white" : "#FF0505", alignItems:"center",display:"flex",justifyContent:"center",
-        color: !item.isStopHere ? "black" : "white"
+        backgroundColor: !item.isVulnerable ? "white" : "#FF0505",
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "center",
+        color: !item.isVulnerable ? "black" : "white",
       }}
       onClick={() => {
-        dispatch(SetVulnerable({ vehicleNo: item.vehicleNo }));
+        dispatch(
+          SetVulnerable({
+            vehicleNo: item.vehicleNo,
+            remainingStops: item.remainingStops,
+          })
+        );
       }}
     >
       <div className="kmarquee">
-            <div className="outer">
-                <div className="inner">
-                  {item.isStopHere ? 
-                      <div className="incontent" style={{lineHeight:"20%"}}>
-                      <p>{item.busNo}</p>
-                      <p style={{fontSize:"38px",left:"3px",position:"relative"}}>정차예정</p>
-                      </div> 
-                    : <div className="incontent" style={{lineHeight:"20%"}}>
-                    <p>{item.busNo}</p>
-                    <p style={{fontSize:"38px",left:"3px",position:"relative"}}>탑승하기</p>
-                    </div>  }
-                    
-                </div>
-            </div>
+        <div className="outer">
+          <div className="inner">
+            {item.isVulnerable ? (
+              <div className="incontent" style={{ lineHeight: "0%" }}>
+                <p>{item.busNo}</p>
+              </div>
+            ) : (
+              <div className="incontent" style={{ lineHeight: "0%" }}>
+                <p>{item.busNo}</p>
+              </div>
+            )}
+          </div>
         </div>
+        {item.isVulnerable ? (
+          <p
+            style={{
+              fontSize: "38px",
+              left: "3px",
+              position: "relative",
+            }}
+          >
+            정차예정
+          </p>
+        ) : (
+          <p
+            style={{
+              fontSize: "38px",
+              left: "3px",
+              position: "relative",
+            }}
+          >
+            탑승하기
+          </p>
+        )}
+      </div>
     </button>
   );
 }
