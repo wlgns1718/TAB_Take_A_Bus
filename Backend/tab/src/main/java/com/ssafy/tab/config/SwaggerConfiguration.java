@@ -4,15 +4,22 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration // 스프링 실행시 설정파일
 @EnableSwagger2 // Swagger2를 사용
@@ -33,6 +40,35 @@ public class SwaggerConfiguration {
 	}
 
 	// API마다 구분짓기 위한 설정.
+/*  Swagger에 Authorization 설정
+
+	private static final String REFERENCE="Authorization 헤더 값";
+	@Bean
+	public Docket api(){
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+				.paths(PathSelectors.any())
+				.build()
+				.securityContexts(Arrays.asList(securityContext()))
+	}
+
+	private SecurityContext securityContext(){
+		return springfox.documentation.spi.service.contexts.SecurityContext.builder().securityReferences(defaultAuth())
+				.operationSelector
+	}
+
+	private List<SecurityReference> defaultAuth() {
+		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+		authorizationScopes[0] = new AuthorizationScope("global", "accessEverything");
+		return Arrays.asList(new SecurityReference(REFERENCE, authorizationScopes));
+	}
+*/
+
+	@Bean
+	public Docket allApi() {
+		return getDocket("전체", Predicates.or(PathSelectors.regex("/*.*")));
+	}
 	@Bean
 	public Docket userApi() {
 		return getDocket("회원", Predicates.or(PathSelectors.regex("/user.*")));
@@ -60,10 +96,7 @@ public class SwaggerConfiguration {
 
 	}*/
 
-	@Bean
-	public Docket allApi() {
-		return getDocket("전체", Predicates.or(PathSelectors.regex("/*.*")));
-	}
+
 
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
 //		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
@@ -82,5 +115,8 @@ public class SwaggerConfiguration {
 	public UiConfiguration uiConfig() {
 		return UiConfigurationBuilder.builder().displayRequestDuration(true).validatorUrl("").build();
 	}
+
+
+
 
 }
