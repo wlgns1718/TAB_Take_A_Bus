@@ -48,7 +48,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           timeout: 5000,
         })
         .then((response) => {
-          console.log(response.data)
+          console.log(response.data);
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
@@ -68,7 +68,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           throw err;
         });
     },
-    { staleTime: 1000, refetchInterval: 10000 }
+    { staleTime: 1000, refetchInterval: 5000 }
   );
 
   useEffect(() => {
