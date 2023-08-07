@@ -1,24 +1,23 @@
 import { FC } from "react";
-import { HeaderProps } from ".";
-import './Header.css'
+import { KioskHeaderProps } from "./KioskHeader.props";
+import './KioskHeader.css'
 
 
-export const Header: FC<HeaderProps> = (props) => {
-
+export const KioskHeader: FC<KioskHeaderProps> = (props) => {
   const time = new Date();
   const hour = time.getHours();
   const min = time.getMinutes();
 
-  const busStop = "우리집 앞"
+  const busStop = "우리집 앞";
   const logoURL = `/대구광역시_logo.png?url`;
 
-  const fillZero = ( num : number ) : string => {
+  const fillZero = (num: number): string => {
     return num.toString().padStart(2, "0");
-  } 
+  };
   return (
     <div {...props}>
       <div
-        className="Header"
+        className="kiosk-header"
         style={{
           fontFamily: "Inter",
           fontSize: "90px",

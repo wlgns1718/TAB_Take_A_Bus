@@ -1,26 +1,31 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { WebMain } from './pages/webpage/WebMain';
-import { MobileMain } from './pages/mobile/MobileMain';
-import {BusInfomationPage} from "./pages/kiosk/BusInfomationPage";
+import { WebMainPage } from "./pages/webpage/WebMainPage";
+import { WebLoginPage } from "./pages/webpage/WebLoginPage";
+import { WebSignupPage } from "./pages/webpage/WebSignupPage";
+import { WebBoardPage } from "./pages/webpage/WebBoardPage";
+import { WebRecommendPage } from "./pages/webpage/WebRecommendPage";
+import { WebSurveyPage } from "./pages/webpage/WebSurveyPage";
+import { MobileMain } from "./pages/mobile/MobileMain";
+import { BusInfomationPage } from "./pages/kiosk/BusInfomationPage";
 import { AuthPage } from "./pages/kiosk/AuthPage";
-import './App.css'
+
+import "./App.css";
 
 function App() {
-
   return (
     <>
       <BrowserRouter>
         <div>
-          <Link to="/">홈</Link> |<Link to="/mobile/"> 모바일</Link> |
-          <Link to="/kiosk/info/"> 키오스크 버스 정보</Link> |
-          <Link to="/kiosk/Auth/"> 키오스크 관리자</Link>
+          <Link to="/web">홈</Link> |<Link to="/mobile"> 모바일</Link> |
+          <Link to="/kiosk/info/DGB7001004100"> 키오스크 버스 정보</Link> |
+          <Link to="/kiosk/auth"> 키오스크 관리자</Link>
         </div>
         <Routes>
-          <Route path="/" element={<WebMain />}></Route>
-          <Route path="/mobile/" element={<MobileMain />}></Route>
-          <Route path='/kiosk/'>
+          <Route path="/web/*" element={<WebMainPage />}></Route>
+          <Route path="/mobile/*" element={<MobileMain />}></Route>
+          <Route path="/kiosk">
             <Route path="info/:id" element={<BusInfomationPage />}></Route>
-            <Route path="Auth/" element={<AuthPage />}></Route>
+            <Route path="auth" element={<AuthPage />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
@@ -28,4 +33,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

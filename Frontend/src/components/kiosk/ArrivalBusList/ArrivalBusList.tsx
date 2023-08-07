@@ -23,7 +23,7 @@ export const ArrivalBusList: FC<ArrivalBusListProps> = ({ pages }) => {
         swipe={true}
         animation="fade"
         height={1900}
-        interval={5000}
+        interval={10000}
         navButtonsAlwaysVisible={true}
         index={1}
         className="carouselll"

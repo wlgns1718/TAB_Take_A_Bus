@@ -53,8 +53,9 @@ const kioskSlice = createSlice({
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
+      const remainingStops = action.payload.remainingStops;
       state.busData.forEach((el) => {
-        if (el.vehicleNo == vehicleNo) {
+        if (el.vehicleNo == vehicleNo && el.remainingStops == remainingStops) {
           el.passengerNumber += 1;
           el.isStopHere = true;
           return;
@@ -67,9 +68,11 @@ const kioskSlice = createSlice({
     },
     SetVulnerable(state, action) {
       const vehicleNo = action.payload.vehicleNo;
+      const remainingStops = action.payload.remainingStops;
       state.busData.forEach((el) => {
-        if (el.vehicleNo == vehicleNo) {
+        if (el.vehicleNo == vehicleNo && el.remainingStops == remainingStops) {
           el.isVulnerable = true;
+          el.passengerNumber += 1;
           el.isStopHere = true;
           return;
         }

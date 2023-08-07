@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { BusInfomationPageProps } from ".";
-import { Header } from "../../../components/kiosk/Header";
+import { KioskHeader } from "../../../components/kiosk/KioskHeader";
 import { ComingSoonBusList } from "../../../components/kiosk/ComingSoonBusList";
 import { ArrivalBusList } from "../../../components/kiosk/ArrivalBusList";
 import { LivingInformationBox } from "../../../components/kiosk/LivingInfomationBox";
@@ -90,8 +90,8 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   }, [data.busData]);
 
   return (
-    <div style={{backgroundColor:"#ECF0F3",maxWidth:'2160px'}} {...props}>
-      <Header />
+    <div style={{ backgroundColor: "#ECF0F3", maxWidth: "2160px" }} {...props}>
+      <KioskHeader />
       <ComingSoonBusList data={comingSoonBusList ? comingSoonBusList : []} />
       <ArrivalBusList pages={pages ? pages : []} />
       <LivingInformationBox />

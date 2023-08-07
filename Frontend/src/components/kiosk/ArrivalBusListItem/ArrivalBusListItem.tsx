@@ -105,7 +105,12 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
         </div>
         <button
           className={`tap-button ${item.isStopHere ? "tap-on" : "tap-off"}`}
-          onClick={() => {dispatch(increasePassenger({ vehicleNo: item.vehicleNo }));}}
+          onClick={() => {dispatch(
+            increasePassenger({
+              vehicleNo: item.vehicleNo,
+              remainingStops: item.remainingStops,
+            })
+          );}}
         >
           <p>탑승</p>
         </button>
