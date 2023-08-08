@@ -19,7 +19,7 @@ import { useQuery, QueryClient } from "react-query";
 import { AxiosError } from "axios";
 
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
-  const [comingSoonBusList, setComingSoonBusList] = useState<BusData[]>([]);
+  const [comingSoonBusList, setComingSoonBusList] = useState<BusStoreData[]>([]);
   const [oldData, setOldData] = useState<BusStoreData[]>([]);
 
   const dispatch = useDispatch();
@@ -35,12 +35,20 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   useEffect(() => {
     // 12분 이내 도착 예정인 버스 리스트
     setComingSoonBusList(
-      data.busData.slice(0, 5).filter((el: BusData) => {
+      data.busData.slice(0, 5).filter((el: BusStoreData) => {
         // 임시로 120분
         return el.eta <= 900;
       })
     );
   }, [data.busData]);
+
+
+  // export type BusStoreData = BusData & {
+  //   isStopHere: boolean;
+  //   passengerNumber: number;
+  //   isVulnerable: boolean;
+  //   isPosted: boolean;
+  // };
 
   const fetchBusData = useQuery(
     "fetchBus",
@@ -50,48 +58,88 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           timeout: 10000,
         })
         .then((response) => {
-          console.log(response.data);
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
-            // 도착예정시간 순으로 정렬해서 저장
-            setOldData(data.busData);
+            // 도착예정시간 순으로 정렬해서 저장.
+            const addData:BusStoreData[] = response.data.data.map((el)=>{
+              el.isStopHere = false
+              el.passengerNumber = 0
+              el.isVulnerable =false
+              el.isposted = false
+              return el
+            })
+            
 
-            const postingBusList = oldData.filter((el) => {
-              const sameBus = response.data.data.find(
-                (newel) => newel.vehicleNo == el.vehicleNo
-              );
-              return el.isPosted == false && sameBus.remainingStops == 1;
-            });
-            console.log(postingBusList);
+            const stateBusData:BusStoreData[] = addData.map((newdata:BusStoreData)=>{
+              const recordedItem = data.busData.find((old:BusStoreData)=> {
+                return old.busNo == newdata.busNo })
+              if(recordedItem){
+                if(recordedItem.isStopHere == true){
+                  newdata = {...newdata, isStopHere: recordedItem.isStopHere}
+                }
+                if(recordedItem.passengerNumber != newdata.passengerNumber){
+                  newdata = {...newdata, passengerNumber: recordedItem.passengerNumber} 
+                }
+                if(recordedItem.isVulnerable == true){
+                  newdata = {...newdata, isVulnerable: recordedItem.isVulnerable}
+                }
+                if(recordedItem.isPosted == true){
+                  newdata ={...newdata, isPosted:recordedItem.isPosted}
+                }
+                return newdata
+              }
+              else{
+                return newdata
+              }})
+            
 
-            postingBusList.map((el) => {
-              busAPI
-                .post(
-                  `/station/${data.citycode}/${data.busStopId}/${el.vehicleNo}`,
-                  {
-                    busStation: `${data.busStopId}`,
-                    count: `${el.passengerNumber}`,
-                    vehicleNo: `${el.vehicleNo}`,
-                    routeNo: `${el.routeId}`,
-                    vulnerable: `${el.isVulnerable}`,
-                  }
-                )
-                .then((response) => {
-                  console.log(response);
-                  dispatch(updateLockedBusData(postingBusList));
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            });
             dispatch(
               updateBusData(
-                response.data.data.sort((a: BusData, b: BusData) => {
+                stateBusData.sort((a: BusStoreData, b: BusStoreData) => {
                   return a.eta - b.eta;
                 })
               )
             );
+            console.log(data.busData)
+           
+            
+            // const postingBusList = oldData.filter((el) => {
+            //   const sameBus = response.data.data.find(
+            //     (newel) => newel.vehicleNo == el.vehicleNo
+            //   );
+            //   return el.isPosted == false && sameBus.remainingStops == 1;
+            // });
+            // console.log(postingBusList);
+
+
+            // postingBusList.map((el) => {
+            //   busAPI
+            //     .post(
+            //       `/station/${data.citycode}/${data.busStopId}/${el.vehicleNo}`,
+            //       {
+            //         busStation: `${data.busStopId}`,
+            //         count: `${el.passengerNumber}`,
+            //         vehicleNo: `${el.vehicleNo}`,
+            //         routeNo: `${el.routeId}`,
+            //         vulnerable: `${el.isVulnerable}`,
+            //       }
+            //     )
+            //     .then((response) => {
+            //       console.log(response);
+            //       dispatch(updateLockedBusData(postingBusList));
+            //     })
+            //     .catch((error) => {
+            //       console.log(error);
+            //     });
+            // });
+            // dispatch(
+            //   updateBusData(
+            //     stateBusData.sort((a: BusData, b: BusData) => {
+            //       return a.eta - b.eta;
+            //     })
+            //   )
+            // );
           }
         })
         .catch((error) => {
@@ -104,7 +152,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   );
 
   useEffect(() => {
-    // console.log(fetchBusData);
+    // console.log(data.busData)
   }, [fetchBusData]);
 
   const paginateArray = (arr: BusStoreData[], pageSize: number) => {
