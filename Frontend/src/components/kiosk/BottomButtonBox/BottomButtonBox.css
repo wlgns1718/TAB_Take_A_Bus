@@ -53,3 +53,8 @@
     font-size: 105px;
     font-weight: bolder;
   }
+
+  .kmarquee .outer .inner .incontent p {
+    margin: 0;
+    line-height: 100%;
+  }

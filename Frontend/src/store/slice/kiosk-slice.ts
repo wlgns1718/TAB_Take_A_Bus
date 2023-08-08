@@ -49,39 +49,12 @@ const kioskSlice = createSlice({
   initialState,
   reducers: {
     updateBusData(state, action) {
-      const oldData: BusStoreData[] = state.busData;
-      const newData: Array<BusData> = action.payload;
-      console.log(oldData);
-      console.log(newData);
-
-      const lockedBusList = oldData.filter((el) => {
-        const sameBus = newData.find(
-          (newel) => newel.vehicleNo == el.vehicleNo
-        );
-        return el.isPosted == false && sameBus.remainingStops == 1;
-      });
-      console.log(lockedBusList);
-
-      lockedBusList.map((el) => {
-        busAPI
-          .post(
-            `/station/${state.citycode}/${state.busStopId}/${el.vehicleNo}`,
-            {
-              busStation: `${state.busStopId}`,
-              count: `${el.passengerNumber}`,
-              vehicleNo: `${el.vehicleNo}`,
-              routeNo: `${el.routeId}`,
-              vulnerable: `${el.isVulnerable}`,
-            }
-          )
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      });
       state.busData = action.payload;
+    },
+    updateLockedBusData(state, action) {
+      // state.busData.forEach(bus=>{
+      //   if(action.payload.find())
+      // })
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
@@ -120,6 +93,7 @@ const kioskSlice = createSlice({
 export const {
   updateBusData,
   increasePassenger,
+  updateLockedBusData,
   SetVulnerable,
   syncCarouselPage,
   checkMaster,

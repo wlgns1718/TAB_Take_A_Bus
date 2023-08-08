@@ -44,7 +44,7 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
                 {item.routeType}
                 
               </Grid>
-              <Grid xs={3}>
+              <Grid xs={3} item>
                 {item.vehicleType === '저상버스' && <img style={{zIndex:3,position:"absolute", width:'110px', height:'80px'}} src={`/wheelchair.png?url`}/>}
               </Grid>
             </Grid>
