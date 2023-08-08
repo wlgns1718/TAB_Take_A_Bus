@@ -1,0 +1,10 @@
+.pagenation{
+  margin: 30px auto !important;
+  justify-content: center;
+  display: flex;
+}
+
+.board-title{
+  text-align: center;
+  font-size: 30px;
+}

@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { WebSignupPageProps } from '.';
-import { WebHeader } from "@/components/web/WebHeader";
 
 
 export const WebSignupPage: FC<WebSignupPageProps> = (props) => {

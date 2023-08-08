@@ -8,7 +8,13 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
   return (
     <div {...props}>
       <div className="web-header">
-        <div className="web-header-logo">로고</div>
+        <div className="web-header-logo" onClick={() => navigation()}>
+          <img
+            src="/TAB_logo.png?url"
+            alt="TAB_logo"
+            className="web-header-logo"
+          />
+        </div>
         <div className="header-links">
           <NavLink to="/web">홈</NavLink>
           <NavLink to="/web/board"> 게시판</NavLink>

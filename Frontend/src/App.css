@@ -4,8 +4,12 @@
   /* padding: 1rem; */
 }
 
-
-.web-body{
+#web-root {
   max-width: 1920px;
   min-width: 960px;
+}
+
+button:focus {
+  border: none;
+  outline: none;
 }
