@@ -93,7 +93,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                 return newdata
               }})
             
-
+              
             dispatch(
               updateBusData(
                 stateBusData.sort((a: BusStoreData, b: BusStoreData) => {
