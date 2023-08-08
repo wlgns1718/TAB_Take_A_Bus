@@ -8,35 +8,51 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Pagination } from '@mui/material';
+import Select from '@mui/joy/Select';
+import Option from "@mui/joy/Option";
+import './WebBoard.css'
 
 export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
+    header: string,
+    title: string,
+    author: string,
+    postDate: string
   ) {
-    return { name, calories, fat, carbs };
+    return { header, title, author, postDate };
   }
 
   const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24),
-    createData("Ice cream sandwich", 237, 9.0, 37),
-    createData("Eclair", 262, 16.0, 24),
-    createData("Cupcake", 305, 3.7, 67),
-    createData("Gingerbread", 356, 16.0, 49),
+    createData("공지사항", '버스 노선 변경(23년 8월)', '관리자','2023-07-01'),
+    createData("공지사항", '버스 노선 변경(23년 8월)', '관리자','2023-07-01'),
+    createData("공지사항", '버스 노선 변경(23년 8월)', '관리자','2023-07-01'),
+    createData("공지사항", '버스 노선 변경(23년 8월)', '관리자','2023-07-01'),
   ];
+
+  const options : string[] = [
+    '공지사항',
+    '건의사항',
+    '칭찬합니다',
+    '고장신고',
+  ]
 
 	return (
     <div {...props}>
-      <div>게시판</div>
+      <div className="board-title">게시판</div>
+      <Select color="primary" placeholder="게시판 구분" size="md">{
+        options.map(op=>{
+          return <Option value={op}>{op}</Option>
+        })
+        }
+      </Select>
       <div>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>No</TableCell>
+                <TableCell align="center">구분</TableCell>
                 <TableCell align="center">제목</TableCell>
                 <TableCell align="center">작성자</TableCell>
                 <TableCell align="center">작성시간</TableCell>
@@ -51,22 +67,25 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
                   <TableCell component="th" scope="row">
                     {index}
                   </TableCell>
-                  <TableCell align="left">{row.calories}</TableCell>
-                  <TableCell align="center">{row.fat}</TableCell>
-                  <TableCell align="center">{row.carbs}</TableCell>
+                  <TableCell align="center">{row.header}</TableCell>
+                  <TableCell align="left">{row.title}</TableCell>
+                  <TableCell align="center">{row.author}</TableCell>
+                  <TableCell align="center">{row.postDate}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <div className="pagenation">
+          <Pagination
+            count={10}
+            defaultPage={1}
+            variant="outlined"
+            color="primary"
+            shape="rounded"
+          />
+        </div>
       </div>
-      <Pagination
-        count={10}
-        defaultPage={1}
-        variant="outlined"
-        color="primary"
-        shape="rounded"
-      />
     </div>
   );
 };

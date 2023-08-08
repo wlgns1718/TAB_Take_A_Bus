@@ -1,0 +1,10 @@
+.web-body{
+  width: 80%;
+  min-width: 960px;
+  margin: 0 auto;
+}
+
+.main-content-text{
+  background-color: whitesmoke;
+  padding: 30px;
+}
