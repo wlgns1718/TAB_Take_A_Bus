@@ -8,8 +8,8 @@ import { BusStoreData, KioskState, increasePassenger } from "@/store/slice/kiosk
 export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
 
   const dispatch = useDispatch();
-  
   const busIconURL = `/bus_side_icon.png?url`;
+  
   return (
     
     <div className="bus-item-container" style={{backgroundColor : item.isStopHere ? "#FF8282" : "E4E1E1"}}>

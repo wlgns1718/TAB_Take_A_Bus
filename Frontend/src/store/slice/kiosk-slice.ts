@@ -38,7 +38,22 @@ const initialState: KioskState = {
   citycode: 22,
   busStopId: "DGB7001004100",
   masterkey: "123123123",
-  busData: [],
+  busData: [{
+    busNo: '1',
+    eta: 100 ,
+    remainingStops: 100,
+    routeId: 'df',
+    routeType: 'sdf',
+    vehicleNo: 'asdf',
+    vehicleType: 'asdf',
+    stationId: 'asdf',
+    stationName: 'asdf',
+    stationOrder:123,
+    isStopHere: false,
+  passengerNumber: 1,
+  isVulnerable: false,
+  isPosted: false,}
+  ],
   nowCarouselPage: 0,
   loading: false,
   error: null,
@@ -58,15 +73,13 @@ const kioskSlice = createSlice({
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
-      const remainingStops = action.payload.remainingStops;
-      state.busData.forEach((el) => {
-        if (el.vehicleNo == vehicleNo && el.remainingStops == remainingStops) {
+      state.busData.map((el) => {
+        if (el.vehicleNo == vehicleNo){
           el.passengerNumber += 1;
-          el.isStopHere = true;
-          return;
-        }
+          el.isStopHere = true;}
+          return el
       });
-      console.log(action.payload.vehicleNo);
+      
     },
     syncCarouselPage(state, action) {
       state.nowCarouselPage = action.payload.now;
@@ -74,12 +87,12 @@ const kioskSlice = createSlice({
     SetVulnerable(state, action) {
       const vehicleNo = action.payload.vehicleNo;
       const remainingStops = action.payload.remainingStops;
-      state.busData.forEach((el) => {
-        if (el.vehicleNo == vehicleNo && el.remainingStops == remainingStops) {
+      state.busData.map((el) => {
+        if (el.vehicleNo == vehicleNo) {
           el.isVulnerable = true;
           el.passengerNumber += 1;
           el.isStopHere = true;
-          return;
+          return el;
         }
       });
     },
