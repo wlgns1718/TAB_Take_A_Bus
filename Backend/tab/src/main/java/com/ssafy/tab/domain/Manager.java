@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@Table(name = "MANAGER")
 public class Manager {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

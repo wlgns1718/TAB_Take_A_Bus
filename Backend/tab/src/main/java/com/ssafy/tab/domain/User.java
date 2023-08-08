@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@Table(name = "USER")
 public class User {
 
     /*
@@ -40,9 +41,6 @@ public class User {
     @Column(name = "SALT", length = 32)
     private String salt;
 
-    @Column(name = "TOKEN", length = 500)
-    private String token;
-
     @Column(name = "REFRESH_TOKEN", length = 500)
     private String refreshToken;
 
@@ -52,6 +50,20 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private Role role;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", userPw='" + userPw + '\'' +
+                ", name='" + name + '\'' +
+                ", salt='" + salt + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                '}';
+    }
 
     public User(String userId, String userPw, String name, String email, Role role) {
         this.userId = userId;

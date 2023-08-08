@@ -1,21 +1,24 @@
 package com.ssafy.tab.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ssafy.tab.dto.BoardDto;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Table(name = "BOARD")
 public class Board {
 
     /*
     id : 게시판 번호
-    userNo : 글 작성자
+    userNo : 글 작성자 id
     title : 제목
     content : 내용
     createTime : 작성 시간
@@ -42,11 +45,23 @@ public class Board {
     @Column(name = "SORT")
     private Sort sort;
 
-    public Board(User user, String title, String content, LocalDateTime createTime, Sort sort) {
-        this.user = user;
-        this.title = title;
-        this.content = content;
-        this.createTime = createTime;
-        this.sort = sort;
+    //게시글의 내용을 수정하는 기능.
+    public Board changeBoard(BoardDto boardDto) {
+        this.title = boardDto.getTitle();
+        this.content = boardDto.getContent();
+        this.createTime = boardDto.getCreateTime();
+        this.sort = boardDto.getSort();
+        return this;
+    }
+
+    public static Board toEntity(BoardDto boardDto, User user) {
+        return Board.builder()
+                .id(boardDto.getId())
+                .user(user)
+                .title(boardDto.getTitle())
+                .content(boardDto.getContent())
+                .createTime(boardDto.getCreateTime())
+                .sort(boardDto.getSort())
+                .build();
     }
 }
