@@ -47,7 +47,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     () => {
       busAPI
         .get(`/${data.citycode}/${data.busStopId}`, {
-          timeout: 5000,
+          timeout: 10000,
         })
         .then((response) => {
           console.log(response.data);
@@ -100,7 +100,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           throw err;
         });
     },
-    { staleTime: 1000, refetchInterval: 5000 }
+    { staleTime: 10000, refetchInterval: 10000 }
   );
 
   useEffect(() => {
