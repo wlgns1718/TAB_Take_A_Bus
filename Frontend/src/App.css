@@ -4,10 +4,6 @@
   /* padding: 1rem; */
 }
 
-@font-face{
-  font-family: "Inter" ;
-  src: url("./font/Inter-VariableFont_slnt,wght.ttf");
-}
 
 .web-body{
   max-width: 1920px;

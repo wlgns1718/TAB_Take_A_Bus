@@ -10,15 +10,17 @@ import {
   BusStoreData,
   KioskState,
   updateBusData,
+  updateLockedBusData,
 } from "../../../store/slice/kiosk-slice";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { busAPI } from "../../../store/api/api";
-import { useQuery } from "react-query";
+import { useQuery, QueryClient } from "react-query";
 import { AxiosError } from "axios";
 
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   const [comingSoonBusList, setComingSoonBusList] = useState<BusData[]>([]);
+  const [oldData, setOldData] = useState<BusStoreData[]>([]);
 
   const dispatch = useDispatch();
 
@@ -45,14 +47,44 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     () => {
       busAPI
         .get(`/${data.citycode}/${data.busStopId}`, {
-          timeout: 5000,
+          timeout: 10000,
         })
         .then((response) => {
-          console.log(response.data)
+          console.log(response.data);
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
             // 도착예정시간 순으로 정렬해서 저장
+            setOldData(data.busData);
+
+            const postingBusList = oldData.filter((el) => {
+              const sameBus = response.data.data.find(
+                (newel) => newel.vehicleNo == el.vehicleNo
+              );
+              return el.isPosted == false && sameBus.remainingStops == 1;
+            });
+            console.log(postingBusList);
+
+            postingBusList.map((el) => {
+              busAPI
+                .post(
+                  `/station/${data.citycode}/${data.busStopId}/${el.vehicleNo}`,
+                  {
+                    busStation: `${data.busStopId}`,
+                    count: `${el.passengerNumber}`,
+                    vehicleNo: `${el.vehicleNo}`,
+                    routeNo: `${el.routeId}`,
+                    vulnerable: `${el.isVulnerable}`,
+                  }
+                )
+                .then((response) => {
+                  console.log(response);
+                  dispatch(updateLockedBusData(postingBusList));
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            });
             dispatch(
               updateBusData(
                 response.data.data.sort((a: BusData, b: BusData) => {
@@ -68,7 +100,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           throw err;
         });
     },
-    { staleTime: 1000, refetchInterval: 10000 }
+    { staleTime: 10000, refetchInterval: 10000 }
   );
 
   useEffect(() => {

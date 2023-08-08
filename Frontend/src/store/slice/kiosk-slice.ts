@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-
+import { busAPI } from "../api/api";
 
 export type BusData = {
   busNo: string;
@@ -19,6 +18,7 @@ export type BusStoreData = BusData & {
   isStopHere: boolean;
   passengerNumber: number;
   isVulnerable: boolean;
+  isPosted: boolean;
 };
 
 type ErrorType = string | null;
@@ -50,6 +50,11 @@ const kioskSlice = createSlice({
   reducers: {
     updateBusData(state, action) {
       state.busData = action.payload;
+    },
+    updateLockedBusData(state, action) {
+      // state.busData.forEach(bus=>{
+      //   if(action.payload.find())
+      // })
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
@@ -88,6 +93,7 @@ const kioskSlice = createSlice({
 export const {
   updateBusData,
   increasePassenger,
+  updateLockedBusData,
   SetVulnerable,
   syncCarouselPage,
   checkMaster,
