@@ -14,7 +14,7 @@ public class Survey {
 
     /*
     id : primary key
-    userNo : user테이블 key
+    user : user
     createDate : 설문 날짜
     startLatitude : 시작지점 위도
     startLontitude : 시작지점 경도
@@ -32,15 +32,6 @@ public class Survey {
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
 
-    public Survey(User user, LocalDateTime createDate, double startLatitude, double startLontitude, double destinationLatitude, double destinationLongtitude) {
-        this.user = user;
-        this.createDate = createDate;
-        this.startLatitude = startLatitude;
-        this.startLontitude = startLontitude;
-        this.destinationLatitude = destinationLatitude;
-        this.destinationLongtitude = destinationLongtitude;
-    }
-
     @Column(name = "START_LATITUDE")
     private double startLatitude;
 
@@ -53,5 +44,13 @@ public class Survey {
     @Column(name = "DESTINATION_LONGTITUDE")
     private double destinationLongtitude;
 
+    public Survey(User user, LocalDateTime createDate, double startLatitude, double startLontitude, double destinationLatitude, double destinationLongtitude) {
+        this.user = user;
+        this.createDate = createDate;
+        this.startLatitude = startLatitude;
+        this.startLontitude = startLontitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongtitude = destinationLongtitude;
+    }
 }
 
