@@ -40,8 +40,6 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final UserService userService;
 
-<<<<<<< HEAD
-=======
 
     @ApiOperation(value = "공지사항 상세보기", notes = "공지사항 상세보기", response = Map.class)
     @GetMapping("/detail/{noticeNo}")
@@ -67,7 +65,6 @@ public class NoticeController {
     }
 
 
->>>>>>> peter
     @ApiOperation(value = "공지사항 목록", notes = "공지사항 전체 목록을 보여줌(페이징)", response = Map.class)
     @GetMapping("/list")
     public Page<NoticeListResponseDto> list(Pageable pageable){
