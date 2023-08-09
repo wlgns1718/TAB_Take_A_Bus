@@ -20,12 +20,12 @@ public class CommentDto {
      */
 
     Long id;
-    Long userId;
+    String userId;
     Long boardId;
     String content;
     LocalDateTime createTime;
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -40,7 +40,7 @@ public class CommentDto {
     public static CommentDto toDto(Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
-                .userId(comment.getUser().getId())
+                .userId(comment.getUser().getUserId())
                 .boardId(comment.getBoard().getId())
                 .content(comment.getContent())
                 .createTime(comment.getCreateTime())

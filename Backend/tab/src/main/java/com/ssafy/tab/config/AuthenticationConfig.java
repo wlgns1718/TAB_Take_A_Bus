@@ -27,9 +27,11 @@ public class AuthenticationConfig {
                 .csrf().disable()// rest api이므로 csrf 보안이 필요없으므로 disable처리
                 .cors().and()
                 .authorizeRequests()// request를 authorize하겠다
-                .antMatchers("/user/join","/user/login","/notice/list").permitAll() // 누구나 접근가능
+                .antMatchers("tab/user/join","tab/user/login","tab/notice/list").permitAll() // 누구나 접근가능
 //                .antMatchers("/api/stops/**").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/**","/notice/write").authenticated() // 인증이 필요한 경로
+                .antMatchers(HttpMethod.POST, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
+                .antMatchers(HttpMethod.PUT, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
+                .antMatchers(HttpMethod.DELETE, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀

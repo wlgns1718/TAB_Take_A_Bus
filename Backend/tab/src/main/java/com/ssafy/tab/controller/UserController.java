@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("tab/user")
+@RequestMapping("/tab/user")
 @Api("사용자 컨트롤러  API")
 @RequiredArgsConstructor
 @CrossOrigin("*")

@@ -79,6 +79,16 @@ public class SwaggerConfiguration {
 		return getDocket("공지사항", Predicates.or(PathSelectors.regex("/notice.*")));
 	}
 
+	@Bean
+	public Docket boardApi() {
+		return getDocket("게시판", Predicates.or(PathSelectors.regex("/board.*")));
+	}
+
+	@Bean
+	public Docket surveyApi() {
+		return getDocket("수요조사", Predicates.or(PathSelectors.regex("/survey.*")));
+	}
+
 	/*@Bean
 	public Docket searchApi() {
 		return getDocket("게시판", Predicates.or(PathSelectors.regex("/board.*")));

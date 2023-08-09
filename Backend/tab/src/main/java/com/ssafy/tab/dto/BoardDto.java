@@ -26,8 +26,7 @@ public class BoardDto {
      */
 
     Long id;
-    Long userId;
-    String userName;
+    String userId;
     String title;
     String content;
     LocalDateTime createTime;
@@ -40,7 +39,7 @@ public class BoardDto {
         this.commentDtoList.add(commentDto);
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -48,10 +47,9 @@ public class BoardDto {
         this.createTime = createTime;
     }
 
-    public BoardDto(Long id, Long userId, String userName, String title, String content, LocalDateTime createTime, Sort sort) {
+    public BoardDto(Long id, String userId, String title, String content, LocalDateTime createTime, Sort sort) {
         this.id = id;
         this.userId = userId;
-        this.userName = userName;
         this.title = title;
         this.content = content;
         this.createTime = createTime;
@@ -62,8 +60,7 @@ public class BoardDto {
     public static BoardDto toDto(Board board) {
         return BoardDto.builder()
                 .id(board.getId())
-                .userId(board.getUser().getId())
-                .userName(board.getUser().getName())
+                .userId(board.getUser().getUserId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .createTime(board.getCreateTime())

@@ -21,12 +21,18 @@ public class CommentService {
     private final BoardService boardService;
     private final UserService userService;
 
-    //댓글 작성하기, 댓글 삭제하기, 댓글 수정하기
+    //댓글 id로 댓글 찾아오기, 댓글 작성하기, 댓글 삭제하기, 댓글 수정하기
 
+    // 댓글 id로 댓글 찾아오기
+    @Transactional(readOnly = true)
+    public Comment findComment(Long id) {
+        Comment comment = commentRepository.findById(id).orElse(null);
+        return comment;
+    }
     //댓글 작성하기
     public CommentDto registComment(CommentDto commentDto){
         Board board = boardService.findBoard(commentDto.getBoardId());
-        User user = userService.findById(commentDto.getUserId()).get();
+        User user = userService.findByUserId(commentDto.getUserId());
         return CommentDto.toDto(commentRepository.save(Comment.toEntity(commentDto, user, board)));
     }
 

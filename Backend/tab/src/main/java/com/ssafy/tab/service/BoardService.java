@@ -33,13 +33,14 @@ public class BoardService {
     @Transactional(readOnly = true)
     public Page<BoardDto> board(Pageable pageable) {
         Page<Board> page = boardRepository.findAll(pageable);
-        return page.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return page.map(b -> new BoardDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 등록
     public BoardDto registBoard(BoardDto boardDto){
-        return BoardDto.toDto(boardRepository.save(Board.toEntity(boardDto, userService.findById(boardDto.getUserId()).get())));
+        return BoardDto.toDto(boardRepository.save(Board.toEntity(boardDto, userService.findByUserId(boardDto.getUserId()))));
     }
+
     //게시글 삭제
     public void deleteBoard(Long boardId){
         boardRepository.delete(boardRepository.findById(boardId).get());
@@ -47,7 +48,7 @@ public class BoardService {
 
     //게시글 수정
     public BoardDto modifyBoard(BoardDto boardDto){
-        Board board = Board.toEntity(boardDto, userService.findById(boardDto.getUserId()).get());
+        Board board = Board.toEntity(boardDto, userService.findByUserId(boardDto.getUserId()));
         board.changeBoard(boardDto);
         return BoardDto.toDto(board);
     }
@@ -69,28 +70,28 @@ public class BoardService {
     @Transactional(readOnly = true)
     public Page<BoardDto> boardBySort(Sort sort, Pageable pageable) {
         Page<Board> postsList = boardRepository.findBySort(sort, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 작성자 이름으로 검색하기 + 페이징 처리
     @Transactional(readOnly = true)
-    public Page<BoardDto> boardByUser(String userName, Pageable pageable) {
-        Page<Board> postsList = boardRepository.findByUserContaining(userName, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+    public Page<BoardDto> boardByUser(String userId, Pageable pageable) {
+        Page<Board> postsList = boardRepository.findByUserContaining(userId, pageable);
+        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 제목으로 검색하기 + 페이징 처리
     @Transactional(readOnly = true)
     public Page<BoardDto> boardByTitle(String string, Pageable pageable) {
         Page<Board> postsList = boardRepository.findByTitleContaining(string, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 내용으로로 검색하기 + 페이징 처리
     @Transactional(readOnly = true)
     public Page<BoardDto> boardByContent(String string, Pageable pageable) {
         Page<Board> postsList = boardRepository.findByContentContaining(string, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getUserId(),b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 id로 게시글 조회하기.

@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("tab/survey")
+@RequestMapping("/tab/survey")
 @RequiredArgsConstructor
 public class SurveyController {
 

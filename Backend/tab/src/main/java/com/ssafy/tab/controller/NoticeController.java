@@ -7,7 +7,6 @@ import com.ssafy.tab.dto.NoticeDto;
 import com.ssafy.tab.dto.NoticeResponseDto;
 import com.ssafy.tab.service.NoticeService;
 import com.ssafy.tab.service.UserService;
-import com.ssafy.tab.utils.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,15 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("tab/notice")
+@RequestMapping("/tab/notice")
 @Api("공지사항 컨트롤러 API")
 @RequiredArgsConstructor
 @CrossOrigin("*")

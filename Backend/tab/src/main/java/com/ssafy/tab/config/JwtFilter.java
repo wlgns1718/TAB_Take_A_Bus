@@ -60,8 +60,7 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
         authorities.add(new SimpleGrantedAuthority(Role.USER.toString())); // authority 종류
         authorities.add(new SimpleGrantedAuthority(Role.MANAGER.toString()));
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userId,null,authorities);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId,null,authorities);
 
         // Detail을 넣어 줌
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
