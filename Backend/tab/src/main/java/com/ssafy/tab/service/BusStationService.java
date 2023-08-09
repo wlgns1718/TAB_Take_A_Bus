@@ -84,13 +84,18 @@ public class BusStationService {
                 Map<String, Object> result1 = mapper1.readValue(response1.toString(), Map.class);
                 Map<String, Object> items = (Map<String, Object>) ((Map<String, Object>) result1.get("response")).get("body");
                 LinkedHashMap items1 = (LinkedHashMap) items.get("items");
-                if(items1.get("item") instanceof LinkedHashMap){ // 도착 예정버스의 갯수에 따라서 type이 달라짐, 예외 발생가능
-                    LinkedHashMap m = (LinkedHashMap) items1.get("item");
-                    setBus(finalResult, (int)m.get("arrprevstationcnt"), (int)m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
-                }else if(items1.get("item") instanceof List){
-                    List<Map<String, Object>> src = (List<Map<String, Object>>) items1.get("item");
+                System.out.println("------------------");
+                System.out.println(items1.get("item"));
+                System.out.println(items1.get("item").getClass());
+                System.out.println("------------------");
+                Object object1 = items1.get("item");
+                if(object1 instanceof LinkedHashMap){ // 도착 예정버스의 갯수에 따라서 type이 달라짐, 예외 발생가능
+                    LinkedHashMap m = (LinkedHashMap) object1;
+                    addBusInfo(finalResult, (int)m.get("arrprevstationcnt"), (int)m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
+                }else if(object1 instanceof List){
+                    List<Map<String, Object>> src = (List<Map<String, Object>>) object1;
                     for (Map<String, Object> m : src) {
-                        setBus(finalResult, (int) m.get("arrprevstationcnt"), (int) m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
+                        addBusInfo(finalResult, (int) m.get("arrprevstationcnt"), (int) m.get("arrtime"), m.get("routeid"), m.get("routeno"), m.get("routetp"), m.get("vehicletp"), m, keyIndex);
                     }
                 }
             }
@@ -103,7 +108,7 @@ public class BusStationService {
     }
 
 
-    private void setBus(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m, int keyIndex) throws IOException {
+    private void addBusInfo(List<BusAPI> finalResult, int arrprevstationcnt, int arrtime, Object routeid, Object routeno, Object routetp, Object vehicletp, Map m, int keyIndex) throws IOException {
         BusAPI busAPI = new BusAPI();
         busAPI.setRemainingStops(arrprevstationcnt);
         busAPI.setEta(arrtime);
@@ -139,8 +144,11 @@ public class BusStationService {
                 Map<String, Object> result2 = mapper2.readValue(response2.toString(), Map.class);
                 Map<String, Object> items2 = (Map<String, Object>) ((Map<String, Object>) result2.get("response")).get("body");
 
-
                 Object items2obj = items2.get("items");
+                System.out.println("******************");
+                System.out.println(items2obj);
+                System.out.println("******************");
+
                 if(items2obj instanceof LinkedHashMap){ // 도착 예정 버스가 없는 경우 Exception이 발생함
                     LinkedHashMap items3 = (LinkedHashMap) items2.get("items");
 

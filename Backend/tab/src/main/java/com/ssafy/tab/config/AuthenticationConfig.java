@@ -1,6 +1,7 @@
 package com.ssafy.tab.config;
 
 
+import com.ssafy.tab.service.TokenBlacklistService;
 import com.ssafy.tab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -18,8 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class AuthenticationConfig {
 
     private final UserService userService;
+    private final TokenBlacklistService tokenBlacklistService;
     @Value("${jwt.secret}")
     private String secretKey;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/user/join","/user/login","/notice/list","/api/stops/**","/user/requestToken");
+    }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
@@ -27,14 +36,14 @@ public class AuthenticationConfig {
                 .csrf().disable()// rest api이므로 csrf 보안이 필요없으므로 disable처리
                 .cors().and()
                 .authorizeRequests()// request를 authorize하겠다
-                .antMatchers("/user/join","/user/login","/notice/list").permitAll() // 누구나 접근가능
-//                .antMatchers("/api/stops/**").authenticated()
+                .antMatchers("/user/join","/user/login","/notice/list","/api/stops/**").permitAll() // 누구나 접근가능
+                .antMatchers("/notice/modify/**").authenticated()
                 .antMatchers(HttpMethod.POST,"/user/**","/notice/write").authenticated() // 인증이 필요한 경로
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀
                 .and()
-                .addFilterBefore(new JwtFilter(userService,secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(userService,tokenBlacklistService,secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }
