@@ -85,6 +85,11 @@ public class SwaggerConfiguration {
 		return getDocket("게시판", Predicates.or(PathSelectors.regex("/board.*")));
 	}
 
+	@Bean
+	public Docket busApi() {
+		return getDocket("버스", Predicates.or(PathSelectors.regex("/board.*")));
+	}
+
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
 //		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
 //		responseMessages.add(new ResponseMessageBuilder().code(200).message("OK !!!").build());
