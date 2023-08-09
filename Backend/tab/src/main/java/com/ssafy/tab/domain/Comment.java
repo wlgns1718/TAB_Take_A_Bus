@@ -31,7 +31,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "USER_NO")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "BOARD_NO")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOARD_NO")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 

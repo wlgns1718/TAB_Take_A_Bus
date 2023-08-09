@@ -39,8 +39,6 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final UserService userService;
 
-
-
     @ApiOperation(value = "공지사항 목록", notes = "공지사항 전체 목록을 보여줌(페이징)", response = Map.class)
     @GetMapping("/list")
     public Page<NoticeResponseDto> list(Pageable pageable){
@@ -86,7 +84,7 @@ public class NoticeController {
 
 
 
-        @ApiOperation(value = "공지사항 글쓰기", notes = "공지사항의 글을 작성한다.", response = Map.class)
+    @ApiOperation(value = "공지사항 글쓰기", notes = "공지사항의 글을 작성한다.", response = Map.class)
     @PostMapping("/write")
     public ResponseEntity<Map<String,Object>> write(@RequestBody @ApiParam(value = "글작성(제목, 내용)",required = true) NoticeDto noticeDto, HttpServletRequest request, Authentication authentication){
         Map<String, Object> resultMap = new HashMap<>();
@@ -95,7 +93,6 @@ public class NoticeController {
 //          Authentication으로 사용자 정보 가져오기
             String userId = authentication.getName(); // Authentication.getName()으로 토큰에 담긴 정보를 받아올 수 있음
             User user = userService.findByUserId(userId);
-            //System.out.println("authentication.getName() = " + userId);
 
 //          MANAGER 인지 체크
             if(user.getRole() == Role.MANAGER){

@@ -47,7 +47,7 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if(authorization==null || !authorization.startsWith("Bearer ")){ // 토큰이 안 넘어 왔으면 권한 부여 코드까지 가지 않고 return
-            log.info("authorization == null || !authorization.startsWith(Bearer)");
+            log.info("authorization is null or not startsWith Bearer");
             filterChain.doFilter(request,response);
             return;
         }

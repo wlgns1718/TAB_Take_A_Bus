@@ -56,7 +56,6 @@ public class BoardDto {
         this.content = content;
         this.createTime = createTime;
         this.sort = sort;
-        this.commentDtoList = new ArrayList<>();
     }
 
     public static BoardDto toDto(Board board) {

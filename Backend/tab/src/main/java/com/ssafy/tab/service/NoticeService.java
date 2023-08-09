@@ -28,7 +28,7 @@ public class NoticeService {
         return page.map(b -> new NoticeResponseDto(b.getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime()));
     }
 
-        public Long createNotice(Notice notice){ // 공지사항 생성
+    public Long createNotice(Notice notice){ // 공지사항 생성
         Notice result = noticeRepository.save(notice);
         return result.getId();
     }

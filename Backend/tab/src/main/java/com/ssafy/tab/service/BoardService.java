@@ -31,14 +31,15 @@ public class BoardService {
 
     //전체 게시물 조회
     @Transactional(readOnly = true)
-    public Page<BoardDto> board(Pageable pageable) {
+    public Page<BoardDto> list(Pageable pageable) {
         Page<Board> page = boardRepository.findAll(pageable);
         return page.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 등록
-    public BoardDto registBoard(BoardDto boardDto){
-        return BoardDto.toDto(boardRepository.save(Board.toEntity(boardDto, userService.findById(boardDto.getUserId()).get())));
+    public Long createBoard(Board board){
+        Board result = boardRepository.save(board);
+        return result.getId();
     }
     //게시글 삭제
     public void deleteBoard(Long boardId){

@@ -1,24 +1,32 @@
 package com.ssafy.tab.controller;
 
+import com.ssafy.tab.domain.Board;
 import com.ssafy.tab.domain.Sort;
+import com.ssafy.tab.domain.User;
 import com.ssafy.tab.dto.BoardDto;
+import com.ssafy.tab.dto.BoardRequestDto;
 import com.ssafy.tab.dto.CommentDto;
 import com.ssafy.tab.service.BoardService;
 import com.ssafy.tab.service.CommentService;
 import com.ssafy.tab.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/board")
+@Api("게시판 컨트롤러 API")
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -26,35 +34,30 @@ public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
 
-    //게시판에 접속 시 전체 게시글 가져오기
-    @GetMapping("")
+    //전체 게시글
+    @ApiOperation(value = "게시판 목록", notes = "게시판 전체 목록을 보여줌(페이징)", response = Map.class)
+    @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> board(Pageable pageable, HttpServletRequest request) {
         Map<String, Object> resultMap = new HashMap<>();
-        //파라미터로 설정 가능 한 것
-        ///board?page=0&size=3&sort=id,desc&sort=username,dec
-
-        /*
-        로그인 하지 않았을 시 접근 불가
-         System.out.println(request.getHeader("TOKEN"));
-         */
 
         try {
-            resultMap.put("code", "500");
+            Page<BoardDto> list = boardService.list(pageable);
+            resultMap.put("data", list);
+            resultMap.put("code", "200");
             resultMap.put("msg", "정상적으로 게시판 정보를 불러왔습니다.");
-            resultMap.put("data", boardService.board(pageable));
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             e.printStackTrace();
-            resultMap.put("code", "200");
+            resultMap.put("code", "500");
             resultMap.put("msg", "정상적으로 게시판 정보를 불러오지 못했습니다!");
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         }
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
     }
 
-
     //게시글 등록
-    @PostMapping("")
-    public ResponseEntity<Map<String, Object>> registBoard(@RequestBody BoardDto boardDto ,HttpServletRequest request) throws Exception {
+    @ApiOperation(value = "게시글 작성", notes = "게시글을 작성할 수 있습니다", response = Map.class)
+    @PostMapping("/write")
+    public ResponseEntity<Map<String, Object>> registBoard(@RequestBody BoardRequestDto boardRequestDto , Authentication authentication) throws Exception {
 
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -64,18 +67,49 @@ public class BoardController {
         boardDto.setUserId(userId);
          */
 
-        boardDto.setUserId(2L);
-        boardDto.setCreateTime(LocalDateTime.now());
         try{
-            BoardDto newBoardDto = boardService.registBoard(boardDto);
+            // Authentication으로 사용자 정보 가져오기
+            String userId = authentication.getName(); // Authentication.getName()으로 토큰에 담긴 정보를 받아올 수 있음
+
+                User user = userService.findByUserId(userId);
+
+                Board board = new Board(user, boardRequestDto.getTitle(), boardRequestDto.getContent(), LocalDateTime.now(),boardRequestDto.getSort());
+                boardService.createBoard(board);
+                resultMap.put("code", "200");
+                resultMap.put("msg", "게시글 등록 완료!");
+
+        }catch (NullPointerException e){
+            resultMap.put("code", "401");
+            resultMap.put("msg", "로그인한 사용자만 게시글을 작성할 수 있습니다.");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            resultMap.put("code", "500");
+            resultMap.put("msg", "게시글 등록 실패!");
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+
+    //게시글 자세히보기
+    @GetMapping("/{boardId}")
+    public ResponseEntity<Map<String, Object>> boardDetail(@PathVariable("boardId") Long boardId ,HttpServletRequest request) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        /*
+        boardDto에 user를 token으로 찾아서 담기.
+        Long userId =;
+        boardDto.setUserId(userId);
+         */
+        try{
+            BoardDto newBoardDto = boardService.boardDetail(boardId);
             resultMap.put("code", "200");
-            resultMap.put("msg", "게시글 등록 완료!");
+            resultMap.put("msg", "게시글 불러오기 완료!");
             resultMap.put("data", newBoardDto);
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         } catch(Exception e){
             e.printStackTrace();
             resultMap.put("code", "500");
-            resultMap.put("msg", "게시글 등록 실패!");
+            resultMap.put("msg", "게시글 불러오기 실패!");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         }
     }
@@ -137,28 +171,7 @@ public class BoardController {
         }
     }
 
-    //게시글 자세히보기
-    @GetMapping("/{boardId}")
-    public ResponseEntity<Map<String, Object>> boardDetail(@PathVariable("boardId") Long boardId ,HttpServletRequest request) throws Exception {
-        Map<String, Object> resultMap = new HashMap<>();
-        /*
-        boardDto에 user를 token으로 찾아서 담기.
-        Long userId =;
-        boardDto.setUserId(userId);
-         */
-        try{
-            BoardDto newBoardDto = boardService.boardDetail(boardId);
-            resultMap.put("code", "200");
-            resultMap.put("msg", "게시글 불러오기 완료!");
-            resultMap.put("data", newBoardDto);
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-        } catch(Exception e){
-            e.printStackTrace();
-            resultMap.put("code", "500");
-            resultMap.put("msg", "게시글 불러오기 실패!");
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-        }
-    }
+
 
     //게시글 머리말대로 검색하기 + 페이징 처리
     @GetMapping("/sort/{sort}")

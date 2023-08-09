@@ -45,6 +45,17 @@ public class Board {
     @Column(name = "SORT")
     private Sort sort;
 
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments;
+
+    public Board(User user, String title, String content, LocalDateTime createTime, Sort sort) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createTime = createTime;
+        this.sort = sort;
+    }
+
     //게시글의 내용을 수정하는 기능.
     public Board changeBoard(BoardDto boardDto) {
         this.title = boardDto.getTitle();
