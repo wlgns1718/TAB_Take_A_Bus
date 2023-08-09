@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("tab/board")
+@RequestMapping("/tab/board")
 @Api("게시판 컨트롤러 API")
 @RequiredArgsConstructor
 public class BoardController {
