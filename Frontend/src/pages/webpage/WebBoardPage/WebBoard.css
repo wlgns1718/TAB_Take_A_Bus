@@ -4,7 +4,37 @@
   display: flex;
 }
 
-.board-title{
+.board-select{
+  width: 200px;
+  margin-left: auto;
+}
+.board-select-space{
+  height: 40px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+
+}
+
+.board-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.board-header-item{
+  flex: 1;
   text-align: center;
-  font-size: 30px;
+  font-size: 20px;
+  background-color: white;
+  border: 2px solid #499BE9;
+  color: black;
+  padding: 20px;
+}
+.board-selected{
+  background-color: #499BE9;
+  color: white;
+}
+.board-header-space{
+  flex: 1;
 }
