@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -20,6 +21,11 @@ public class AuthenticationConfig {
     private final UserService userService;
     @Value("${jwt.secret}")
     private String secretKey;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return (web) -> web.ignoring().antMatchers("/user/join", "/user/login", "/notice/list", "/stoptest/**");
+    }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
@@ -29,7 +35,7 @@ public class AuthenticationConfig {
                 .authorizeRequests()// request를 authorize하겠다
                 .antMatchers("tab/user/join","tab/user/login","tab/notice/list").permitAll() // 누구나 접근가능
 //                .antMatchers("/api/stops/**").authenticated()
-                .antMatchers(HttpMethod.POST, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
+                .antMatchers(HttpMethod.POST, "tab/user/**","tab/notice/write", "tab/board/**", "/tab/stoptest/**").authenticated() // 인증이 필요한 경로
                 .antMatchers(HttpMethod.PUT, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
                 .antMatchers(HttpMethod.DELETE, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
                 .and()
@@ -38,10 +44,6 @@ public class AuthenticationConfig {
                 .and()
                 .addFilterBefore(new JwtFilter(userService,secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
-
-
-
 }
 

@@ -18,9 +18,6 @@ import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration // 스프링 실행시 설정파일
 @EnableSwagger2 // Swagger2를 사용
 @SuppressWarnings("unchecked") // warning 제거
@@ -99,7 +96,7 @@ public class SwaggerConfiguration {
 		return getDocket("핫플레이스", Predicates.or(PathSelectors.regex("/hotplace.*")));
 
 	}
-	
+
 	@Bean
 	public Docket planApi() {
 		return getDocket("여행계획", Predicates.or(PathSelectors.regex("/plan.*")));
