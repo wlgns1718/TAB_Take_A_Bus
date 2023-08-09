@@ -1,0 +1,13 @@
+.quill .ql-container{
+  height: 400px;
+}
+
+.tb_data.tb_write tbody tr th {
+  width: 200px;
+  min-width: 200px;
+}
+.tb_data.tb_write tbody tr td .ql-container{
+  height: 300px;
+  
+  /* max-width: 100%; */
+}

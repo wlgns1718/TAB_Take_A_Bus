@@ -4,6 +4,8 @@ import { WebHeader } from "@/components/web/WebHeader";
 import { WebLoginPage } from "../WebLoginPage";
 import { WebSignupPage } from "../WebSignupPage";
 import { WebBoardPage } from "../WebBoardPage";
+import { WebBoardPostPage } from "../WebBoardPostPage";
+import { WebBoardDetailPage } from "../WebBoardDetailPage";
 import { WebRecommendPage } from "../WebRecommendPage";
 import { WebSurveyPage } from "../WebSurveyPage";
 import { Web404Page } from "../Web404Page";
@@ -38,7 +40,9 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
                       onClick={function () {}}
                       size="lg"
                       variant="soft"
-                    >TAB</Button>
+                    >
+                      TAB
+                    </Button>
                   </Grid>
                   <Grid item xs={6}>
                     <img src="/main_bus.png?url" style={{ width: "100%" }} />
@@ -49,7 +53,11 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
           ></Route>
           <Route path="signup" element={<WebSignupPage />}></Route>
           <Route path="login" element={<WebLoginPage />}></Route>
-          <Route path="board" element={<WebBoardPage />}></Route>
+          <Route path="board/">
+            <Route path="" element={<WebBoardPage />}></Route>
+            <Route path="post" element={<WebBoardPostPage />}></Route>
+            <Route path="detail/:postId" element={<WebBoardDetailPage />}></Route>
+          </Route>
           <Route path="recommend" element={<WebRecommendPage />}></Route>
           <Route path="survey" element={<WebSurveyPage />}></Route>
           <Route path="*" element={<Web404Page />}></Route>
