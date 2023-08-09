@@ -14,7 +14,7 @@ export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
     src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png",
     size: [50, 45],
     options: {
-      offset: [15, 43],
+      offset: [200, 200],
     },
   };
 
@@ -30,7 +30,7 @@ export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
     src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png",
     size: [50, 45],
     options: {
-      offset: [15, 43],
+      offset: [100,100],
     },
   };
 
@@ -223,7 +223,7 @@ export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
                 { lat: endPoint?.lat, lng: endPoint?.lng },
               ],
             ]}
-            strokeWeight={10} // 선의 두께 입니다
+            strokeWeight={5} // 선의 두께 입니다
             strokeColor={"#FFAE00"} // 선의 색깔입니다
             strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
             strokeStyle={"solid"} // 선의 스타일입니다
