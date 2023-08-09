@@ -4,6 +4,7 @@ import com.ssafy.tab.domain.Notice;
 import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.User;
 import com.ssafy.tab.dto.NoticeDto;
+import com.ssafy.tab.dto.NoticeListResponseDto;
 import com.ssafy.tab.dto.NoticeResponseDto;
 import com.ssafy.tab.service.NoticeService;
 import com.ssafy.tab.service.UserService;
@@ -40,10 +41,33 @@ public class NoticeController {
     private final UserService userService;
 
 
+    @ApiOperation(value = "공지사항 상세보기", notes = "공지사항 상세보기", response = Map.class)
+    @GetMapping("/detail/{noticeNo}")
+    ResponseEntity<Map<String,Object>> detail(@PathVariable("noticeNo")  Long noticeNo){
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            NoticeResponseDto response = noticeService.findById(noticeNo);
+            if (response == null) {
+                resultMap.put("code", "401");
+                resultMap.put("msg", "해당 공지사항이 삭제되었습니다");
+            } else {
+                resultMap.put("data", response);
+                resultMap.put("code", "200");
+                resultMap.put("msg", "공지사항 상세조회 성공!");
+            }
+        }catch (Exception e){
+            resultMap.put("code", "500");
+            resultMap.put("msg", "공지사항 상세조회 실패");
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+    }
+
 
     @ApiOperation(value = "공지사항 목록", notes = "공지사항 전체 목록을 보여줌(페이징)", response = Map.class)
     @GetMapping("/list")
-    public Page<NoticeResponseDto> list(Pageable pageable){
+    public Page<NoticeListResponseDto> list(Pageable pageable){
         return noticeService.list(pageable);
     }
 
@@ -86,7 +110,7 @@ public class NoticeController {
 
 
 
-        @ApiOperation(value = "공지사항 글쓰기", notes = "공지사항의 글을 작성한다.", response = Map.class)
+    @ApiOperation(value = "공지사항 글쓰기", notes = "공지사항의 글을 작성한다.", response = Map.class)
     @PostMapping("/write")
     public ResponseEntity<Map<String,Object>> write(@RequestBody @ApiParam(value = "글작성(제목, 내용)",required = true) NoticeDto noticeDto, HttpServletRequest request, Authentication authentication){
         Map<String, Object> resultMap = new HashMap<>();
