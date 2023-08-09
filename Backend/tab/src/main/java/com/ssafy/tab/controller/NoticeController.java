@@ -121,7 +121,7 @@ public class NoticeController {
                 Notice notice = new Notice(user,noticeDto.getTitle(),noticeDto.getContext(), Timestamp.valueOf(LocalDateTime.now()));
                 noticeService.createNotice(notice);
                 resultMap.put("code", "200");
-                resultMap.put("msg","글작성 성공!");
+                resultMap.put("msg","공지사항 작성 성공!");
             }else{
                 resultMap.put("code", "401");
                 resultMap.put("msg","관리자만 글을 작성할 수 있습니다.");

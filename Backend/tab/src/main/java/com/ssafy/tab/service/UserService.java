@@ -64,21 +64,26 @@ public class UserService {
         resultMap.put("refreshToken",refreshToken);
         return resultMap; // 위 과정을 성공적으로 거친 후 로그인 수행
     }
-/*
-    public Map<String,String> requestToken(String token){
+
+    public String requestToken(String token){
         Map<String, String> resultMap = new HashMap<>();
+
+        if(JwtUtil.isExpired(token,secretKey)){
+            return null;
+        }
 
         String userId = JwtUtil.getUserId(token, secretKey);
 
-        userRepository.findrefreshTokenByUserId(userId);
+        Optional<String> refreshToken = userRepository.findRefreshToken(userId);
 
-        String accessToken = JwtUtil.createToken(userId,secretKey,accessExpiredMs);
+        if(token.equals(refreshToken.get())){
+            String accessToken = JwtUtil.createToken(userId,secretKey,accessExpiredMs);
+            return accessToken;
+        }
 
-        resultMap.put("accessToken",accessToken);
-
-        return resultMap;
+        return null;
     }
-*/
+
     @Transactional
     public Long joinUser(User user) throws Exception { // 회원가입
 

@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
+import static com.mysql.cj.conf.PropertyKey.logger;
 
 @RestController
 @RequestMapping("/tab/user")
@@ -30,6 +33,32 @@ public class UserController {
     private final TokenBlacklistService tokenBlacklistService;
 
     private int refreshExpiredMs = 1000 * 60 * 600; // 10시간
+
+/*
+    @ApiOperation(value = "회원정보 by id", notes = "id를 이용하여 회원 정보를 반환한다.", response = Map.class)
+    @GetMapping("/info/{userId}")
+    public ResponseEntity<Map<String, Object>> getInfo(
+            @PathVariable("userId") @ApiParam(value = "조회할 회원의 아이디.", required = true) Long userId,
+            HttpServletRequest request) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        try {
+            User user = us.findById(userId).get();
+
+            resultMap.put("userInfo", userDto);
+            resultMap.put("code", "200");
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            logger.error("정보조회 실패 : {}", e);
+            resultMap.put("code", "500");
+            status = HttpStatus.ACCEPTED;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+ */
     @ApiOperation(value = "회원가입", notes = "회원가입 진행.", response = Map.class)
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserJoinDto userJoinDto){
@@ -83,8 +112,8 @@ public class UserController {
 
     }
 
-/*
-    @ApiOperation(value = "accessToken 재발급", notes = "refreshToken으로 accessToken 재발급 수행", response = Map.class)
+
+    @ApiOperation(value = "accessToken 재발급", notes = "header에 있는 cookie refreshToken으로 accessToken 재발급 수행", response = Map.class)
     @PostMapping("/requestToken")
     public ResponseEntity<Map<String,Object>> requestToken(HttpServletRequest request){
         Map<String, Object> resultMap = new HashMap<>();
@@ -94,14 +123,23 @@ public class UserController {
             for (Cookie cookie : cookies) {
                 if(cookie.getName().equals("refreshToken")){
                     String refreshToken = cookie.getValue();
-                    us.requestToken(refreshToken);
+                    String newToken = us.requestToken(refreshToken);
+                    if(newToken!=null){
+                        resultMap.put("code","200");
+                        resultMap.put("msg","accessToken을 성공적으로 받아왔습니다");
+                        resultMap.put("data",newToken);
+                    }else{
+                        resultMap.put("code","401");
+                        resultMap.put("msg","accessToken을 받아오는데 실패했습니다");
+                    }
+
                     break;
                 }
             }
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
-*/
+
     @ApiOperation(value = "로그아웃", notes = "token을 블랙리스트에 넣어서 로그아웃을 수행", response = Map.class)
     @DeleteMapping("/logout")
     public ResponseEntity<Map<String, Object>> logout(@RequestHeader("Authorization") @ApiParam(value = "헤더에 있는 토큰", required = true) String authorizationHeader) {
