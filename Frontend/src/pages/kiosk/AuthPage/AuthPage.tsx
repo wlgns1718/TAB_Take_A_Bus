@@ -36,15 +36,18 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
 
   return (
     <div className="mainbox" {...props}>
-      <h1
-        style={{
-          fontSize: "200px",
-          justifyContent: "center",
-          textAlign: "center",
-        }}
-      >
-        정류장 선택
-      </h1>
+      <div style={{ paddingTop: "800px" }}>
+        <h1
+          style={{
+            fontSize: "160px",
+            textAlign: "center",
+            marginTop: "0%",
+            marginBottom: "300px",
+          }}
+        >
+          정류장 선택
+        </h1>
+      </div>
 
       <div className="Authkey">
         <input
