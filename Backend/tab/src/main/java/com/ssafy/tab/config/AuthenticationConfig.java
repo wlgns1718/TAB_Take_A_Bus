@@ -27,9 +27,9 @@ public class AuthenticationConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/user/join","/user/login","/user/logout","/notice/list","/notice/detail/**","/api/stops/**","/user/requestToken",
-                "/v2/api-docs","/configuration/ui","/swagger-resources","/configuration/security","/swagger-ui.html","/webjars/**",
-                "/swagger/**"
+        return (web) -> web.ignoring().antMatchers("/tab/user/join","/tab/user/login","/tab/user/logout","/tab/notice/list","/tab/notice/detail/**","/tab/station/**","/tab/user/requestToken",
+                "/v2/api-docs","/configuration/ui","/swagger-resources","/configuration/security","/swagger-ui.html","/webjars/**","/swagger/**"
+
         );
 
     }
@@ -40,10 +40,9 @@ public class AuthenticationConfig {
                 .csrf().disable()// rest api이므로 csrf 보안이 필요없으므로 disable처리
                 .cors().and()
                 .authorizeRequests()// request를 authorize하겠다
-                /*.antMatchers("/notice/detail/**","/user/join","/user/login","/api/stops/**",
-                        "/swagger-ui.html#/**","/swagger-ui.html").permitAll() // 누구나 접근가능 (permitAll대신 web.ignore로 대체)*/
+                /*.antMatchers(HttpMethod.GET,"/tab/board").permitAll() // 누구나 접근가능 (permitAll대신 web.ignore로 대체)*/
                 .antMatchers("/notice/modify/**").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/**","/notice/write").authenticated() // 인증이 필요한 경로
+                .antMatchers(HttpMethod.POST,"/user/**","/notice/write","/tab/board").authenticated() // 인증이 필요한 경로
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀

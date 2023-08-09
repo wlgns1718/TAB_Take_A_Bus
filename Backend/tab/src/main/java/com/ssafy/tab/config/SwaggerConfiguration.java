@@ -72,17 +72,17 @@ public class SwaggerConfiguration {
 	}
 	@Bean
 	public Docket userApi() {
-		return getDocket("회원", Predicates.or(PathSelectors.regex("/user.*")));
+		return getDocket("회원", Predicates.or(PathSelectors.regex("/tab/user.*")));
 	}
 
 	@Bean
 	public Docket noticeApi() {
-		return getDocket("공지사항", Predicates.or(PathSelectors.regex("/notice.*")));
+		return getDocket("공지사항", Predicates.or(PathSelectors.regex("/tab/notice.*")));
 	}
 
 	@Bean
 	public Docket boardApi() {
-		return getDocket("게시판", Predicates.or(PathSelectors.regex("/board.*")));
+		return getDocket("게시판", Predicates.or(PathSelectors.regex("/tab/board.*")));
 	}
 
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
