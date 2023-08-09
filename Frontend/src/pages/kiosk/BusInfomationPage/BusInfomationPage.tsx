@@ -42,14 +42,6 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     );
   }, [data.busData]);
 
-
-  // export type BusStoreData = BusData & {
-  //   isStopHere: boolean;
-  //   passengerNumber: number;
-  //   isVulnerable: boolean;
-  //   isPosted: boolean;
-  // };
-
   const fetchBusData = useQuery(
     "fetchBus",
     () => {
@@ -66,10 +58,10 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
               el.isStopHere = false
               el.passengerNumber = 0
               el.isVulnerable =false
-              el.isposted = false
+              el.isPosted = false
               return el
             })
-            
+           
 
             const stateBusData:BusStoreData[] = addData.map((newdata:BusStoreData)=>{
               const recordedItem = data.busData.find((old:BusStoreData)=> {
@@ -87,13 +79,35 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                 if(recordedItem.isPosted == true){
                   newdata ={...newdata, isPosted:recordedItem.isPosted}
                 }
+                if(recordedItem.isPosted == false){
+                  if(newdata.remainingStops == 1){
+                  busAPI
+                .post(
+                  `station/${data.citycode}/${data.busStopId}/${recordedItem.vehicleNo}`,null,
+                  {params:{
+                    busStation: `${data.busStopId}`,
+                    count: `${recordedItem.passengerNumber}`,
+                    vehicleNo: `${recordedItem.vehicleNo}`,
+                    routeNo: `${recordedItem.routeId}`,
+                    vulnerable: `${recordedItem.isVulnerable}`,
+                  }}
+                ).then((response)=>{
+                  console.log(response)
+                  console.log(1111)
+                })
+                .catch((error)=>{
+                  console.log(error)
+                })
+                newdata ={...newdata, isPosted:true}
+                console.log('일단 포스티드로바꿈 ')
+                  }
+                }
                 return newdata
               }
               else{
                 return newdata
               }})
             
-              
             dispatch(
               updateBusData(
                 stateBusData.sort((a: BusStoreData, b: BusStoreData) => {
@@ -101,45 +115,6 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                 })
               )
             );
-            console.log(data.busData)
-           
-            
-            // const postingBusList = oldData.filter((el) => {
-            //   const sameBus = response.data.data.find(
-            //     (newel) => newel.vehicleNo == el.vehicleNo
-            //   );
-            //   return el.isPosted == false && sameBus.remainingStops == 1;
-            // });
-            // console.log(postingBusList);
-
-
-            // postingBusList.map((el) => {
-            //   busAPI
-            //     .post(
-            //       `/station/${data.citycode}/${data.busStopId}/${el.vehicleNo}`,
-            //       {
-            //         busStation: `${data.busStopId}`,
-            //         count: `${el.passengerNumber}`,
-            //         vehicleNo: `${el.vehicleNo}`,
-            //         routeNo: `${el.routeId}`,
-            //         vulnerable: `${el.isVulnerable}`,
-            //       }
-            //     )
-            //     .then((response) => {
-            //       console.log(response);
-            //       dispatch(updateLockedBusData(postingBusList));
-            //     })
-            //     .catch((error) => {
-            //       console.log(error);
-            //     });
-            // });
-            // dispatch(
-            //   updateBusData(
-            //     stateBusData.sort((a: BusData, b: BusData) => {
-            //       return a.eta - b.eta;
-            //     })
-            //   )
-            // );
           }
         })
         .catch((error) => {
@@ -152,7 +127,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   );
 
   useEffect(() => {
-    // console.log(data.busData)
+  //  console.log(data.busData)
   }, [fetchBusData]);
 
   const paginateArray = (arr: BusStoreData[], pageSize: number) => {

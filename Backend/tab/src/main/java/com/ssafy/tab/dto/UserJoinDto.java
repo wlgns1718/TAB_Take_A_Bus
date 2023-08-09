@@ -3,8 +3,9 @@ package com.ssafy.tab.dto;
 import com.ssafy.tab.domain.Role;
 import lombok.Data;
 
+
 @Data
-public class UserDto {
+public class UserJoinDto {
     private String id;
     private String pw;
     private String name;

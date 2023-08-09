@@ -1,10 +1,15 @@
 package com.ssafy.tab.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@Getter @Setter
 public class SurveyDto {
 
     /*
@@ -18,8 +23,6 @@ public class SurveyDto {
     double startLongtitude;
     double destinationLatitude;
     double destinationLongtitude;
-
-    public SurveyDto() {}
 
     public SurveyDto(LocalDateTime createDate, double startLatitude, double startLongtitude, double destinationLatitude, double destinationLongtitude) {
         this.createDate = createDate;

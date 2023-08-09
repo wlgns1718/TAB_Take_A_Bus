@@ -1,20 +1,17 @@
 package com.ssafy.tab.controller;
 
-import com.ssafy.tab.domain.Role;
 import com.ssafy.tab.domain.User;
-import com.ssafy.tab.dto.UserDto;
+import com.ssafy.tab.dto.UserJoinDto;
+import com.ssafy.tab.dto.UserLoginDto;
 import com.ssafy.tab.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,22 +23,25 @@ import java.util.Map;
 public class UserController {
 
     private final UserService us;
-    private final JwtService js;
     private final EmailService es;
 
     @ApiOperation(value = "회원가입", notes = "회원가입 진행.", response = Map.class)
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserDto userDto){
+    public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserJoinDto userJoinDto){
         //logger.debug("join user : {} ", userDto);
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            User user = new User(userDto.getId(),userDto.getPw(),userDto.getName(),userDto.getEmail(),userDto.getRole());
+            User user = new User(userJoinDto.getId(),userJoinDto.getPw(),userJoinDto.getName(),userJoinDto.getEmail(),userJoinDto.getRole());
 
             us.joinUser(user);
 
             resultMap.put("code", "200");
             resultMap.put("msg","회원가입 성공");
+        }catch (IllegalStateException e){
+            resultMap.put("data","중복된 아이디 입니다.");
+            resultMap.put("msg","회원가입 실패");
+            resultMap.put("code", "401");
         } catch (Exception e) {
             //logger.error("정보조회 실패 : {}", e);
             resultMap.put("code", "500");
@@ -51,7 +51,25 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
-    //@ApiOperation(value = "로그인", notes = "token 과 로그인 결과를 반환한다.", response = Map.class)
+
+    @ApiOperation(value = "로그인", notes = "token 과 로그인 결과를 반환한다.", response = Map.class)
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody @ApiParam(value = "로그인", required = true) UserLoginDto userLoginDto){
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try{
+            Map<String, Object> tokens = us.login(userLoginDto.getId(), userLoginDto.getPw());// 발행된 토큰
+
+            resultMap.put("data",tokens);
+            resultMap.put("code", "200");
+            resultMap.put("msg","로그인 성공");
+        }catch (Exception e){
+            resultMap.put("code", "500");
+            resultMap.put("msg","로그인 실패");
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
 
 
 
