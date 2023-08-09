@@ -43,7 +43,7 @@ public class SurveyController {
 
     //수요조사 저장
     @ApiOperation(value = "수요조사 등록", notes = "출발지 경도 위도, 목적지 경도 위도를 설정해 수요조사를 합니다.", response = Map.class)
-    @PostMapping("/survey")
+    @PostMapping("")
     public ResponseEntity<Map<String, Object>> insertSurvey(@RequestBody @ApiParam(value = "수요 조사에 필요한 요소", required = true) SurveyDto surveyDto, Authentication authentication) {
         Map<String, Object> resultMap = new HashMap<>();
         String userId = authentication.getName();
@@ -60,7 +60,7 @@ public class SurveyController {
 
     //수요조사 삭제
     @ApiOperation(value = "수요조사 삭제", notes = "이미 등록했던 수요조사를 삭제합니다.", response = Map.class)
-    @DeleteMapping("/survey")
+    @DeleteMapping("")
     public ResponseEntity<Map<String, Object>> deleteSurvey(@RequestBody SurveyDto surveyDto, Authentication authentication) {
         Map<String, Object> resultMap = new HashMap<>();
         String userId = authentication.getName();
