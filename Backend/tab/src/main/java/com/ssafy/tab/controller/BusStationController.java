@@ -1,6 +1,5 @@
 package com.ssafy.tab.controller;
 
-import com.ssafy.tab.domain.BusAPI;
 import com.ssafy.tab.domain.BusTest;
 import com.ssafy.tab.domain.BustestApi;
 import com.ssafy.tab.service.BusStationService;

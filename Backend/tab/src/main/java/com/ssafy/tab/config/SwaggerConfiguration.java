@@ -18,6 +18,9 @@ import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration // 스프링 실행시 설정파일
 @EnableSwagger2 // Swagger2를 사용
 @SuppressWarnings("unchecked") // warning 제거
@@ -79,11 +82,6 @@ public class SwaggerConfiguration {
 	@Bean
 	public Docket boardApi() {
 		return getDocket("게시판", Predicates.or(PathSelectors.regex("/board.*")));
-	}
-
-	@Bean
-	public Docket surveyApi() {
-		return getDocket("수요조사", Predicates.or(PathSelectors.regex("/survey.*")));
 	}
 
 	/*@Bean

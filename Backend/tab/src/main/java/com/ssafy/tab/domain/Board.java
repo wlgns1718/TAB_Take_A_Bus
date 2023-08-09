@@ -1,11 +1,11 @@
 package com.ssafy.tab.domain;
 
-import com.ssafy.tab.dto.BoardDto;
+import com.ssafy.tab.dto.BoardRequestDto;
+import com.ssafy.tab.dto.BoardResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,23 +45,33 @@ public class Board {
     @Column(name = "SORT")
     private Sort sort;
 
-    //게시글의 내용을 수정하는 기능.
-    public Board changeBoard(BoardDto boardDto) {
-        this.title = boardDto.getTitle();
-        this.content = boardDto.getContent();
-        this.createTime = boardDto.getCreateTime();
-        this.sort = boardDto.getSort();
-        return this;
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments;
+
+    public Board(User user, String title, String content, LocalDateTime dateTime, Sort sort) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createTime = dateTime;
+        this.sort = sort;
     }
 
-    public static Board toEntity(BoardDto boardDto, User user) {
+    //게시글의 내용을 수정하는 기능.
+    public void changeBoard(BoardRequestDto boardRequestDto, LocalDateTime dateTime) {
+        this.title = boardRequestDto.getTitle();
+        this.content = boardRequestDto.getContent();
+        this.sort = boardRequestDto.getSort();
+        this.createTime = dateTime;
+    }
+
+    public static Board toEntity(BoardResponseDto boardResponseDto, User user) {
         return Board.builder()
-                .id(boardDto.getId())
+                .id(boardResponseDto.getId())
                 .user(user)
-                .title(boardDto.getTitle())
-                .content(boardDto.getContent())
-                .createTime(boardDto.getCreateTime())
-                .sort(boardDto.getSort())
+                .title(boardResponseDto.getTitle())
+                .content(boardResponseDto.getContent())
+                .createTime(boardResponseDto.getCreateTime())
+                .sort(boardResponseDto.getSort())
                 .build();
     }
 }

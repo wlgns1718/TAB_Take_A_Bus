@@ -28,7 +28,7 @@ public class UserService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Long accessExpiredMs = 1000 * 60 * 60l; // 1시간
+    private Long accessExpiredMs = 1000 * 60 * 60l; // 1시간 (현재 테스트를 위해 5분으로 설정)
     private Long refreshExpiredMs = 1000 * 60 * 600l; // 10시간
 
     /*public int idCheck(String userId) throws Exception {
@@ -36,8 +36,8 @@ public class UserService {
     }*/
 
     @Transactional
-    public Map<String,Object> login(String userId, String password) throws Exception {
-        Map<String, Object> resultMap = new HashMap<>();
+    public Map<String,String> login(String userId, String password) throws Exception {
+        Map<String, String> resultMap = new HashMap<>();
         // 입력받은 아이디와 비밀번호 검사
         List<User> users = userRepository.findByUserId(userId);
         if(users.isEmpty() || users.size()>2){ // 사용자가 없거나 2명 이상이면 잘못된 아이디
@@ -46,7 +46,7 @@ public class UserService {
         }
 
         User user = users.get(0); // 사용자를 가져옴
-        System.out.println("UserService에서 가져온 user : " + user);
+
         if(!hashing(password,user.getSalt()).equals(user.getUserPw())){ // 입력받은 비밀번호를 해싱해서 결과값이 같지 않으면 잘못된 비밀번호
             log.info("입력받은 password : "+password);
             log.info("salt 값 : " + user.getSalt());
@@ -58,12 +58,27 @@ public class UserService {
 
         String accessToken = JwtUtil.createToken(userId,secretKey,accessExpiredMs);
         String refreshToken = JwtUtil.createToken(userId,secretKey,refreshExpiredMs);
+
         user.setRefreshToken(refreshToken);
         resultMap.put("accessToken",accessToken);
         resultMap.put("refreshToken",refreshToken);
         return resultMap; // 위 과정을 성공적으로 거친 후 로그인 수행
     }
+/*
+    public Map<String,String> requestToken(String token){
+        Map<String, String> resultMap = new HashMap<>();
 
+        String userId = JwtUtil.getUserId(token, secretKey);
+
+        userRepository.findrefreshTokenByUserId(userId);
+
+        String accessToken = JwtUtil.createToken(userId,secretKey,accessExpiredMs);
+
+        resultMap.put("accessToken",accessToken);
+
+        return resultMap;
+    }
+*/
     @Transactional
     public Long joinUser(User user) throws Exception { // 회원가입
 

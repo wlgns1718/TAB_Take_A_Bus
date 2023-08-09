@@ -39,7 +39,7 @@ public class Notice {
     private String content;
 
     @Column(name = "CREATE_TIME")
-    private Timestamp createTime = Timestamp.valueOf(LocalDateTime.now());
+    private Timestamp createTime;
 
     public void changeTitle(String title){
         this.title = title;

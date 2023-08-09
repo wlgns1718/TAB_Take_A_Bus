@@ -1,6 +1,7 @@
 package com.ssafy.tab.config;
 
 
+import com.ssafy.tab.service.TokenBlacklistService;
 import com.ssafy.tab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,12 +21,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class AuthenticationConfig {
 
     private final UserService userService;
+    private final TokenBlacklistService tokenBlacklistService;
     @Value("${jwt.secret}")
     private String secretKey;
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web) -> web.ignoring().antMatchers("/user/join", "/user/login", "/notice/list", "/stoptest/**");
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/user/join","/user/login","/notice/list","/api/stops/**","/user/requestToken", "tab/board/**",
+                "/swagger-ui.html#/**","/swagger-ui.html");
+
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -33,17 +38,18 @@ public class AuthenticationConfig {
                 .csrf().disable()// rest api이므로 csrf 보안이 필요없으므로 disable처리
                 .cors().and()
                 .authorizeRequests()// request를 authorize하겠다
-                .antMatchers("tab/user/join","tab/user/login","tab/notice/list").permitAll() // 누구나 접근가능
-//                .antMatchers("/api/stops/**").authenticated()
-                .antMatchers(HttpMethod.POST, "tab/user/**","tab/notice/write", "tab/board/**", "/tab/stoptest/**").authenticated() // 인증이 필요한 경로
-                .antMatchers(HttpMethod.PUT, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
-                .antMatchers(HttpMethod.DELETE, "tab/user/**","tab/notice/write", "tab/board/**").authenticated() // 인증이 필요한 경로
+                .antMatchers("/user/join","/user/login","/notice/list","/api/stops/**",
+                        "/swagger-ui.html#/**","/swagger-ui.html"
+                ).permitAll() // 누구나 접근가능
+                .antMatchers("/notice/modify/**").authenticated()
+                .antMatchers(HttpMethod.POST,"/user/**","/notice/write").authenticated() // 인증이 필요한 경로
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀
                 .and()
-                .addFilterBefore(new JwtFilter(userService,secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(userService,tokenBlacklistService,secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
+
     }
 }
 

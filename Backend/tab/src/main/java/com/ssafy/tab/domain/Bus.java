@@ -20,6 +20,7 @@ public class Bus {
     stationId : 버스정류장 번호
     vulnerable : 교통약자 여부
      */
+
     @Id
     @Column(name = "VHHICLE_NO", length = 20)
     private String id;

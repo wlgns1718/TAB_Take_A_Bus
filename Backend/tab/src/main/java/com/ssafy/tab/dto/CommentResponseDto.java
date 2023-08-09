@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class CommentDto {
+public class CommentResponseDto {
 
     /*
     id : 댓글 id
@@ -37,8 +37,8 @@ public class CommentDto {
         this.createTime = createTime;
     }
 
-    public static CommentDto toDto(Comment comment) {
-        return CommentDto.builder()
+    public static CommentResponseDto toDto(Comment comment) {
+        return CommentResponseDto.builder()
                 .id(comment.getId())
                 .userId(comment.getUser().getUserId())
                 .boardId(comment.getBoard().getId())
