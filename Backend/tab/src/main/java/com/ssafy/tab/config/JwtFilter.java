@@ -47,18 +47,16 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
 
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(authorization==null || !authorization.startsWith("Bearer ")){ // 토큰이 안 넘어 왔으면 권한 부여 코드까지 가지 않고 return
+        if(authorization==null || !authorization.startsWith("Bearer ")){ // 토큰이 null이거나 Bearer으로 시작하지 않으면
 
-            log.info("authorization : " + authorization);
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-            String errorResponse = "{\"code\" : \"401\", \"msg\":\"accessToken이 없습니다.\"}";
-            PrintWriter writer = response.getWriter();
-            writer.write(errorResponse);
-            writer.flush();
-
+            log.error("authorization을 잘못 보냈습니다.");
+//            response.setCharacterEncoding("UTF-8");
+//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//
+//            String errorResponse = "{\"code\" : \"401\", \"msg\":\"accessToken이 없습니다.\"}";
+//            response.getWriter().write(errorResponse);
+            filterChain.doFilter(request,response);
             return;
         }
 
@@ -66,78 +64,52 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
         String token = authorization.split(" ")[1];
 
 
-        try{
-            JwtUtil.isExpired(token,secretKey);
-        }catch (ExpiredJwtException e){
-
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-            String errorResponse = "{\"code\" : \"401\", \"msg\":\"accessToken이 만료되었습니다.\"}";
-            log.info(errorResponse);
-            PrintWriter writer = response.getWriter();
-            writer.write(errorResponse);
-            writer.flush();
-            return;
-        }catch (MalformedJwtException e){
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-            String errorResponse = "{\"code\" : \"401\", \"msg\":\"잘못된 accessToken 입니다\"}";
-            log.info(errorResponse);
-            PrintWriter writer = response.getWriter();
-            writer.write(errorResponse);
-            writer.flush();
+        try {
+            JwtUtil.isExpired(token, secretKey);
+        }
+        catch (ExpiredJwtException e){
+            log.error("토큰이 만료되었습니다.");
+            filterChain.doFilter(request,response);
             return;
         }
-
-        if(tokenBlacklistService.isTokenBlacklisted(token)){ // 로그아웃 로직 (블랙리스트에 등록된 토큰)
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-            String errorResponse = "{\"code\" : \"401\", \"msg\":\"로그아웃 되었습니다. 다시 로그인해주세요.\"}";
-            log.info(errorResponse);
-
-            PrintWriter writer = response.getWriter();
-            writer.write(errorResponse);
-            writer.flush();
-            return;
-        }
-
-
-
-        //  token에서 userId 꺼내기 ( userId가 null이면 잘못된 refreshToken이다. refreshToken에는 사용자 정보를 담지 않음 )
-        String userId = JwtUtil.getUserId(token,secretKey);
-        if(userId==null){
-            log.info("잘못된 accessToken입니다.");
+        catch (MalformedJwtException e){
+            log.error("올바른 토큰이 아닙니다.");
             filterChain.doFilter(request,response);
             return;
         }
 
-        log.info("userId : " + userId);
 
-        setAuthentication(request, userId);
 
-        //SecurityContextHolder에 authentication이 없으면 현재 정보를 바탕으로 setAuthentication
-//        if(SecurityContextHolder.getContext().getAuthentication()==null) {
-//            setAuthentication(request, userId);
-//        }
+        if(tokenBlacklistService.isTokenBlacklisted(token)){ // 로그아웃 로직 (블랙리스트에 등록된 토큰)
+
+            log.error("로그아웃 된 사용자입니다.");
+            filterChain.doFilter(request,response);
+            return;
+
+        }
+
+
+
+        //  token에서 userId 꺼내기
+        String userId = JwtUtil.getUserId(token,secretKey);
+
+        if(userId==null){
+            log.error("token에서 userId를 가져오지 못했습니다");
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority(Role.MANAGER.toString()));
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userId,null,authorities);
+
+        // Detail을 넣어 줌
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request,response);
     }
 
-    private void setAuthentication(HttpServletRequest request,String userId){
-
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(Role.USER.toString())); // authority 종류
-        authorities.add(new SimpleGrantedAuthority(Role.MANAGER.toString()));
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userId,null,authorities);
-        // Detail을 넣어 줌
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-    }
 }
