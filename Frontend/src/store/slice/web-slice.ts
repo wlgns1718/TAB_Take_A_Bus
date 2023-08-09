@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+type user ={
+  
+} 
+
+
 const webSlice = createSlice({
   name: "web",
   initialState: { 
