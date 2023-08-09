@@ -5,6 +5,7 @@ import com.ssafy.tab.service.TokenBlacklistService;
 import com.ssafy.tab.service.UserService;
 import com.ssafy.tab.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,15 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if(authorization==null || !authorization.startsWith("Bearer ")){ // 토큰이 안 넘어 왔으면 권한 부여 코드까지 가지 않고 return
-            log.info("authorization == null || !authorization.startsWith(Bearer)");
-            filterChain.doFilter(request,response);
+            log.info("authorization : " + authorization);
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+            String errorResponse = "{\"code\" : \"401\", \"msg\":\"accessToken이 없습니다.\"}";
+            PrintWriter writer = response.getWriter();
+            writer.write(errorResponse);
+            writer.flush();
             return;
         }
 
@@ -59,15 +67,24 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
         try{
             JwtUtil.isExpired(token,secretKey);
         }catch (ExpiredJwtException e){
-            if(request.getRequestURI().equals("/user/login") || request.getRequestURI().equals("/user/refresh")){
-                filterChain.doFilter(request,response);
-                return;
-            }
+
             response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
             String errorResponse = "{\"code\" : \"401\", \"msg\":\"accessToken이 만료되었습니다.\"}";
+            log.info(errorResponse);
+            PrintWriter writer = response.getWriter();
+            writer.write(errorResponse);
+            writer.flush();
+            return;
+        }catch (MalformedJwtException e){
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+            String errorResponse = "{\"code\" : \"401\", \"msg\":\"잘못된 accessToken 입니다\"}";
+            log.info(errorResponse);
             PrintWriter writer = response.getWriter();
             writer.write(errorResponse);
             writer.flush();
@@ -80,6 +97,8 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
             String errorResponse = "{\"code\" : \"401\", \"msg\":\"로그아웃 되었습니다. 다시 로그인해주세요.\"}";
+            log.info(errorResponse);
+
             PrintWriter writer = response.getWriter();
             writer.write(errorResponse);
             writer.flush();

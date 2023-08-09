@@ -109,7 +109,7 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "accessToken 재발급", notes = "refreshToken으로 accessToken 재발급 수행", response = Map.class)
+    @ApiOperation(value = "accessToken 재발급", notes = "header에 있는 cookie refreshToken으로 accessToken 재발급 수행", response = Map.class)
     @PostMapping("/requestToken")
     public ResponseEntity<Map<String,Object>> requestToken(HttpServletRequest request){
         Map<String, Object> resultMap = new HashMap<>();

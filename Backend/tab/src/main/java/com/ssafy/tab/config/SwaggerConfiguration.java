@@ -39,9 +39,9 @@ public class SwaggerConfiguration {
 				.licenseUrl("psg19lee@gmail.com").version("1.0").build();
 	}
 
-	// API마다 구분짓기 위한 설정.
-/*  Swagger에 Authorization 설정
+	/*
 
+	//  Swagger에 Authorization 설정
 	private static final String REFERENCE="Authorization 헤더 값";
 	@Bean
 	public Docket api(){
@@ -63,8 +63,9 @@ public class SwaggerConfiguration {
 		authorizationScopes[0] = new AuthorizationScope("global", "accessEverything");
 		return Arrays.asList(new SecurityReference(REFERENCE, authorizationScopes));
 	}
-*/
+	*/
 
+	// API마다 구분짓기 위한 설정.
 	@Bean
 	public Docket allApi() {
 		return getDocket("전체", Predicates.or(PathSelectors.regex("/*.*")));
@@ -79,24 +80,10 @@ public class SwaggerConfiguration {
 		return getDocket("공지사항", Predicates.or(PathSelectors.regex("/notice.*")));
 	}
 
-	/*@Bean
+	@Bean
 	public Docket searchApi() {
 		return getDocket("게시판", Predicates.or(PathSelectors.regex("/board.*")));
 	}
-
-	@Bean
-	public Docket hotplaceApi() {
-		return getDocket("핫플레이스", Predicates.or(PathSelectors.regex("/hotplace.*")));
-
-	}
-	
-	@Bean
-	public Docket planApi() {
-		return getDocket("여행계획", Predicates.or(PathSelectors.regex("/plan.*")));
-
-	}*/
-
-
 
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
 //		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
@@ -115,8 +102,6 @@ public class SwaggerConfiguration {
 	public UiConfiguration uiConfig() {
 		return UiConfigurationBuilder.builder().displayRequestDuration(true).validatorUrl("").build();
 	}
-
-
 
 
 }

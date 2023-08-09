@@ -27,7 +27,10 @@ public class AuthenticationConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/user/join","/user/login","/notice/list","/notice/detail/**","/api/stops/**","/user/requestToken");
+        return (web) -> web.ignoring().antMatchers("/","/user/join","/user/login","/notice/list","/notice/detail/**","/api/stops/**","/user/requestToken",
+                "/v2/api-docs","/configuration/ui","/swagger-resources","/configuration/security","/swagger-ui.html","/webjars/**",
+                "/swagger/**"
+        );
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -36,7 +39,8 @@ public class AuthenticationConfig {
                 .csrf().disable()// rest api이므로 csrf 보안이 필요없으므로 disable처리
                 .cors().and()
                 .authorizeRequests()// request를 authorize하겠다
-                .antMatchers("/notice/detail/**","/user/join","/user/login","/notice/list","/api/stops/**").permitAll() // 누구나 접근가능
+                /*.antMatchers("/notice/detail/**","/user/join","/user/login","/api/stops/**",
+                        "/swagger-ui.html#/**","/swagger-ui.html").permitAll() // 누구나 접근가능 (permitAll대신 web.ignore로 대체)*/
                 .antMatchers("/notice/modify/**").authenticated()
                 .antMatchers(HttpMethod.POST,"/user/**","/notice/write").authenticated() // 인증이 필요한 경로
                 .and()
