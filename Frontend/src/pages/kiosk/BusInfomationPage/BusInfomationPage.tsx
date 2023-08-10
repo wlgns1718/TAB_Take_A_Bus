@@ -46,7 +46,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     "fetchBus",
     () => {
       busAPI
-        .get(`/${data.citycode}/${data.busStopId}`, {
+        .get(`/${data.cityCode}/${data.busStopId}/${data.stationName}`, {
           timeout: 10000,
         })
         .then((response) => {
@@ -54,60 +54,75 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
             // 도착예정시간 순으로 정렬해서 저장.
-            const addData:BusStoreData[] = response.data.data.map((el)=>{
-              el.isStopHere = false
-              el.passengerNumber = 0
-              el.isVulnerable =false
-              el.isPosted = false
-              return el
-            })
-           
+            const addData: BusStoreData[] = response.data.data.map((el) => {
+              el.isStopHere = false;
+              el.passengerNumber = 0;
+              el.isVulnerable = false;
+              el.isPosted = false;
+              return el;
+            });
 
-            const stateBusData:BusStoreData[] = addData.map((newdata:BusStoreData)=>{
-              const recordedItem = data.busData.find((old:BusStoreData)=> {
-                return old.busNo == newdata.busNo })
-              if(recordedItem){
-                if(recordedItem.isStopHere == true){
-                  newdata = {...newdata, isStopHere: recordedItem.isStopHere}
-                }
-                if(recordedItem.passengerNumber != newdata.passengerNumber){
-                  newdata = {...newdata, passengerNumber: recordedItem.passengerNumber} 
-                }
-                if(recordedItem.isVulnerable == true){
-                  newdata = {...newdata, isVulnerable: recordedItem.isVulnerable}
-                }
-                if(recordedItem.isPosted == true){
-                  newdata ={...newdata, isPosted:recordedItem.isPosted}
-                }
-                if(recordedItem.isPosted == false){
-                  if(newdata.remainingStops == 1){
-                  busAPI
-                .post(
-                  `station/${data.citycode}/${data.busStopId}/${recordedItem.vehicleNo}`,null,
-                  {params:{
-                    busStation: `${data.busStopId}`,
-                    count: `${recordedItem.passengerNumber}`,
-                    vehicleNo: `${recordedItem.vehicleNo}`,
-                    routeNo: `${recordedItem.routeId}`,
-                    vulnerable: `${recordedItem.isVulnerable}`,
-                  }}
-                ).then((response)=>{
-                  console.log(response)
-                  console.log(1111)
-                })
-                .catch((error)=>{
-                  console.log(error)
-                })
-                newdata ={...newdata, isPosted:true}
-                console.log('일단 포스티드로바꿈 ')
+            const stateBusData: BusStoreData[] = addData.map(
+              (newdata: BusStoreData) => {
+                const recordedItem = data.busData.find((old: BusStoreData) => {
+                  return old.busNo == newdata.busNo;
+                });
+                if (recordedItem) {
+                  if (recordedItem.isStopHere == true) {
+                    newdata = {
+                      ...newdata,
+                      isStopHere: recordedItem.isStopHere,
+                    };
                   }
+                  if (recordedItem.passengerNumber != newdata.passengerNumber) {
+                    newdata = {
+                      ...newdata,
+                      passengerNumber: recordedItem.passengerNumber,
+                    };
+                  }
+                  if (recordedItem.isVulnerable == true) {
+                    newdata = {
+                      ...newdata,
+                      isVulnerable: recordedItem.isVulnerable,
+                    };
+                  }
+                  if (recordedItem.isPosted == true) {
+                    newdata = { ...newdata, isPosted: recordedItem.isPosted };
+                  }
+                  if (recordedItem.isPosted == false) {
+                    if (newdata.remainingStops == 1) {
+                      busAPI
+                        .post(
+                          `station/${data.cityCode}/${data.busStopId}/${recordedItem.vehicleNo}`,
+                          null,
+                          {
+                            params: {
+                              busStation: `${data.busStopId}`,
+                              count: `${recordedItem.passengerNumber}`,
+                              vehicleNo: `${recordedItem.vehicleNo}`,
+                              routeNo: `${recordedItem.routeId}`,
+                              vulnerable: `${recordedItem.isVulnerable}`,
+                            },
+                          }
+                        )
+                        .then((response) => {
+                          console.log(response);
+                          console.log(1111);
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                      newdata = { ...newdata, isPosted: true };
+                      console.log("일단 포스티드로바꿈 ");
+                    }
+                  }
+                  return newdata;
+                } else {
+                  return newdata;
                 }
-                return newdata
               }
-              else{
-                return newdata
-              }})
-            
+            );
+
             dispatch(
               updateBusData(
                 stateBusData.sort((a: BusStoreData, b: BusStoreData) => {

@@ -1,6 +1,6 @@
 .web-body{
   width: 80%;
-  display: flex;
+  /* display: flex; */
   min-width: 960px;
   margin: 0 auto;
   justify-content: center;

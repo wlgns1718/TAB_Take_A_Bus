@@ -8,23 +8,9 @@ import { Button, dividerClasses } from "@mui/joy";
 import "./WebBoard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { BoardTable } from "@/components/web/BoardTable";
-
-import { noticeAPI } from "@/store/api/api";
-
-export type BoardData = {
-  header: string;
-  title: string;
-  author: string;
-  postDate: string;
-};
-
-export type NoticeData = {
-  id: number;
-  username: string;
-  title: string;
-  content: string;
-  createTime: string;
-};
+import { NoticeTable } from "@/components/web/NoticeTable";
+import { boardAPI, noticeAPI } from "@/store/api/api";
+import { BoardData, NoticeData } from "@/store/slice/web-slice";
 
 export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   enum BOARD {
@@ -32,68 +18,8 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     FREE = "게시판",
   }
 
-  function createData(
-    header: string,
-    title: string,
-    author: string,
-    postDate: string
-  ) {
-    return { header, title, author, postDate };
-  }
-
-  const rows: BoardData[] = [
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-    createData("공지사항", "버스 노선 변경(23년 8월)", "관리자", "2023-07-01"),
-  ];
-  const freerows: BoardData[] = [
-    createData(
-      "자유게시판",
-      "버스 노선 변경(23년 8월)",
-      "관리자",
-      "2023-07-01"
-    ),
-    createData(
-      "자유게시판",
-      "버스 노선 변경(23년 8월)",
-      "관리자",
-      "2023-07-01"
-    ),
-    createData(
-      "자유게시판",
-      "버스 노선 변경(23년 8월)",
-      "관리자",
-      "2023-07-01"
-    ),
-    createData(
-      "칭찬합니다",
-      "버스 노선 변경(23년 8월)",
-      "관리자",
-      "2023-07-01"
-    ),
-    createData(
-      "자유게시판",
-      "버스 노선 변경(23년 8월)",
-      "관리자",
-      "2023-07-01"
-    ),
-    createData(
-      "자유게시판",
-      "버스 노선 변경(23년 8월)",
-      "관리자",
-      "2023-07-01"
-    ),
-  ];
+  const [noticeData, setNoticeData] = useState<NoticeData[]>();
+  const [boardData, setBoardData] = useState<BoardData[]>();
 
   const options: string[] = [
     "전체게시판",
@@ -110,18 +36,24 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [currentFreePage, setFreeCurrentPage] = useState(1);
-  const [renderPageNo, setRenderPageNo] = useState(1);
 
-  const [pages, setPages] = useState<BoardData[][]>([]);
+  const [pages, setPages] = useState<NoticeData[][]>([]);
   const [freePages, setFreePages] = useState<BoardData[][]>([]);
-  const [renderPage, setRenderPage] = useState<BoardData[][]>([]);
 
   const handleCurrentBoard = (value) => {
     setCurrentBoard(value);
   };
 
-  const paginateArray = (arr: BoardData[], pageSize: number) => {
-    const pageCount = Math.ceil(arr.length / pageSize);
+  const paginateBoard = (arr: BoardData[], pageSize: number) => {
+    const pageCount = Math.ceil(arr?.length / pageSize);
+    const pagelist = Array.from({ length: pageCount }, (_, index) => {
+      const startIndex = index * pageSize;
+      return arr.slice(startIndex, startIndex + pageSize);
+    });
+    return pagelist;
+  };
+  const paginateNotice = (arr: NoticeData[], pageSize: number) => {
+    const pageCount = Math.ceil(arr?.length / pageSize);
     const pagelist = Array.from({ length: pageCount }, (_, index) => {
       const startIndex = index * pageSize;
       return arr.slice(startIndex, startIndex + pageSize);
@@ -130,22 +62,30 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   };
 
   useEffect(() => {
-    setPages(paginateArray(rows, 5));
+    noticeAPI.get("list").then((response) => {
+      console.log(response.data);
+      setNoticeData(response.data.content);
+    });
   }, []);
 
   useEffect(() => {
-    setFreePages(paginateArray(freerows, 5));
+    boardAPI.get("").then((response) => {
+      console.log(response.data.data.content);
+      setBoardData(response.data.data.content);
+    });
   }, []);
 
   useEffect(() => {
-    if (currentBoard == "공지사항") {
-      setRenderPage(pages);
-      setRenderPageNo(currentPage);
-    } else {
-      setRenderPage(freePages);
-      setRenderPageNo(currentFreePage);
-    }
-  }, [currentBoard, currentPage, currentFreePage]);
+    setPages(paginateNotice(noticeData, 5));
+  }, [noticeData]);
+
+  useEffect(() => {
+    setFreePages(paginateBoard(boardData, 5));
+  }, [boardData]);
+
+  useEffect(() => {
+    setFreePages(paginateBoard(boardData, 5));
+  }, []);
 
   return (
     <div {...props}>
@@ -186,28 +126,44 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         <div className="board-select-space"></div>
       )}
       <div>
-        <BoardTable
-          pages={renderPage ? renderPage : []}
-          currentPage={renderPageNo}
-        ></BoardTable>
-        <div className="pagenation">
-          <Pagination
-            count={renderPage?.length}
-            page={renderPageNo}
-            variant="outlined"
-            color="primary"
-            shape="rounded"
-            onChange={(e, page) => {
-              if (currentBoard == "공지사항") {
-                setCurrentPage(page);
-                console.log(page);
-              } else {
-                setFreeCurrentPage(page);
-                console.log(page);
-              }
-            }}
-          />
-        </div>
+        {currentBoard == "공지사항" ? (
+          <div>
+            <NoticeTable pages={pages} currentPage={currentPage}></NoticeTable>
+            <div className="pagenation">
+              <Pagination
+                count={pages?.length}
+                page={currentPage}
+                variant="outlined"
+                color="primary"
+                shape="rounded"
+                onChange={(e, page) => {
+                  setCurrentPage(page);
+                  console.log(page);
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <BoardTable
+              pages={freePages}
+              currentPage={currentFreePage}
+            ></BoardTable>
+            <div className="pagenation">
+              <Pagination
+                count={freePages?.length}
+                page={currentFreePage}
+                variant="outlined"
+                color="primary"
+                shape="rounded"
+                onChange={(e, page) => {
+                  setFreeCurrentPage(page);
+                  console.log(page);
+                }}
+              />
+            </div>
+          </div>
+        )}
         <Button
           onClick={() => {
             navigate("post");
