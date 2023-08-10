@@ -10,36 +10,36 @@ import {
 import { Button } from "@mui/joy";
 
 export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
+
+  const markerImageSize = new kakao.maps.Size(40, 42);
+
+  const markerImageOptions = {
+    spriteOrigin: new kakao.maps.Point(0, 0),
+    spriteSize: new kakao.maps.Size(40, 42),
+    offset: new kakao.maps.Point(13, 40),
+  };
   const startImage = {
     src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png",
-    size: [50, 45],
-    options: {
-      offset: [200, 200],
-    },
+    size: markerImageSize,
+    options: markerImageOptions,
   };
 
   const startDragImage = {
     src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_drag.png",
-    size: [50, 64],
+    size: markerImageSize,
     options: {
-      offset: [15, 54],
+      offset: markerImageOptions,
     },
   };
 
   const endImage = {
     src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png",
-    size: [50, 45],
-    options: {
-      offset: [100,100],
-    },
+    size: markerImageSize,
   };
 
   const endDragImage = {
     src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_drag.png",
-    size: [50, 64],
-    options: {
-      offset: [15, 54],
-    },
+    size: markerImageSize,
   };
 
   const [startPoint, setStartPoint] = useState<{ lat: number; lng: number }>();
@@ -49,8 +49,8 @@ export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
 
   const [position, setPosition] = useState<{ lat: number; lng: number }>();
 
-  const [startImg, setStartImg] = useState(startImage);
-  const [endImg, setEndImg] = useState(endImage);
+  const [startImg, setStartImg] = useState<{}>(startImage);
+  const [endImg, setEndImg] = useState<{}>(endImage);
 
   const handleMapClick = (_t, mouseEvent) => {
     if (focus == "nothing") return;
@@ -71,25 +71,15 @@ export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
     });
   };
 
+  useEffect(()=>{
+
+  },[])
+
   const handleCalculateDistance = () => {
     if (!startPoint || !endPoint) {
       alert("출발지와 도착지를 모두 클릭하세요.");
       return;
     }
-
-    // TODO: Use Kakao Maps API to calculate shortest distance and display it.
-
-    // Example of using Kakao Maps API to calculate distance:
-    // const distance = kakao.maps.services.Distance.calculate({
-    //   start: new kakao.maps.LatLng(start.getLat(), start.getLng()),
-    //   end: new kakao.maps.LatLng(end.getLat(), end.getLng()),
-    // });
-
-    // Display the calculated distance using the 'distance' object.
-
-    // Remember to handle API response and errors appropriately.
-
-    // For now, just log the markers for testing.
     console.log("Start:", startPoint);
     console.log("End:", endPoint);
   };
@@ -140,12 +130,11 @@ export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
             draggable={true}
             onDragStart={() => {
               setStartImg(startDragImage);
-              // handleMapClick(_t, MouseEvent);
-            }} // 마커가 이동하면 이미지를 변경합니다
+              }
+            } // 마커가 이동하면 이미지를 변경합니다
             onDragEnd={(_t, MouseEvent) => {
               setStartImg(startImage);
               setFocus('start');
-              // handleMapClick(_t, MouseEvent);
             }} // 마커가 이동하면 이미지를 변경합니다
           />
         )}

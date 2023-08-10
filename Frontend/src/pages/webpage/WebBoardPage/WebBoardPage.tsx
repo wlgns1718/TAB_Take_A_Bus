@@ -17,9 +17,26 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     NOTICE = "공지사항",
     FREE = "게시판",
   }
+  const initialNoticeData: NoticeData = {
+    id: 1,
+    userName: "string",
+    title: "string",
+    createTime: [2023, 8, 11, 11, 13, 44],
+  };
+  const initialBoardData : BoardData = {
+    id: 3,
+    userId: "string",
+    title: "string",
+    content: "string",
+    createTime: [2023, 2, 2, 2, 2, 2, 2],
+    sort: "REPORT",
+    commentResponseDtoList: [],
+  };
 
-  const [noticeData, setNoticeData] = useState<NoticeData[]>();
-  const [boardData, setBoardData] = useState<BoardData[]>();
+  const [noticeData, setNoticeData] = useState<NoticeData[]>([
+    initialNoticeData,
+  ]);
+  const [boardData, setBoardData] = useState<BoardData[]>([initialBoardData]);
 
   const options: string[] = [
     "전체게시판",
@@ -62,17 +79,21 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   };
 
   useEffect(() => {
-    noticeAPI.get("list").then((response) => {
-      console.log(response.data);
-      setNoticeData(response.data.content);
-    });
+    if (!noticeData?.length) {
+      noticeAPI.get("list").then((response) => {
+        console.log(response.data);
+        setNoticeData(response.data.content);
+      });
+    }
   }, []);
 
   useEffect(() => {
-    boardAPI.get("").then((response) => {
-      console.log(response.data.data.content);
-      setBoardData(response.data.data.content);
-    });
+    if (!boardData?.length) {
+      boardAPI.get("").then((response) => {
+        console.log(response.data.data.content);
+        setBoardData(response.data.data.content);
+      });
+    }
   }, []);
 
   useEffect(() => {

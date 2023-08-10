@@ -37,7 +37,7 @@ export const NoticeTable: FC<NoticeTableProps> = ({ pages, currentPage }) => {
                   </TableCell>
                   <TableCell align="center">공지사항</TableCell>
                   <TableCell align="left">
-                    <Link to={`/web/board/detail/${row.id}`}>{row.title}</Link>
+                    <Link to={`/web/board/notice/${row.id}`}>{row.title}</Link>
                   </TableCell>
                   <TableCell align="center">{row.userName}</TableCell>
                   <TableCell align="center">
