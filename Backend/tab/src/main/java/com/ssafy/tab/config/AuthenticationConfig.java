@@ -43,7 +43,7 @@ public class AuthenticationConfig {
                         "/tab/station/**"
                         ).permitAll() // 누구나 접근가능
                 .antMatchers(HttpMethod.GET,"/tab/board/**","/tab/board/content/**","/tab/board/sort/**","/tab/board/title/**","/tab/board/user/**").permitAll()
-                .antMatchers("/notice/modify/**","/tab/notice/write","/tab/notice/delete/**").authenticated()
+                .antMatchers("/notice/modify/**","/tab/notice/write","/tab/notice/delete/**","/tab/survey").authenticated()
                 .antMatchers(HttpMethod.POST,"/tab/board","/tab/board/**/comment").authenticated() // 인증이 필요한 경로
                 .antMatchers(HttpMethod.PUT,"/tab/board/**","/tab/board/**/comment/**").authenticated() // 인증이 필요한 경로
                 .antMatchers(HttpMethod.DELETE,"/tab/board/**","/tab/board/**/comment/**").authenticated() // 인증이 필요한 경로
