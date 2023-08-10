@@ -1,0 +1,30 @@
+.signupTop{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    font-weight: bold;
+}
+.signUpMid{
+    display: flex;
+    flex-direction: row;
+    margin-top: 0px;
+
+}
+
+.signUpMidLeft p{
+    margin-bottom: 13px;
+    
+}
+.signUpMidRight{
+    display: flex;
+    flex-direction: column;
+    margin-left: 40px;
+    justify-content: space-evenly;
+}
+
+.signUpBottom{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
