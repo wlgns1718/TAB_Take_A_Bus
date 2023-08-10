@@ -24,7 +24,7 @@ public class SurveyService{
     //사용자의 수요 등록
     public void createSurvey(SurveyDto surveyDto, String userId){
         User user = userService.findByUserId(userId);
-        Survey survey = new Survey(user, LocalDateTime.now(), surveyDto.getStartLatitude(), surveyDto.getStartLongtitude(), surveyDto.getDestinationLatitude(), surveyDto.getDestinationLongtitude());
+        Survey survey = new Survey(user, surveyDto.getStartLatitude(), surveyDto.getStartLongtitude(), surveyDto.getDestinationLatitude(), surveyDto.getDestinationLongtitude());
         surveyRepository.save(survey);
     }
 
@@ -39,7 +39,7 @@ public class SurveyService{
         Optional<Survey> tempSurvey = surveyRepository.findByUser(userService.findByUserId(userId));
         if (tempSurvey.isPresent()){
             Survey survey = tempSurvey.get();
-            SurveyDto surveyDto = new SurveyDto(survey.getCreateDate(), survey.getStartLatitude(), survey.getStartLontitude(), survey.getDestinationLatitude(), survey.getDestinationLongtitude());
+            SurveyDto surveyDto = new SurveyDto(survey.getStartLatitude(), survey.getStartLontitude(), survey.getDestinationLatitude(), survey.getDestinationLongtitude());
             return surveyDto;
         }else{
             throw new Exception();
