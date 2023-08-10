@@ -1,17 +1,28 @@
 import { FC, useState, useEffect } from "react";
 import { WebNoticeDetailPageProps } from ".";
 import { noticeAPI } from "@/store/api/api";
-import { NoticeDetailData, changeSelectedNoticeId } from "@/store/slice/web-slice";
-import { Container, IconButton, Paper, Typography } from "@mui/material";
+import {
+  NoticeDetailData,
+  WebState,
+  changeSelectedNoticeId,
+  deleteOneNotice,
+} from "@/store/slice/web-slice";
+import { Container, IconButton, Typography } from "@mui/material";
 import { Button } from "@mui/joy";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import "./WebNoticeDetailPage.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { prettyTime } from "../WebBoardPage";
 
-export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({ postId }) => {
+export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
+  postId,
+}) => {
   const [noticeDetailData, setNoticeDetailData] = useState<NoticeDetailData>();
 
   const dispatch = useDispatch();
+  const data: WebState = useSelector((state: { web: WebState }) => {
+    return state.web;
+  });
 
   useEffect(() => {
     noticeAPI
@@ -25,23 +36,37 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({ postId }) =>
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [postId]);
 
-  const prettyTime = (createTime) => {
-    if (createTime) {
-      return `${createTime[0]}-${createTime[1]}-${createTime[2]} ${createTime[3]}:${createTime[4]}`;
-    } else {
-      return " ";
+  const deleteNotice = () => {
+    if (!data.Token) {
+      alert("로그인이 필요한 기능입니다.");
+      return;
     }
-  };
+    if (!confirm("공지사항을 삭제하시겠습니까?")) {
+      return;
+    }
 
+    noticeAPI
+      .delete(`delete/${noticeDetailData.id}`, {
+        headers: { Authorization: `Bearer ${data.Token}` },
+      })
+      .then((response) => {
+        console.log(response.data);
+        dispatch(deleteOneNotice(noticeDetailData.id));
+        dispatch(changeSelectedNoticeId(null));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   if (!noticeDetailData) {
     return <div></div>;
   }
 
   return (
-    <div >
+    <div>
       <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
         <div className="detail-header">
           <IconButton
@@ -71,7 +96,7 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({ postId }) =>
           <Button color="neutral" onClick={function () {}} variant="soft">
             수정
           </Button>
-          <Button color="neutral" onClick={function () {}} variant="soft">
+          <Button color="neutral" onClick={deleteNotice} variant="soft">
             삭제
           </Button>
         </div>

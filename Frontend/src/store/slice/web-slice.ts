@@ -50,7 +50,7 @@ const initialState: WebState = {
   boardData: [],
   boardDetailData: null,
   Token:
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE2NTIzNzMsImV4cCI6MTY5MTY1NTk3M30.T9QkI25cz0hklLfpgwyeLoVNLIRKvRj_Kn5b_AdKZj4",
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE2NzU5OTgsImV4cCI6MTY5MTY3OTU5OH0.TYVoT8K-9Fyv6UL0DNGfHdDNT1maZiQnBT9YF6vT2dA",
   selectedNoticeId: null,
   selectedPostId: null,
 };
@@ -68,10 +68,40 @@ const webSlice = createSlice({
     changeSelectedPostId(state, action) {
       state.selectedPostId = action.payload;
     },
+    saveBoardData(state, action) {
+      state.boardData = action.payload;
+    },
+    saveNoticeData(state, action) {
+      state.noticeData = action.payload;
+    },
+    deleteOneNotice(state, action) {
+      const indexToDelete = state.noticeData.findIndex(
+        (post) => post.id === action.payload
+      );
+      if (indexToDelete !== -1) {
+        state.noticeData.splice(indexToDelete, 1);
+        console.log("delete one");
+      }
+    },
+    deleteOneBoard(state, action) {
+      const indexToDelete = state.boardData.findIndex(
+        (post) => post.id === action.payload
+      );
+      if (indexToDelete !== -1) {
+        state.boardData.splice(indexToDelete, 1);
+        console.log("delete one");
+      }
+    },
   },
 });
 
-export const { changeSelectedNoticeId, changeSelectedPostId } =
-  webSlice.actions;
+export const {
+  changeSelectedNoticeId,
+  changeSelectedPostId,
+  saveBoardData,
+  saveNoticeData,
+  deleteOneNotice,
+  deleteOneBoard,
+} = webSlice.actions;
 
 export default webSlice;
