@@ -4,13 +4,26 @@ import Paper from "@mui/material/Paper";
 import { Pagination } from "@mui/material";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
-import { Button, dividerClasses } from "@mui/joy";
+import {
+  Autocomplete,
+  Button,
+  FormControl,
+  FormLabel,
+  IconButton,
+  Input,
+  Stack,
+  dividerClasses,
+} from "@mui/joy";
+import SearchIcon from "@mui/icons-material/Search";
 import "./WebBoard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { BoardTable } from "@/components/web/BoardTable";
 import { NoticeTable } from "@/components/web/NoticeTable";
 import { boardAPI, noticeAPI } from "@/store/api/api";
-import { BoardData, NoticeData } from "@/store/slice/web-slice";
+import { BOARD_ENG, BoardData, NoticeData, WebState } from "@/store/slice/web-slice";
+import { WebBoardDetailPage } from "../WebBoardDetailPage";
+import { useSelector } from "react-redux";
+import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
 
 export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   enum BOARD {
@@ -18,8 +31,12 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     FREE = "게시판",
   }
 
-  const [noticeData, setNoticeData] = useState<NoticeData[]>();
-  const [boardData, setBoardData] = useState<BoardData[]>();
+  const data: WebState = useSelector((state: { web: WebState }) => {
+    return state.web;
+  });
+
+  const [noticeData, setNoticeData] = useState<NoticeData[]>([]);
+  const [boardData, setBoardData] = useState<BoardData[]>([]);
 
   const options: string[] = [
     "전체게시판",
@@ -27,6 +44,18 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     "칭찬합니다",
     "불만사항",
   ];
+
+  const searchOptions : string[] = [
+    '제목',
+    '내용',
+    '작성자',
+  ]
+  enum CATEGORY {
+    '제목' = 'title',
+    '내용' = 'content',
+    '작성자' = 'user'
+  }
+
 
   const boards: string[] = ["공지사항", "게시판"];
 
@@ -40,10 +69,16 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   const [pages, setPages] = useState<NoticeData[][]>([]);
   const [freePages, setFreePages] = useState<BoardData[][]>([]);
 
+  const [selectedNoticeId, setSelectedNoticeId] = useState(
+    data.selectedNoticeId
+  );
+  const [selectedPostId, setSelectedPostId] = useState(data.selectedPostId);
+
+  
   const handleCurrentBoard = (value) => {
     setCurrentBoard(value);
   };
-
+  
   const paginateBoard = (arr: BoardData[], pageSize: number) => {
     const pageCount = Math.ceil(arr?.length / pageSize);
     const pagelist = Array.from({ length: pageCount }, (_, index) => {
@@ -61,18 +96,63 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     return pagelist;
   };
 
-  useEffect(() => {
-    noticeAPI.get("list").then((response) => {
+  // 검색 기능
+  const [searchKeyword, setSearchKeyword] = useState<string>();
+  const [searchCategory, setSearchCategory] = useState<string>('제목');
+    const handleCategoryChange = (value) => {
+      setSearchCategory(value);
+    };
+  const handleTitleChange = (event) => {
+    setSearchKeyword(event.target.value);
+  };
+
+  const searchBoard = (e)=>{
+    e.preventDefault();
+    if(!searchCategory) {
+      alert('검색옵션을 선택해주세요')
+      return}
+    if(!searchKeyword.trim().length){
+      alert("검색어를 입력해주세요");
+      return
+    }
+    if(searchKeyword.trim().length<3){
+      alert("검색어를 두글자 이상 입력해주세요");
+      return
+    }
+    console.log('search', searchKeyword);
+    boardAPI.get(`${CATEGORY[searchCategory]}/${searchKeyword}`).then(response=>{
       console.log(response.data);
-      setNoticeData(response.data.content);
+      setBoardData(response.data.data.content);
+    })
+  }
+
+  const filterSort = (value) => {
+    let url = ''
+    if(value!="전체게시판"){
+      url = `sort/${BOARD_ENG[value]}`;
+    }
+    boardAPI.get(url).then((response) => {
+      console.log(response.data);
+      setBoardData(response.data.data.content);
     });
+  }
+
+  useEffect(() => {
+    if (!noticeData?.length) {
+      noticeAPI.get("list").then((response) => {
+        console.log(response.data);
+        setNoticeData(response.data.content);
+      });
+    }
   }, []);
 
   useEffect(() => {
-    boardAPI.get("").then((response) => {
-      console.log(response.data.data.content);
-      setBoardData(response.data.data.content);
-    });
+    if (!boardData?.length) {
+      boardAPI.get("").then((response) => {
+        console.log(response.data.data.content);
+        setBoardData(response.data.data.content);
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -84,8 +164,11 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   }, [boardData]);
 
   useEffect(() => {
-    setFreePages(paginateBoard(boardData, 5));
-  }, []);
+    setSelectedNoticeId(data.selectedNoticeId);
+  }, [data.selectedNoticeId]);
+  useEffect(() => {
+    setSelectedPostId(data.selectedPostId);
+  }, [data.selectedPostId]);
 
   return (
     <div {...props}>
@@ -106,28 +189,22 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         })}
         <div className="board-header-space"> </div>
       </div>
-
-      {currentBoard == BOARD.FREE ? (
-        <Select
-          className="board-select board-select-space"
-          color="primary"
-          placeholder="전체게시판"
-          size="md"
-        >
-          {options.map((op, index) => {
-            return (
-              <Option value={op} key={index}>
-                {op}
-              </Option>
-            );
-          })}
-        </Select>
+      {currentBoard == "공지사항" ? (
+        selectedNoticeId ? (
+          <WebNoticeDetailPage postId={selectedNoticeId}></WebNoticeDetailPage>
+        ) : (
+          <div></div>
+        )
+      ) : selectedPostId ? (
+        <WebBoardDetailPage postId={selectedPostId}></WebBoardDetailPage>
       ) : (
-        <div className="board-select-space"></div>
+        <div></div>
       )}
+      {/* 공지사항 */}
       <div>
         {currentBoard == "공지사항" ? (
           <div>
+            <div className="board-select-space"></div>
             <NoticeTable pages={pages} currentPage={currentPage}></NoticeTable>
             <div className="pagenation">
               <Pagination
@@ -144,7 +221,22 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
             </div>
           </div>
         ) : (
+          // 게시판
           <div>
+            <Select
+              className="board-select board-select-space"
+              color="primary"
+              placeholder="전체게시판"
+              size="md"
+            >
+              {options.map((op, index) => {
+                return (
+                  <Option value={op} key={index} onClick={()=>{filterSort(op)}}>
+                    {op}
+                  </Option>
+                );
+              })}
+            </Select>
             <BoardTable
               pages={freePages}
               currentPage={currentFreePage}
@@ -162,15 +254,44 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
                 }}
               />
             </div>
+            <form onSubmit={searchBoard}>
+              <Stack direction={"row"} spacing={2}>
+                <Select defaultValue="제목" variant="soft" sx={{ width: 100 }}>
+                  {searchOptions.map((op, index) => {
+                    return (
+                      <Option
+                        value={op}
+                        key={index}
+                        onClick={() => handleCategoryChange(op)}
+                      >
+                        {op}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <Input
+                  placeholder="검색어를 입력하세요.."
+                  variant="outlined"
+                  color="neutral"
+                  onChange={handleTitleChange}
+                />
+                <IconButton onClick={searchBoard}>
+                  <SearchIcon fontSize="large"></SearchIcon>
+                </IconButton>
+              </Stack>
+            </form>
           </div>
         )}
-        <Button
-          onClick={() => {
-            navigate("post");
-          }}
-        >
-          글 작성
-        </Button>
+
+        <div className="board-notice-button">
+          <Button
+            onClick={() => {
+              navigate("post");
+            }}
+          >
+            글 작성
+          </Button>
+        </div>
       </div>
     </div>
   );

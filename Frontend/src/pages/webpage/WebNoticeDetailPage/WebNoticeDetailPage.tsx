@@ -1,50 +1,80 @@
 import { FC, useState, useEffect } from "react";
-import { WebNoticeDetailPageProps } from '.';
-import { noticeAPI } from '@/store/api/api';
-import { useParams } from 'react-router-dom';
-import { NoticeDetailData } from "@/store/slice/web-slice";
+import { WebNoticeDetailPageProps } from ".";
+import { noticeAPI } from "@/store/api/api";
+import { NoticeDetailData, changeSelectedNoticeId } from "@/store/slice/web-slice";
 import { Container, IconButton, Paper, Typography } from "@mui/material";
+import { Button } from "@mui/joy";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
+import "./WebNoticeDetailPage.css";
+import { useDispatch } from "react-redux";
 
-export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = (props) => {
-	const [noticeDetailData, setNoticeDetailData] = useState<NoticeDetailData>({
-  id: 1,
-  userName: "string",
-  title: 'string',
-  createTime: [2,2,2,2,2,2,2],
-	content : "content"
-});
-  const params = useParams();
+export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({ postId }) => {
+  const [noticeDetailData, setNoticeDetailData] = useState<NoticeDetailData>();
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const postId = params.postId;
-    noticeAPI.get(`${postId}`).then((response) => {
-      console.log(response.data);
-      setNoticeDetailData(response.data.data);
-    });
+    noticeAPI
+      .get(`detail/${postId}`)
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.code == "200") {
+          setNoticeDetailData(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
+  const prettyTime = (createTime) => {
+    if (createTime) {
+      return `${createTime[0]}-${createTime[1]}-${createTime[2]} ${createTime[3]}:${createTime[4]}`;
+    } else {
+      return " ";
+    }
+  };
+
+
+  if (!noticeDetailData) {
+    return <div></div>;
+  }
+
   return (
-    <div {...props}>
-      <div>{noticeDetailData.title}</div>
-      <div>{noticeDetailData.content}</div>
-      <div>{noticeDetailData.userName}</div>
-      <div>{`${noticeDetailData.createTime[0]}-${noticeDetailData.createTime[1]}-${noticeDetailData.createTime[2]} ${noticeDetailData.createTime[3]}:${noticeDetailData.createTime[4]}`}</div>
-      <div></div>
-      <Container maxWidth="md" sx={{ paddingTop: 32 }}>
-        <Paper elevation={3} sx={{ padding: 16 }}>
+    <div >
+      <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
+        <div className="detail-header">
           <IconButton
             onClick={() => {
-              // 뒤로 가기 버튼 클릭 시 이전 페이지로 이동
-              // (이 예시에서는 게시판 목록 페이지로 간주)
+              dispatch(changeSelectedNoticeId(null));
             }}
           >
-            <ArrowBackOutlinedIcon />
+            <ArrowBackOutlinedIcon fontSize="large" />
           </IconButton>
-          <Typography variant="h4" sx={{ marginBottom: 16 }}>
-            {noticeDetailData.title}
+          <div style={{ fontSize: "30px", fontWeight: "bold" }}>공지사항</div>
+        </div>
+        <div className="detail">
+          <Typography variant="h4" sx={{ margin: 5 }}>
+            {noticeDetailData?.title}
           </Typography>
-          <Typography>{noticeDetailData.content}</Typography>
-        </Paper>
+
+          <div>{`작성자 : ${noticeDetailData?.userName}`}</div>
+          <div>{`작성시간 : ${prettyTime(noticeDetailData?.createTime)}`}</div>
+          {/* html 코드 출력 */}
+          <div
+            dangerouslySetInnerHTML={{ __html: noticeDetailData?.content }}
+          ></div>
+        </div>
+      </Container>
+      <Container maxWidth="xl">
+        <div className="bottom-buttons">
+          <Button color="neutral" onClick={function () {}} variant="soft">
+            수정
+          </Button>
+          <Button color="neutral" onClick={function () {}} variant="soft">
+            삭제
+          </Button>
+        </div>
       </Container>
     </div>
   );

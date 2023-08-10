@@ -9,11 +9,14 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { BOARD_KOR } from "@/store/slice/web-slice";
+import { BOARD_KOR, changeSelectedPostId } from "@/store/slice/web-slice";
+import { useDispatch } from "react-redux";
+
 
 
 export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
+  const dispatch = useDispatch();
+
   return (
     <div>
       <TableContainer component={Paper}>
@@ -39,7 +42,14 @@ export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
                   </TableCell>
                   <TableCell align="center">{BOARD_KOR[row.sort]}</TableCell>
                   <TableCell align="left">
-                    <Link to={`/web/board/detail/${row.id}`}>{row.title}</Link>
+                    {/* <Link to={`/web/board/detail/${row.id}`}>{row.title}</Link> */}
+                    <span
+                      onClick={(e) => {
+                        dispatch(changeSelectedPostId(row.id));
+                      }}
+                    >
+                      {row.title}
+                    </span>
                   </TableCell>
                   <TableCell align="center">{row.userId}</TableCell>
                   <TableCell align="center">

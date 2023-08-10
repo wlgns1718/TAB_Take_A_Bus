@@ -9,9 +9,11 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeSelectedNoticeId } from "@/store/slice/web-slice";
 
 export const NoticeTable: FC<NoticeTableProps> = ({ pages, currentPage }) => {
+  const dispatch = useDispatch();
   return (
     <div>
       <TableContainer component={Paper}>
@@ -37,7 +39,14 @@ export const NoticeTable: FC<NoticeTableProps> = ({ pages, currentPage }) => {
                   </TableCell>
                   <TableCell align="center">공지사항</TableCell>
                   <TableCell align="left">
-                    <Link to={`/web/board/detail/${row.id}`}>{row.title}</Link>
+                    {/* <Link to={`/web/board/notice/${row.id}`}>{row.title}</Link> */}
+                    <span
+                      onClick={(e) => {
+                        dispatch(changeSelectedNoticeId(row.id));
+                      }}
+                    >
+                      {row.title}
+                    </span>
                   </TableCell>
                   <TableCell align="center">{row.userName}</TableCell>
                   <TableCell align="center">
