@@ -98,6 +98,11 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 		return getDocket("버스", Predicates.or(PathSelectors.regex("/tab/station.*")));
 	}
 
+	@Bean
+	public Docket surveyApi() {
+		return getDocket("수요조사", Predicates.or(PathSelectors.regex("/tab/survey.*")));
+	}
+
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
 //		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
 //		responseMessages.add(new ResponseMessageBuilder().code(200).message("OK !!!").build());

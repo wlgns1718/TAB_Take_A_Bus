@@ -33,7 +33,7 @@ public class SurveyController {
             SurveyDto surveyDto = surveyService.selectSurvey(userId);
             resultMap.put("msg", "회원님이 등록하신 수요조사를 가져왔습니다!");
             resultMap.put("code", "200");
-            resultMap.put("data", "surveyDto");
+            resultMap.put("data", surveyDto);
         }catch (Exception e){
             resultMap.put("msg", "회원님께서는 아직 수요조사를 등록하지 않으셨습니다!");
             resultMap.put("code", "500");
