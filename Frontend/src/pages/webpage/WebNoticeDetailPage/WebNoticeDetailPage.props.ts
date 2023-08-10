@@ -1,1 +1,3 @@
-export interface WebNoticeDetailPageProps {};
+export interface WebNoticeDetailPageProps {
+  postId:number;
+};

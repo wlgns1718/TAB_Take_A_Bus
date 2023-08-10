@@ -1,13 +1,17 @@
 .quill .ql-container{
-  height: 400px;
+  min-width: 50%;
+  /* max-width: 800px; */
+  min-height: 400px;
+  max-height: 800px;
 }
 
-.tb_data.tb_write tbody tr th {
-  width: 200px;
-  min-width: 200px;
+.tb_data.tb_write{
+  max-width: 100%;
+  min-width: 100%;
 }
-.tb_data.tb_write tbody tr td .ql-container{
-  height: 300px;
-  
-  /* max-width: 100%; */
+
+.bottom-buttons{
+  display: flex;
+  justify-content: center;
+  gap: 50px;
 }

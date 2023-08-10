@@ -57,8 +57,8 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
           <Route path="board/">
             <Route path="" element={<WebBoardPage />}></Route>
             <Route path="post" element={<WebBoardPostPage />}></Route>
-            <Route path="detail/:postId" element={<WebBoardDetailPage />}></Route>
-            <Route path="notice/:noticeId" element={<WebNoticeDetailPage />}></Route>
+            {/* <Route path="detail/:postId" element={<WebBoardDetailPage />}></Route>
+            <Route path="notice/:noticeId" element={<WebNoticeDetailPage />}></Route> */}
           </Route>
           <Route path="recommend" element={<WebRecommendPage />}></Route>
           <Route path="survey" element={<WebSurveyPage />}></Route>
