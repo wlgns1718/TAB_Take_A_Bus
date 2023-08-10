@@ -1,13 +1,12 @@
 package com.ssafy.tab.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ssafy.tab.domain.Survey;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @NoArgsConstructor
 @Getter @Setter
 public class SurveyDto {
@@ -28,5 +27,15 @@ public class SurveyDto {
         this.startLongtitude = startLongtitude;
         this.destinationLatitude = destinationLatitude;
         this.destinationLongtitude = destinationLongtitude;
+    }
+
+    public static SurveyDto toDto(Survey survey){
+        return SurveyDto.builder()
+                .startLatitude(survey.getStartLatitude())
+                .startLongtitude(survey.getStartLontitude())
+                .destinationLatitude(survey.getDestinationLatitude())
+                .destinationLongtitude(survey.getDestinationLongtitude())
+                .build();
+
     }
 }
