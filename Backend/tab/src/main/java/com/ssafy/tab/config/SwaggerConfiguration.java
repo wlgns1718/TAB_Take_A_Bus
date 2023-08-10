@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -24,14 +26,20 @@ import java.util.List;
 @Configuration // 스프링 실행시 설정파일
 @EnableSwagger2 // Swagger2를 사용
 @SuppressWarnings("unchecked") // warning 제거
-public class SwaggerConfiguration {
+public class SwaggerConfiguration implements WebMvcConfigurer {
 
 //	Swagger-UI 2.x 확인
 //	http://localhost[:8080]/{your-app-root}/swagger-ui.html
 //	Swagger-UI 3.x 확인
 //	http://localhost[:8080]/{your-app-root}/swagger-ui/index.html
-
 	private String title = "Take A Bus API ";
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("swagger-ui.html")
+				.addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**")
+				.addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
 
 	private ApiInfo apiInfo() {
 		String descript = "더 이상 버스를 놓치지 마세요!<br> 버스 승차를 도와주는 TAB입니다.";
