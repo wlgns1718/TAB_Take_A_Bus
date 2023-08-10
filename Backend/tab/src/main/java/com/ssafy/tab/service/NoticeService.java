@@ -64,7 +64,7 @@ public class NoticeService {
         if(notice.getUser().getId() == userNo){
             notice.changeTitle(noticeDto.getTitle());
             notice.changeContent(noticeDto.getContext());
-            notice.changeTime(Timestamp.valueOf(LocalDateTime.now()));
+            notice.changeTime(LocalDateTime.now());
             return notice.getId();
         }
         return -1l;
