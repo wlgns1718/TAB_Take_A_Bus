@@ -3,10 +3,8 @@ package com.ssafy.tab.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,9 +19,12 @@ public class Bus {
     vulnerable : 교통약자 여부
      */
 
-    @Id
-    @Column(name = "VHHICLE_NO", length = 20)
-    private String id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BUS_ID")
+    private Long id;
+
+    @Column(name = "VEHICLE_NO", length = 20)
+    private String vehicleNo;
 
     @Column(name = "ROUTE_NO", length = 20)
     private String routeNo;

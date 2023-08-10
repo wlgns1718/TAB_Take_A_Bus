@@ -45,6 +45,8 @@ public class BusStationService {
 
     @Transactional
     public boolean busStationData(String cityName){
+        int insertedRecordCount = 0; // 삽입된 레코드 수를 세는 변수
+
         try (
             Connection connection = DriverManager.getConnection(url, username, password);
             CSVReader reader = new CSVReader(new FileReader(CSV_FILE_PATH))) {
@@ -79,12 +81,10 @@ public class BusStationService {
                 preparedStatement.addBatch();
             }
             int[] batchResult = preparedStatement.executeBatch();
-
-            int totalRecordsInserted = 0;
             for (int count : batchResult) {
-                totalRecordsInserted += count;
+                insertedRecordCount += count;
             }
-            return true;
+            return insertedRecordCount > 0; // 삽입된 레코드 수가 0보다 크면 true 반환, 그렇지 않으면 false 반환
         } catch (ClassNotFoundException | SQLException | IOException | CsvValidationException e) {
             e.printStackTrace();
             return false;
