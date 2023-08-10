@@ -39,7 +39,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 				.addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**")
 				.addResourceLocations("classpath:/META-INF/resources/webjars/");
-	}
+	} 
 
 	private ApiInfo apiInfo() {
 		String descript = "더 이상 버스를 놓치지 마세요!<br> 버스 승차를 도와주는 TAB입니다.";
