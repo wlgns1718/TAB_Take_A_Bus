@@ -118,7 +118,7 @@ public class NoticeController {
 //          MANAGER 인지 체크
             if(user.getRole() == Role.MANAGER){
 
-                Notice notice = new Notice(user,noticeDto.getTitle(),noticeDto.getContext(), Timestamp.valueOf(LocalDateTime.now()));
+                Notice notice = new Notice(user,noticeDto.getTitle(),noticeDto.getContext(), LocalDateTime.now());
                 noticeService.createNotice(notice);
                 resultMap.put("code", "200");
                 resultMap.put("msg","공지사항 작성 성공!");
