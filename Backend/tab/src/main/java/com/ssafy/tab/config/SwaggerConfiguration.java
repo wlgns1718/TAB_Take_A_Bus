@@ -87,7 +87,7 @@ public class SwaggerConfiguration {
 
 	@Bean
 	public Docket busApi() {
-		return getDocket("버스", Predicates.or(PathSelectors.regex("/board.*")));
+		return getDocket("버스", Predicates.or(PathSelectors.regex("/tab/station.*")));
 	}
 
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
