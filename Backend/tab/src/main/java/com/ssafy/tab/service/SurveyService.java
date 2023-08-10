@@ -33,15 +33,9 @@ public class SurveyService{
         surveyRepository.delete(surveyRepository.findByUser(userService.findByUserId(userId)).get());
     }
 
-    //모든 사용자의 수요 가져오기
-    @Transactional(readOnly = true)
-    public List<Survey> selectAllSurvey(){
-        return surveyRepository.findAll();
-    }
-
     //내가 작성한 수요조사만 가져오기.
     @Transactional(readOnly = true)
-    public SurveyDto selectSurvey(String userId) throws Exception {
+    public SurveyDto selectMySurvey(String userId) throws Exception {
         Optional<Survey> tempSurvey = surveyRepository.findByUser(userService.findByUserId(userId));
         if (tempSurvey.isPresent()){
             Survey survey = tempSurvey.get();
@@ -50,5 +44,11 @@ public class SurveyService{
         }else{
             throw new Exception();
         }
+    }
+
+    //모든 수요조사를 가져오기
+    @Transactional(readOnly = true)
+    public List<Survey> selectAllSurvey() {
+        return surveyRepository.findAll();
     }
 }
