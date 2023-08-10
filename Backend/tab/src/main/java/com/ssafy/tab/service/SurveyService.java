@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,9 +37,8 @@ public class SurveyService{
     //내가 작성한 수요조사만 가져오기.
     @Transactional(readOnly = true)
     public SurveyDto selectMySurvey(String userId) throws Exception {
-        Optional<Survey> tempSurvey = surveyRepository.findByUser(userService.findByUserId(userId));
-        if (tempSurvey.isPresent()){
-            Survey survey = tempSurvey.get();
+        Survey survey = surveyRepository.findByUser(userService.findByUserId(userId)).orElse(null);
+        if (survey != null){
             SurveyDto surveyDto = new SurveyDto(survey.getStartLatitude(), survey.getStartLontitude(), survey.getDestinationLatitude(), survey.getDestinationLongtitude());
             return surveyDto;
         }else{
@@ -48,7 +48,12 @@ public class SurveyService{
 
     //모든 수요조사를 가져오기
     @Transactional(readOnly = true)
-    public List<Survey> selectAllSurvey() {
-        return surveyRepository.findAll();
+    public List<SurveyDto> selectAllSurvey() {
+        List<Survey> SurveyList = surveyRepository.findAll();
+        List<SurveyDto> result = new ArrayList<>();
+        for (Survey survey : SurveyList) {
+            result.add(SurveyDto.toDto(survey));
+        }
+        return result;
     }
 }
