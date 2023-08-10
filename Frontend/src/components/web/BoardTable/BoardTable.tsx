@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import { BOARD_KOR, changeSelectedPostId } from "@/store/slice/web-slice";
 import { useDispatch } from "react-redux";
-
-
+import { POSTPERPAGE, prettyTime } from "@/pages/webpage/WebBoardPage";
 
 export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
   const dispatch = useDispatch();
@@ -38,7 +37,7 @@ export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {index}
+                    {(currentPage - 1) * POSTPERPAGE + index + 1}
                   </TableCell>
                   <TableCell align="center">{BOARD_KOR[row.sort]}</TableCell>
                   <TableCell align="left">
@@ -53,7 +52,7 @@ export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
                   </TableCell>
                   <TableCell align="center">{row.userId}</TableCell>
                   <TableCell align="center">
-                    {`${row.createTime[0]}-${row.createTime[1]}-${row.createTime[2]} ${row.createTime[3]}:${row.createTime[4]}`}
+                    {prettyTime(row.createTime)}
                   </TableCell>
                 </TableRow>
               ))

@@ -1,5 +1,5 @@
-import { FC, useState, useEffect } from 'react';
-import { WebBoardPostPageProps } from '.';
+import { FC, useState, useEffect } from "react";
+import { WebBoardPostPageProps } from ".";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button, FormControl, FormLabel, Input } from "@mui/joy";
@@ -7,19 +7,19 @@ import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
 import "./WebBoardPostPage.css";
 import { boardAPI, noticeAPI } from "@/store/api/api";
-import { BOARD_ENG, WebState } from '@/store/slice/web-slice';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { BOARD_ENG, WebState } from "@/store/slice/web-slice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
-	const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const options: string[] = ["공지사항", "건의사항", "칭찬합니다", "불만사항"];
 
-	const data: WebState = useSelector((state: { web: WebState }) => {
+  const data: WebState = useSelector((state: { web: WebState }) => {
     return state.web;
   });
 
@@ -35,25 +35,31 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
     setContent(value);
   };
 
-  const backToList=()=>{
-    navigate(-1)
-  }
-  
-  useEffect(()=>{
+  const backToList = () => {
+    navigate(-1);
+  };
+
+  useEffect(() => {
     // 로그인 체크
-  }, [])
+  }, []);
 
   const postPost = () => {
-    if(!category){
-      alert('말머리를 선택해주세요')
-      return
-    }
-    if(!title){
-      alert('제목을 입력해주세요')
+    if (!category) {
+      alert("말머리를 선택해주세요");
       return;
     }
-    if(!content){
-      alert('상세내용을 입력해주세요')
+    const sendTitle = title.trim();
+    console.log(sendTitle);
+
+    if (!sendTitle) {
+      alert("제목을 입력해주세요");
+      return;
+    }
+    // HTML로 된 문자열에서 태그를 지우고 검사
+    const sendContent = content.trim();
+    const sendContentwithoutTags = sendContent.replace(/<[^>]*>/g, "");
+    if (!sendContentwithoutTags.trim()) {
+      alert("상세내용을 입력해주세요");
       return;
     }
     // 머리말이 공지사항이면 noticeAPI 아니면 게시글
@@ -62,8 +68,8 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
         .post(
           "write",
           {
-            context: `${content}`,
-            title: `${title}`,
+            title: `${sendTitle}`,
+            context: `${sendContent}`,
           },
           {
             headers: {
@@ -73,14 +79,15 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
         )
         .then((res) => {
           console.log(res.data);
+          navigate(-1);
         });
     } else {
       boardAPI
         .post(
           "",
           {
-            title: `${title}`,
-            content: `${content}`,
+            title: `${sendTitle}`,
+            content: `${sendContent}`,
             sort: `${BOARD_ENG[category]}`,
           },
           {
@@ -91,10 +98,11 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
         )
         .then((res) => {
           console.log(res.data);
+          navigate(-1);
         });
     }
   };
-	return (
+  return (
     <div {...props}>
       <div>게시판 작성</div>
       <div>

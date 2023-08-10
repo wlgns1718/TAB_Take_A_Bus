@@ -1,15 +1,25 @@
 import { FC, useEffect, useState } from "react";
 import { WebBoardDetailPageProps } from ".";
-import { BOARD_KOR, BoardData, changeSelectedPostId } from "@/store/slice/web-slice";
+import {
+  BOARD_KOR,
+  BoardData,
+  WebState,
+  changeSelectedPostId,
+  deleteOneBoard,
+} from "@/store/slice/web-slice";
 import { boardAPI } from "@/store/api/api";
-import { useNavigate, useParams } from "react-router-dom";
-import { Container, IconButton, Paper, Typography } from "@mui/material";
+import { Container, IconButton, Typography } from "@mui/material";
 import { Button } from "@mui/joy";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { prettyTime } from "../WebBoardPage";
 
 export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
   const [boardDetailData, setBoardDetailData] = useState<BoardData | null>();
+
+  const data: WebState = useSelector((state: { web: WebState }) => {
+    return state.web;
+  });
 
   const dispatch = useDispatch();
 
@@ -27,14 +37,29 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [postId]);
 
-  const prettyTime = (createTime) => {
-    if (createTime) {
-      return `${createTime[0]}-${createTime[1]}-${createTime[2]} ${createTime[3]}:${createTime[4]}`;
-    } else {
-      return " ";
+  const deleteBoard = () => {
+    if (!data.Token) {
+      alert("로그인이 필요한 기능입니다.");
+      return;
     }
+    if (!confirm("게시글을 삭제하시겠습니까?")) {
+      return;
+    }
+
+    boardAPI
+      .delete(`${boardDetailData.id}`, {
+        headers: { Authorization: `Bearer ${data.Token}` },
+      })
+      .then((response) => {
+        console.log(response.data);
+        dispatch(deleteOneBoard(boardDetailData.id));
+        dispatch(changeSelectedPostId(null));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   if (!boardDetailData) {
@@ -74,7 +99,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
           <Button color="neutral" onClick={function () {}} variant="soft">
             수정
           </Button>
-          <Button color="neutral" onClick={function () {}} variant="soft">
+          <Button color="neutral" onClick={deleteBoard} variant="soft">
             삭제
           </Button>
         </div>

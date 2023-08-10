@@ -20,10 +20,30 @@ import { Link, useNavigate } from "react-router-dom";
 import { BoardTable } from "@/components/web/BoardTable";
 import { NoticeTable } from "@/components/web/NoticeTable";
 import { boardAPI, noticeAPI } from "@/store/api/api";
-import { BOARD_ENG, BoardData, NoticeData, WebState } from "@/store/slice/web-slice";
+import {
+  BOARD_ENG,
+  BoardData,
+  NoticeData,
+  WebState,
+  saveBoardData,
+  saveNoticeData,
+} from "@/store/slice/web-slice";
 import { WebBoardDetailPage } from "../WebBoardDetailPage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
+import { fillZero } from "@/components/kiosk/KioskHeader";
+
+export const POSTPERPAGE: number = 10;
+
+export const prettyTime = (createTime) => {
+  if (createTime) {
+    return `${createTime[0]}-${fillZero(createTime[1])}-${fillZero(
+      createTime[2]
+    )} ${fillZero(createTime[3])}:${fillZero(createTime[4])}`;
+  } else {
+    return " ";
+  }
+};
 
 export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   enum BOARD {
@@ -34,6 +54,8 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   const data: WebState = useSelector((state: { web: WebState }) => {
     return state.web;
   });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [noticeData, setNoticeData] = useState<NoticeData[]>([]);
   const [boardData, setBoardData] = useState<BoardData[]>([]);
@@ -45,21 +67,14 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     "불만사항",
   ];
 
-  const searchOptions : string[] = [
-    '제목',
-    '내용',
-    '작성자',
-  ]
+  const searchOptions: string[] = ["제목", "내용", "작성자"];
   enum CATEGORY {
-    '제목' = 'title',
-    '내용' = 'content',
-    '작성자' = 'user'
+    "제목" = "title",
+    "내용" = "content",
+    "작성자" = "user",
   }
 
-
   const boards: string[] = ["공지사항", "게시판"];
-
-  const navigate = useNavigate();
 
   const [currentBoard, setCurrentBoard] = useState(BOARD.NOTICE);
 
@@ -74,11 +89,10 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   );
   const [selectedPostId, setSelectedPostId] = useState(data.selectedPostId);
 
-  
   const handleCurrentBoard = (value) => {
     setCurrentBoard(value);
   };
-  
+
   const paginateBoard = (arr: BoardData[], pageSize: number) => {
     const pageCount = Math.ceil(arr?.length / pageSize);
     const pagelist = Array.from({ length: pageCount }, (_, index) => {
@@ -98,50 +112,54 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   // 검색 기능
   const [searchKeyword, setSearchKeyword] = useState<string>();
-  const [searchCategory, setSearchCategory] = useState<string>('제목');
-    const handleCategoryChange = (value) => {
-      setSearchCategory(value);
-    };
+  const [searchCategory, setSearchCategory] = useState<string>("제목");
+  const handleCategoryChange = (value) => {
+    setSearchCategory(value);
+  };
   const handleTitleChange = (event) => {
     setSearchKeyword(event.target.value);
   };
 
-  const searchBoard = (e)=>{
+  const searchBoard = (e) => {
     e.preventDefault();
-    if(!searchCategory) {
-      alert('검색옵션을 선택해주세요')
-      return}
-    if(!searchKeyword.trim().length){
+    if (!searchCategory) {
+      alert("검색옵션을 선택해주세요");
+      return;
+    }
+    if (!searchKeyword.trim().length) {
       alert("검색어를 입력해주세요");
-      return
+      return;
     }
-    if(searchKeyword.trim().length<3){
+    if (searchKeyword.trim().length < 2) {
       alert("검색어를 두글자 이상 입력해주세요");
-      return
+      return;
     }
-    console.log('search', searchKeyword);
-    boardAPI.get(`${CATEGORY[searchCategory]}/${searchKeyword}`).then(response=>{
-      console.log(response.data);
-      setBoardData(response.data.data.content);
-    })
-  }
+    console.log("search", searchKeyword);
+    boardAPI
+      .get(`${CATEGORY[searchCategory]}/${searchKeyword}`)
+      .then((response) => {
+        console.log(response.data);
+        setBoardData(response.data.data.content);
+      });
+  };
 
   const filterSort = (value) => {
-    let url = ''
-    if(value!="전체게시판"){
+    let url = "";
+    if (value != "전체게시판") {
       url = `sort/${BOARD_ENG[value]}`;
     }
     boardAPI.get(url).then((response) => {
       console.log(response.data);
       setBoardData(response.data.data.content);
     });
-  }
+  };
 
   useEffect(() => {
     if (!noticeData?.length) {
       noticeAPI.get("list").then((response) => {
         console.log(response.data);
-        setNoticeData(response.data.content);
+        // setNoticeData(response.data.content);
+        dispatch(saveNoticeData(response.data.content));
       });
     }
   }, []);
@@ -150,22 +168,32 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     if (!boardData?.length) {
       boardAPI.get("").then((response) => {
         console.log(response.data.data.content);
-        setBoardData(response.data.data.content);
+        // setBoardData(response.data.data.content);
+        dispatch(saveBoardData(response.data.data.content));
       });
     }
   }, []);
 
   useEffect(() => {
-    setPages(paginateNotice(noticeData, 5));
+    setNoticeData(data.noticeData);
+  }, [data.noticeData]);
+
+  useEffect(() => {
+    setBoardData(data.boardData);
+  }, [data.boardData]);
+
+  useEffect(() => {
+    setPages(paginateNotice(noticeData, POSTPERPAGE));
   }, [noticeData]);
 
   useEffect(() => {
-    setFreePages(paginateBoard(boardData, 5));
+    setFreePages(paginateBoard(boardData, POSTPERPAGE));
   }, [boardData]);
 
   useEffect(() => {
     setSelectedNoticeId(data.selectedNoticeId);
   }, [data.selectedNoticeId]);
+
   useEffect(() => {
     setSelectedPostId(data.selectedPostId);
   }, [data.selectedPostId]);
@@ -231,7 +259,13 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
             >
               {options.map((op, index) => {
                 return (
-                  <Option value={op} key={index} onClick={()=>{filterSort(op)}}>
+                  <Option
+                    value={op}
+                    key={index}
+                    onClick={() => {
+                      filterSort(op);
+                    }}
+                  >
                     {op}
                   </Option>
                 );
