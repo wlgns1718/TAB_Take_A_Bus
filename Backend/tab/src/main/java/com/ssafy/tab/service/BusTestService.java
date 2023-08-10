@@ -35,6 +35,7 @@ public class BusTestService {
 
     //현재 버스 정류장에 정차하는 모든 노선에 저장 후 모든 버스를 반환.
     public List<Map<String, String>> saveAllBus(String cityCode, String nodeId) {
+        busTestRepository.deleteAll();
         String apiUrl = API_BASE_URL + "/1613000/BusSttnInfoInqireService/getSttnThrghRouteList" +
                 "?serviceKey=" + SERVICE_KEY +
                 "&cityCode=" + cityCode +
@@ -100,7 +101,7 @@ public class BusTestService {
     }
 
     //현재 정류장에서 도착 예정인 노선 불러오기.
-    public List<BustestApi> findAllInfo(String cityCode, String nodeId, String stationName,int keyIndex) {
+    public List<BustestApi> findAllInfo(String cityCode, String nodeId, int keyIndex) {
         List<BustestApi> bustestApiList = new ArrayList<>();
         String apiUrl = API_BASE_URL + "/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList" +
                 "?serviceKey=" + keyList.get(keyIndex) +
@@ -123,7 +124,7 @@ public class BusTestService {
                         .busNo(item.path("routeno").asText())
                         .routeType(item.path("routetp").asText())
                         .vehicleType(item.path("vehicletp").asText())
-                        .stationName(stationName)
+                        .stationId(nodeId)
                         .build();
                 BustestApi tempBusTestApi = findPresentLocation(bustestApi);
                 if(tempBusTestApi.getVehicleNo()==null){
@@ -141,7 +142,7 @@ public class BusTestService {
     //버스 번호와 몇 정거장 남았는지를 DB에 조회해서 현재 위치 가져오기
     public BustestApi findPresentLocation(BustestApi bustestApi){
         System.out.println(bustestApi.toString());
-        BusTest findBusTest = busTestRepository.findByRouteNoAndStationNameAndRouteId(bustestApi.getRouteNo(), bustestApi.getStationName(), bustestApi.getRouteId());
+        BusTest findBusTest = busTestRepository.findByRouteNoAndStationIdAndRouteId(bustestApi.getRouteNo(), bustestApi.getStationId(), bustestApi.getRouteId());
         List<BusTest> ListBusTest = busTestRepository.findByRouteNoAndRouteId(bustestApi.getRouteNo(), bustestApi.getRouteId());
         int temp = 0;
         int presentOrder = 0;
