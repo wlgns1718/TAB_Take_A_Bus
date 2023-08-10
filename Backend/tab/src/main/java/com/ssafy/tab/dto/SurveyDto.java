@@ -18,14 +18,12 @@ public class SurveyDto {
     destinationLatitude : 목적지 위도
     destinationLongtitude : 목적지 경도
      */
-    LocalDateTime createDate;
     double startLatitude;
     double startLongtitude;
     double destinationLatitude;
     double destinationLongtitude;
 
-    public SurveyDto(LocalDateTime createDate, double startLatitude, double startLongtitude, double destinationLatitude, double destinationLongtitude) {
-        this.createDate = createDate;
+    public SurveyDto(double startLatitude, double startLongtitude, double destinationLatitude, double destinationLongtitude) {
         this.startLatitude = startLatitude;
         this.startLongtitude = startLongtitude;
         this.destinationLatitude = destinationLatitude;
