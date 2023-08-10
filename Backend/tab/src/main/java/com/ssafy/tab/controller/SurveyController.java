@@ -11,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/tab/survey")
@@ -44,7 +42,7 @@ public class SurveyController {
 
     //모든 수요조사를 가져와서 google api로 뿌려주기
     @ApiOperation(value = "모든 수요조사 가져오기", notes = "도시별로 등록된 모든 수요조사를 가져와서 구글 API로 뿌려주기.", response = Map.class)
-    @GetMapping("")
+    @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> selectAllSurvey(Authentication authentication) {
         Map<String, Object> resultMap = new HashMap<>();
         try{
@@ -77,9 +75,9 @@ public class SurveyController {
     }
 
     //수요조사 삭제
-    @ApiOperation(value = "수요조사 삭제", notes = "이미 등록했던 수요조사를 삭제합니다.", response = Map.class)
+    @ApiOperation(value = "수요조사 삭제", notes = "이미 등록했던 나의 수요조사를 삭제합니다.", response = Map.class)
     @DeleteMapping("")
-    public ResponseEntity<Map<String, Object>> deleteSurvey(@RequestBody SurveyDto surveyDto, Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> deleteSurvey(Authentication authentication) {
         Map<String, Object> resultMap = new HashMap<>();
         String userId = authentication.getName();
         try{
