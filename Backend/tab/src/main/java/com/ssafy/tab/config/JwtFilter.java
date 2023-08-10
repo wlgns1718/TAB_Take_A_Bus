@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
     private final UserService userService;
     private final TokenBlacklistService tokenBlacklistService;
     private final String secretKey;
-
+ 
     private String refreshToken;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
