@@ -1,5 +1,6 @@
-import { BoardData, NoticeData } from "@/pages/webpage/WebBoardPage"
+import { BoardData } from "@/store/slice/web-slice";
+
 export interface BoardTableProps {
-  pages: BoardData[][] | NoticeData[][];
+  pages: BoardData[][];
   currentPage: number;
 };

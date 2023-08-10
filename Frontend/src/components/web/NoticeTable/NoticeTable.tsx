@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { BoardTableProps } from ".";
+import { NoticeTableProps } from ".";
 import {
   Table,
   TableBody,
@@ -10,10 +10,8 @@ import {
   Paper,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { BOARD_KOR } from "@/store/slice/web-slice";
 
-
-export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
+export const NoticeTable: FC<NoticeTableProps> = ({ pages, currentPage }) => {
   return (
     <div>
       <TableContainer component={Paper}>
@@ -37,11 +35,11 @@ export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
                   <TableCell component="th" scope="row">
                     {index}
                   </TableCell>
-                  <TableCell align="center">{BOARD_KOR[row.sort]}</TableCell>
+                  <TableCell align="center">공지사항</TableCell>
                   <TableCell align="left">
                     <Link to={`/web/board/detail/${row.id}`}>{row.title}</Link>
                   </TableCell>
-                  <TableCell align="center">{row.userId}</TableCell>
+                  <TableCell align="center">{row.userName}</TableCell>
                   <TableCell align="center">
                     {`${row.createTime[0]}-${row.createTime[1]}-${row.createTime[2]} ${row.createTime[3]}:${row.createTime[4]}`}
                   </TableCell>
@@ -54,7 +52,7 @@ export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
                 <TableCell component="th" scope="row"></TableCell>
                 <TableCell align="center"></TableCell>
                 <TableCell align="left">
-                  <p>등록된 게시물이 없습니다..</p>
+                  <p>등록된 공지사항이 없습니다..</p>
                 </TableCell>
                 <TableCell align="center"></TableCell>
                 <TableCell align="center"></TableCell>
