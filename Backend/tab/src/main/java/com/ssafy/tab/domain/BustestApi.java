@@ -18,7 +18,6 @@ public class BustestApi {
     private String routeType; // 노선유형 x
     private String vehicleType; // 도착예정버스 차량유형 x
 
-
     private int stationOrder; // 정류소 순서 x
     private String vehicleNo; // 차량번호
     private String stationId; // 현재 위치 정류소ID x
