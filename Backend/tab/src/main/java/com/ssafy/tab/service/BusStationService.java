@@ -117,7 +117,6 @@ public class BusStationService {
                 "&pageNo=" + PAGE_NO +
                 "&numOfRows=" + NUM_OF_ROWS +
                 "&_type=" + TYPE_JSON +
-                "&cityCode=" + CITY_CODE +
                 "&routeId=" + routeid;
 
         URL url2 = new URL(apiUrl2);

@@ -3,10 +3,8 @@ package com.ssafy.tab.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,6 +18,12 @@ public class Bus {
     stationId : 버스정류장 번호
     vulnerable : 교통약자 여부
      */
+//    @Id
+//    @Column(name = "BUS_NO")
+//    @GeneratedValue
+//    private Long id;
+
+
     @Id
     @Column(name = "VHHICLE_NO", length = 20)
     private String id;
