@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type user ={
-  
-} 
-
+export type user = {
+  email :string;
+  password :string;
+  confirmPwd : string;
+  nickname: string;
+  master: string | null;
+}
 
 const webSlice = createSlice({
   name: "web",

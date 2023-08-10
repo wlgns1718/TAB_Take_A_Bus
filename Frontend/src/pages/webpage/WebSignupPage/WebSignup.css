@@ -8,13 +8,18 @@
 .signUpMid{
     display: flex;
     flex-direction: row;
-    margin-top: 0px;
+   
 
+}
+.signUpMidLeft{
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 }
 
 .signUpMidLeft p{
-    margin-bottom: 13px;
-    
+  
+    margin-bottom: 25px;
 }
 .signUpMidRight{
     display: flex;
