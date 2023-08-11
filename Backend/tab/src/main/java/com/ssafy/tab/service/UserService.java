@@ -114,6 +114,14 @@ public class UserService {
         return users.get(0);
     }
 
+    public boolean checkId(String id){
+        List<User> users = userRepository.findByUserId(id);
+        if(users.size() > 0){
+            return false;
+        }
+        return true;
+    }
+
 
 
 

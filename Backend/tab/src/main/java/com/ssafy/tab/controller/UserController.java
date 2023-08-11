@@ -156,6 +156,22 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
+    @ApiOperation(value = "아이디 중복검사", notes = "해당 아이디 중복검사", response = Map.class)
+    @GetMapping("/checkId/{id}")
+    public ResponseEntity<Map<String,Object>> checkId(@PathVariable("id")String id){
+        Map<String, Object> resultMap = new HashMap<>();
+
+        if(us.checkId(id)){
+            resultMap.put("code","200");
+            resultMap.put("msg",id+"는 사용가능한 아이디 입니다.");
+        }else{
+            resultMap.put("code","401");
+            resultMap.put("msg",id+"는 중복된 아이디 입니다.");
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
 
     /*@ApiOperation(value = "이메일 인증코드 전송", notes = "전송한 인증코드를 반환한다.", response = Map.class)
     @PostMapping("/sendmail")
