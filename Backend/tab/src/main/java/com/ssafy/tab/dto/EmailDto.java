@@ -6,11 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@NoArgsConstructor
-@Getter @Setter
 public class EmailDto {
     private String userId;
-    private String type;
+    private String type; // register 혹은 findPw
     private String email;
 }
 

@@ -122,6 +122,15 @@ public class UserService {
         return true;
     }
 
+    @Transactional
+    public void updatePw(String userId, String code) throws Exception {
+        User user = findByUserId(userId);
+        String salt = user.getSalt();
+        String newPw = hashing(code,salt);
+        System.out.println(newPw);
+        user.setUserPw(newPw);
+    }
+
 
 
 

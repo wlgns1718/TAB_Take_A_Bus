@@ -1,6 +1,7 @@
 package com.ssafy.tab.controller;
 
 import com.ssafy.tab.domain.User;
+import com.ssafy.tab.dto.EmailDto;
 import com.ssafy.tab.dto.UserJoinDto;
 import com.ssafy.tab.dto.UserLoginDto;
 import com.ssafy.tab.service.*;
@@ -59,6 +60,8 @@ public class UserController {
     }
 
  */
+
+    
     @ApiOperation(value = "회원가입", notes = "회원가입 진행.", response = Map.class)
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserJoinDto userJoinDto){
@@ -161,55 +164,62 @@ public class UserController {
     public ResponseEntity<Map<String,Object>> checkId(@PathVariable("id")String id){
         Map<String, Object> resultMap = new HashMap<>();
 
-        if(us.checkId(id)){
-            resultMap.put("code","200");
-            resultMap.put("msg",id+"는 사용가능한 아이디 입니다.");
-        }else{
-            resultMap.put("code","401");
-            resultMap.put("msg",id+"는 중복된 아이디 입니다.");
+        try{
+            if(us.checkId(id)){
+                resultMap.put("code","200");
+                resultMap.put("msg",id+"는 사용가능한 아이디 입니다.");
+            }else{
+                resultMap.put("code","401");
+                resultMap.put("msg",id+"는 중복된 아이디 입니다.");
+            }
+        }catch (Exception e){
+            resultMap.put("code","500");
+            resultMap.put("msg","아이디 중복검사 실패");
         }
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
     }
 
-    /*@ApiOperation(value = "이메일 인증코드 전송", notes = "전송한 인증코드를 반환한다.", response = Map.class)
-    @PostMapping("/sendmail")
+    @ApiOperation(value = "이메일 인증코드 전송", notes = "전송한 인증코드를 반환한다. type = 회원가입 or 비밀번호 재발급", response = Map.class)
+    @PostMapping("/mailCheck")
     public ResponseEntity<Map<String, Object>> sendMail(@RequestBody EmailDto emailDto){
 
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
+        String code;
 
         try {
-            String code = "error";
-            UserDto userDto = us.getUser(emailDto.getUserId());
-            if(userDto.getEmail().equals(emailDto.getEmail())) {
+            if (emailDto.getType().equals("register")) {
+
                 code = es.sendMail(emailDto);
+
+                resultMap.put("data",code);
+                resultMap.put("msg", "본인 확인용 코드입니다.");
+                resultMap.put("code", "200");
+            } else if (emailDto.getType().equals("findPw")) {
+                User user = us.findByUserId(emailDto.getUserId());
+                if (user.getEmail().equals(emailDto.getEmail())) { // 입력받은 사용자의 이메일 일치여부 검사
+                    code = es.sendMail(emailDto);
+                    us.updatePw(user.getUserId(),code); // 비밀번호 변경
+                    resultMap.put("msg", "이메일로 임시 비밀번호를 발급했습니다.");
+                    resultMap.put("code", "200");
+                }else{
+                    resultMap.put("msg", "회원가입 시 입력한 이메일과 일치하지 않습니다.");
+                    resultMap.put("code", "401");
+                }
+            }else{
+                resultMap.put("msg", "잘못된 전송형식 입니다");
+                resultMap.put("code", "401");
             }
 
-            if(code.equals("error")) {
-                resultMap.put("code","401");
-                status = HttpStatus.ACCEPTED;
-            }else {
-                if(emailDto.getType().equals("register")) {
-                    resultMap.put("emailCode", code);
-                }else if(emailDto.getType().equals("findPw")) {
-                    userDto = new UserDto();
-                    userDto.setPassword(code);
-                    userDto.setUserId(emailDto.getUserId());
-                    userDto.setEmail(emailDto.getEmail());
-                    System.out.println(userDto);
-                    us.findPw(userDto);
-                }
-                status = HttpStatus.ACCEPTED;
-                resultMap.put("code", "200");
-            }
-        }catch(Exception e) {
+
+        }catch (Exception e){
+            resultMap.put("msg", "이메일 전송에 실패했습니다.");
             resultMap.put("code", "500");
-            status = HttpStatus.ACCEPTED;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }*/
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+    }
 
 
 }
