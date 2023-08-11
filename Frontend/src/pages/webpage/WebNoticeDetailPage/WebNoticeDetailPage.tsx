@@ -67,7 +67,7 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
 
   return (
     <div>
-      <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
+      <Container maxWidth="xl" sx={{ paddingTop: 8 }}>
         <div className="detail-header">
           <IconButton
             onClick={() => {
