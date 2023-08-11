@@ -28,7 +28,7 @@ public class UserService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Long accessExpiredMs = 1000 * 60 * 60l; // 1시간 (현재 테스트를 위해 5분으로 설정)
+    private Long accessExpiredMs = 1000 * 60 * 60l; // 1시간
     private Long refreshExpiredMs = 1000 * 60 * 600l; // 10시간
 
     /*public int idCheck(String userId) throws Exception {
@@ -102,6 +102,12 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public Long joinUserKakao(User user) throws Exception { // 카카오 로그인
+        userRepository.save(user);
+        return user.getId();
+    }
+
     public Optional<User> findById(Long id){
         return userRepository.findById(id);
     }
@@ -113,10 +119,6 @@ public class UserService {
         }
         return users.get(0);
     }
-
-
-
-
 
     /*public UserDto getUser(String userId) throws Exception {
         return userRepository.getUser(userId);
@@ -170,7 +172,6 @@ public class UserService {
     public void saveRefreshToken(int userNo, String refreshToken) throws Exception {
         UserMapper.saveRefreshToken(userNo,refreshToken);
     }
-
 
     @Transactional
     public void deleteRefreshToken(int userNo) throws Exception {

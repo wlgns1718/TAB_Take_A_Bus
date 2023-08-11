@@ -1,6 +1,7 @@
 package com.ssafy.tab.controller;
 
 import com.ssafy.tab.domain.User;
+import com.ssafy.tab.dto.KakaoUserDto;
 import com.ssafy.tab.dto.UserJoinDto;
 import com.ssafy.tab.dto.UserLoginDto;
 import com.ssafy.tab.service.*;
@@ -31,6 +32,7 @@ public class UserController {
     private final UserService us;
     private final EmailService es;
     private final TokenBlacklistService tokenBlacklistService;
+    private final OAuthService kakao;
 
     private int refreshExpiredMs = 1000 * 60 * 600; // 10시간
 
@@ -67,9 +69,7 @@ public class UserController {
 
         try {
             User user = new User(userJoinDto.getId(),userJoinDto.getPw(),userJoinDto.getName(),userJoinDto.getEmail(),userJoinDto.getRole());
-
             us.joinUser(user);
-
             resultMap.put("code", "200");
             resultMap.put("msg","회원가입 성공");
         }catch (IllegalStateException e){
@@ -85,12 +85,10 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
-
     @ApiOperation(value = "로그인", notes = "accessToken과 refreshToken을 반환 (refreshToken을 header의 쿠키에 넣어서 반환)", response = Map.class)
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody @ApiParam(value = "로그인", required = true) UserLoginDto userLoginDto, HttpServletResponse response){
         Map<String, Object> resultMap = new HashMap<>();
-
         try{
             Map<String, String> tokens = us.login(userLoginDto.getId(), userLoginDto.getPw());// 발행된 토큰
             String accessToken = tokens.get("accessToken");
@@ -98,7 +96,6 @@ public class UserController {
             Cookie cookie = new Cookie("refreshToken",refreshToken);
             cookie.setMaxAge(refreshExpiredMs);
             response.addCookie(cookie);
-
             Map<String,String> data = new HashMap<>();
             data.put("accessToken",accessToken);
             resultMap.put("data",data);
@@ -109,9 +106,7 @@ public class UserController {
             resultMap.put("msg","로그인 실패");
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-
     }
-
 
     @ApiOperation(value = "accessToken 재발급", notes = "header에 있는 cookie refreshToken으로 accessToken 재발급 수행", response = Map.class)
     @PostMapping("/requestToken")
@@ -132,7 +127,6 @@ public class UserController {
                         resultMap.put("code","401");
                         resultMap.put("msg","accessToken을 받아오는데 실패했습니다");
                     }
-
                     break;
                 }
             }
@@ -155,7 +149,6 @@ public class UserController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
-
 
     /*@ApiOperation(value = "이메일 인증코드 전송", notes = "전송한 인증코드를 반환한다.", response = Map.class)
     @PostMapping("/sendmail")
@@ -195,5 +188,30 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }*/
 
-
+    @ApiOperation(value = "카카오 로그인", notes = "카카오에서 인증 코드를 받아와서 서버에서 처리", response = Map.class)
+    @PostMapping(value="/login/kakao")
+    public Map<String, Object> login(@RequestBody @ApiParam(value = "헤더에 있는 토큰", required = true) KakaoUserDto kakaoUserDto, HttpServletResponse response) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String code = kakaoUserDto.getCode();
+        try {
+            String access_Token = kakao.getKakaoAccessToken(code);
+            Map<String, String> userInfo = kakao.getUserInfo(access_Token);
+            String accessToken = userInfo.get("accessToken");
+            String refreshToken = userInfo.get("refreshToken");
+            Cookie cookie = new Cookie("refreshToken",refreshToken);
+            cookie.setMaxAge(refreshExpiredMs);
+            response.addCookie(cookie);
+            Map<String,String> data = new HashMap<>();
+            data.put("accessToken",accessToken);
+            resultMap.put("data",data);
+            resultMap.put("code", "200");
+            resultMap.put("msg","카카오 로그인 성공");
+            resultMap.put("msg2", userInfo.get("msg"));
+        }
+        catch (Exception e){
+            resultMap.put("code", "500");
+            resultMap.put("msg","카카오 로그인 실패");
+        }
+        return resultMap;
+    }
 }
