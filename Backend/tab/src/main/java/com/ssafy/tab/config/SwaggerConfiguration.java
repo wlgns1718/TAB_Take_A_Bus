@@ -99,9 +99,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public Docket surveyApi() {
-		return getDocket("수요조사", Predicates.or(PathSelectors.regex("/tab/survey.*")));
-	}
+	public Docket surveyApi() {return getDocket("수요조사", Predicates.or(PathSelectors.regex("/tab/survey.*")));}
+	@Bean
+	public Docket ArduinoApi(){ return getDocket("아두이노" , Predicates.or(PathSelectors.regex("/tab/arduino.*")));}
 
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
 //		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();

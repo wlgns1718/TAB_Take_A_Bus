@@ -40,7 +40,7 @@ public class AuthenticationConfig {
                 .authorizeRequests()// request를 authorize하겠다
                 .antMatchers("/tab/user/join","/tab/user/login","/tab/user/logout","/tab/user/requestToken",
                         "/tab/notice/list","/tab/notice/detail/**",
-                        "/tab/station/**"
+                        "/tab/station/**","/tab/arduino/**"
                         ).permitAll() // 누구나 접근가능
                 .antMatchers(HttpMethod.GET,"/tab/board/**","/tab/board/content/**","/tab/board/sort/**","/tab/board/title/**","/tab/board/user/**").permitAll()
                 .antMatchers("/notice/modify/**","/tab/notice/write","/tab/notice/delete/**","/tab/survey").authenticated()
