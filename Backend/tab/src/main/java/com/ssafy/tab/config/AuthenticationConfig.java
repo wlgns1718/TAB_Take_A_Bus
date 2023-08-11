@@ -38,12 +38,12 @@ public class AuthenticationConfig {
                 .csrf().disable()// rest api이므로 csrf 보안이 필요없으므로 disable처리
                 .cors().and()
                 .authorizeRequests()// request를 authorize하겠다
-                .antMatchers("/tab/user/join","/tab/user/login","/tab/user/logout","/tab/user/requestToken",
+                .antMatchers("/tab/user/join","/tab/user/login","/tab/user/logout","/tab/user/requestToken","/tab/user/checkId",
                         "/tab/notice/list","/tab/notice/detail/**",
-                        "/tab/station/**","/tab/arduino/**"
+                        "/tab/station/**","/tab/arduino/**","/tab/user/mail/**"
                         ).permitAll() // 누구나 접근가능
                 .antMatchers(HttpMethod.GET,"/tab/board/**","/tab/board/content/**","/tab/board/sort/**","/tab/board/title/**","/tab/board/user/**").permitAll()
-                .antMatchers("/notice/modify/**","/tab/notice/write","/tab/notice/delete/**","/tab/survey").authenticated()
+                .antMatchers("/notice/modify/**","/tab/notice/write","/tab/notice/delete/**","/tab/survey","/tab/survey/all","/tab/user/update").authenticated()
                 .antMatchers(HttpMethod.POST,"/tab/board","/tab/board/**/comment").authenticated() // 인증이 필요한 경로
                 .antMatchers(HttpMethod.PUT,"/tab/board/**","/tab/board/**/comment/**").authenticated() // 인증이 필요한 경로
                 .antMatchers(HttpMethod.DELETE,"/tab/board/**","/tab/board/**/comment/**").authenticated() // 인증이 필요한 경로
