@@ -7,6 +7,14 @@ export type user = {
   nickname: string;
   master: string | null;
 }
+
+export type CommentData = {
+  id : number,
+  boardId : number,
+  userId : string,
+  content : string,
+  createTime: number[],
+}
 export type BoardData = {
   id: number;
   userId: string;
@@ -14,7 +22,7 @@ export type BoardData = {
   content: string;
   createTime: number[];
   sort: string;
-  commentResponseDtoList: [] | null;
+  commentResponseDtoList: CommentData[] | null;
 };
 
 export type NoticeData = {
@@ -58,11 +66,11 @@ const initialState: WebState = {
   boardData: [],
   boardDetailData: null,
   Token:
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE2NzU5OTgsImV4cCI6MTY5MTY3OTU5OH0.TYVoT8K-9Fyv6UL0DNGfHdDNT1maZiQnBT9YF6vT2dA",
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE3MzIwNTcsImV4cCI6MTY5MTczNTY1N30.1tAqLkg3IDExjUP6fecr5Gm-DD-ukwlFJWtYSCbbidc",
   selectedNoticeId: null,
   selectedPostId: null,
-  User:null
-}
+  User: null,
+};
 
 const webSlice = createSlice({
   name: "web",
