@@ -37,7 +37,7 @@ public class UserController {
 
     @ApiOperation(value = "회원정보 수정", notes = "회원정보 수정 진행.", response = Map.class)
     @PutMapping("/update/{userId}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable("userId")String userId, @RequestBody @ApiParam(value = "회원정보 수정에 필요한 정보", required = true) UserUpdateDto userUpdateDto, Authentication authentication){
+    public ResponseEntity<Map<String,Object>> update(@PathVariable("userId")String userId, @RequestBody @ApiParam(value = "수정하고 싶은 정보만 입력하면 됩니다.", required = true) UserUpdateDto userUpdateDto, Authentication authentication){
 
         Map<String, Object> resultMap = new HashMap<>();
         try {
