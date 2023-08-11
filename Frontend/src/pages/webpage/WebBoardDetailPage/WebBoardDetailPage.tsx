@@ -48,14 +48,14 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       )
       .then((response) => {
         console.log(response.data);
-        updateDetailData()
+        updateDetailData();
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const updateDetailData = () =>{
+  const updateDetailData = () => {
     boardAPI
       .get(`${postId}`)
       .then((response) => {
@@ -67,12 +67,12 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   useEffect(() => {
     // const postId = params.postId;
     console.log(postId);
-    updateDetailData()
+    updateDetailData();
   }, [postId]);
 
   const deleteBoard = () => {
@@ -88,9 +88,14 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
         headers: { Authorization: `Bearer ${data.Token}` },
       })
       .then((response) => {
-        console.log(response.data);
-        dispatch(deleteOneBoard(boardDetailData.id));
-        dispatch(changeSelectedPostId(null));
+        if(response.data.code === 401) {
+          alert("본인의 게시글만 삭제할 수 있습니다.");
+          return;
+        } else {
+          console.log(response.data.code);
+          dispatch(deleteOneBoard(boardDetailData.id));
+          dispatch(changeSelectedPostId(null));
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -106,14 +111,11 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       return;
     }
     boardAPI
-      .delete(
-        `${postId}/comment/${commentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${data.Token}`,
-          },
-        }
-      )
+      .delete(`${postId}/comment/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${data.Token}`,
+        },
+      })
       .then((response) => {
         console.log(response.data);
         updateDetailData();
@@ -188,7 +190,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
                     <Button size="sm" variant="soft">
                       수정
                     </Button>
-                    |<Button onClick={()=>deleteComment(el.id)}>삭제</Button>
+                    |<Button onClick={() => deleteComment(el.id)}>삭제</Button>
                   </Stack>
                   <div>{el.content}</div>
                 </Container>

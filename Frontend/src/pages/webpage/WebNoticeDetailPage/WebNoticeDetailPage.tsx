@@ -52,9 +52,15 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
         headers: { Authorization: `Bearer ${data.Token}` },
       })
       .then((response) => {
-        console.log(response.data);
-        dispatch(deleteOneNotice(noticeDetailData.id));
-        dispatch(changeSelectedNoticeId(null));
+        if(response.data.code == '401') {
+          alert("본인의 게시글만 삭제할 수 있습니다.");
+          return;
+        }
+        else{
+          console.log(response.data);
+          dispatch(deleteOneNotice(noticeDetailData.id));
+          dispatch(changeSelectedNoticeId(null));
+        }
       })
       .catch((error) => {
         console.log(error);
