@@ -8,6 +8,14 @@ export type user = {
   role: string;
 }
 
+export type CommentData = {
+  id: number;
+  boardId: number;
+  userId: string;
+  content: string;
+  createTime: number[];
+};
+
 
 export type loginuser = {
   id : string;
