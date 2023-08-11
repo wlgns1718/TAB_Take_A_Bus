@@ -26,10 +26,9 @@ public class ArduinoService {
     private final BusStationRepository busStationRepository;
     private final BusRepository busRepository;
     @Transactional(readOnly = true)
-
-    public Optional<Bus> getInfo(String busNo) {
+    public Optional<Bus> getInfo(String vehicleNo) {
         //busNo로 정보 찾아오기
-        Optional<Bus> bus = arduinoRepository.findByBusNo(busNo);
+        Optional<Bus> bus = busRepository.findByVehicleNo(vehicleNo);
         return bus;
     }
 
@@ -67,5 +66,9 @@ public class ArduinoService {
 
 
 
+    }
+
+    public void deleteInfo(Long id) {
+        busRepository.delete(busRepository.findById(id).get());
     }
 }
