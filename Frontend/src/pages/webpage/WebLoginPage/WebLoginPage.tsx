@@ -15,19 +15,51 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import { setToken,setIsUserIn, WebState } from '@/store/slice/web-slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { webAPI } from '@/store/api/api';
+import webSlice from '@/store/slice/web-slice';
+import { KioskState } from '@/store/slice/kiosk-slice';
 
 export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
+  const webData = useSelector((state:{kiosk:KioskState ,web:WebState})=>{
+    return state.web
+  })
+  
   const navigate = useNavigate(); 
-  const [id,setId] = useState<string>('')
+  const [Id,setId] = useState<string>('')
   const [password,setPassword] = useState<string>('')
-
-
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+  const login = ()=>{
+    const loginid = {
+      id : Id,
+      pw: password
+    }
+          webAPI
+      .post(`/user/login`,loginid)
+      .then((response)=>{
+        dispatch(setToken(response.data.data.accessToken))
+        dispatch(setIsUserIn())
+        console.log('로그인성공')
+        console.log(webData.Token)
+        console.log(webData.isUserIn)
+        navigate('/web/')
+      })
+      .catch((error)=>{
+        console.log(loginid)
+        console.log(error)
+        alert('로그인에 실패했습니다.')
+      })
+    
+  }
+
+
+
 
   return (
     <div style={{ display: "flex" }}>
@@ -47,11 +79,15 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
           </div>
           <div className="inputBox">
           <div className='loginbox'>
-      <TextField fullWidth id="standard-basic" label="ID" variant="standard" />
+      <TextField fullWidth id="standard-basic" label="ID" variant="standard"  onChange={(e)=>{
+              setId(e.target.value)
+            }} />
       <FormControl fullWidth  variant="standard">
           <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
           <Input
-          
+            onChange={(e)=>{
+              setPassword(e.target.value)
+            }}
             id="standard-adornment-password"
             type={showPassword ? 'text' : 'password'}
             endAdornment={
@@ -67,7 +103,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
             }
           />
         </FormControl>
-        <Button variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>로그인</Button>
+        <Button onClick={login} variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>로그인</Button>
         <Button variant='outlined' onClick={()=>{navigate('/web/signup')}} style={{marginBottom:"20px"}}>회원가입</Button>
 
          </div>
