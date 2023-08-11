@@ -91,6 +91,12 @@ const webSlice = createSlice({
     saveNoticeData(state, action) {
       state.noticeData = action.payload;
     },
+    saveBoardDetailData(state, action) {
+      state.boardDetailData = action.payload;
+    },
+    saveNoticeDetailData(state, action) {
+      state.noticeDetailData = action.payload;
+    },
     deleteOneNotice(state, action) {
       const indexToDelete = state.noticeData.findIndex(
         (post) => post.id === action.payload
@@ -117,6 +123,8 @@ export const {
   changeSelectedPostId,
   saveBoardData,
   saveNoticeData,
+  saveBoardDetailData,
+  saveNoticeDetailData,
   deleteOneNotice,
   deleteOneBoard,
 } = webSlice.actions;
