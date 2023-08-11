@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public class SurveyService{
     //사용자의 수요 등록
     public void createSurvey(SurveyDto surveyDto, String userId){
         User user = userService.findByUserId(userId);
-        Survey survey = new Survey(user, LocalDateTime.now(), surveyDto.getStartLatitude(), surveyDto.getStartLongtitude(), surveyDto.getDestinationLatitude(), surveyDto.getDestinationLongtitude());
+        Survey survey = new Survey(user, surveyDto.getStartLatitude(), surveyDto.getStartLongtitude(), surveyDto.getDestinationLatitude(), surveyDto.getDestinationLongtitude());
         surveyRepository.save(survey);
     }
 
@@ -33,22 +34,26 @@ public class SurveyService{
         surveyRepository.delete(surveyRepository.findByUser(userService.findByUserId(userId)).get());
     }
 
-    //모든 사용자의 수요 가져오기
-    @Transactional(readOnly = true)
-    public List<Survey> selectAllSurvey(){
-        return surveyRepository.findAll();
-    }
-
     //내가 작성한 수요조사만 가져오기.
     @Transactional(readOnly = true)
-    public SurveyDto selectSurvey(String userId) throws Exception {
-        Optional<Survey> tempSurvey = surveyRepository.findByUser(userService.findByUserId(userId));
-        if (tempSurvey.isPresent()){
-            Survey survey = tempSurvey.get();
-            SurveyDto surveyDto = new SurveyDto(survey.getCreateDate(), survey.getStartLatitude(), survey.getStartLontitude(), survey.getDestinationLatitude(), survey.getDestinationLongtitude());
+    public SurveyDto selectMySurvey(String userId) throws Exception {
+        Survey survey = surveyRepository.findByUser(userService.findByUserId(userId)).orElse(null);
+        if (survey != null){
+            SurveyDto surveyDto = new SurveyDto(survey.getStartLatitude(), survey.getStartLontitude(), survey.getDestinationLatitude(), survey.getDestinationLongtitude());
             return surveyDto;
         }else{
             throw new Exception();
         }
+    }
+
+    //모든 수요조사를 가져오기
+    @Transactional(readOnly = true)
+    public List<SurveyDto> selectAllSurvey() {
+        List<Survey> SurveyList = surveyRepository.findAll();
+        List<SurveyDto> result = new ArrayList<>();
+        for (Survey survey : SurveyList) {
+            result.add(SurveyDto.toDto(survey));
+        }
+        return result;
     }
 }
