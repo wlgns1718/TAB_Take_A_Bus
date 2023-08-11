@@ -16,12 +16,12 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import React from 'react'
 import Button from '@mui/joy/Button';
-import { user } from 'store/slice/web-slice'
+import { setIsUserIn, user } from 'store/slice/web-slice'
 import kioskSlice, { checkMaster } from '@/store/slice/kiosk-slice';
 import { KioskState } from '@/store/slice/kiosk-slice';
 import { useSelector, useDispatch } from "react-redux";
-
-
+import { webAPI } from '@/store/api/api';
+import { setToken } from 'store/slice/web-slice';
 
 export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
   
@@ -31,7 +31,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
     }
   );
 
-  const [user,setUser] = useState<user[]>([]);
+  const [userdata,setUser] = useState<user>();
 
   const dispatch = useDispatch();
 
@@ -63,6 +63,10 @@ const [password, setPassword] = useState<string>("숫자,영문,특수문자를 
 const [confirmPwd, setConfirmPwd] = useState<string>("비밀번호가 일치하지 않습니다.");
 const [Id, setId] = useState<string>("6자 이상 15자 이하 영문,숫자조합을 필요로합니다.");
 const [master, setMaster] = useState<boolean>(false)
+const [masterCheck,setMasterCheck] = useState<boolean>(false)
+const [name,setName] = useState<string>('') 
+
+
 
 const [emailMsg, setEmailMsg] = useState<string>("");
 const [pwdMsg, setPwdMsg] = useState<string>('');
@@ -109,6 +113,11 @@ const onChangePass = (e)=>{
   }
 }
 
+const onChangeName = (e)=>{
+  const currentName = e.target.value;
+  setName(currentName)
+}
+
 const checkConfirm = (e)=>{
   const currentConPass = e.target.value;
   setConfirmPwd(currentConPass)
@@ -122,8 +131,7 @@ const checkConfirm = (e)=>{
 const onChangeMaster = (e)=>{
   const currentMaster = e.target.value;
   if(currentMaster==kiosdata.masterkey){
-    setMaster(true)
-    setMasterMsg('마스터키가 일치합니다.')
+    setMasterCheck(true)
   }else{
     setMasterMsg('마스터키를 입력해주세요')
   }
@@ -155,18 +163,78 @@ const isAllValid:boolean = isEmailValid && isConfirmPwd && isPwdValid && isIdVal
         </div>
         <div className='signUpMidRight'>
         <TextField style={{height:'55px'}} helperText={`${emailMsg}`} id="E-mail"  variant="standard" onChange={onChangeEmail}/>
-        <TextField style={{height:'55px',minWidth:'350px'}} helperText={'성명을입력해주세요.'} id="Name"  variant="standard" /> 
+        <TextField style={{height:'55px',minWidth:'350px'}} helperText={'성명을입력해주세요.'} id="Name" onChange={onChangeName}  variant="standard" /> 
         <TextField style={{height:'55px'}} helperText={`${IdMsg}`} id="Id"  variant="standard" onChange={onChangeId} />
         <PasswordBox pass={onChangePass} helptext ={`${pwdMsg}`} id={'pass'} />
         <PasswordBox pass={checkConfirm} helptext ={`${confirmPwdMsg}`} id={'passconf'} />
         </div>
       </div>
-      
+
+
       <div className='signUpBottom'>
         {!isAllValid ? 
         <Button variant="outlined"  style={{marginBottom:"20px",marginTop:"20px"}} disabled>회원가입</Button> 
         : 
-        <Button variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>회원가입</Button> }
+        <Button onClick={()=>{
+          {
+            if(master){
+              if(masterCheck){
+                const userSetting = {
+                  email : email,
+                  id : Id,
+                  name: name,
+                  pw : password,
+                  role: 'MANAGER'
+                }
+                webAPI
+                .post(`/user/join`,userSetting)
+                .then((response)=>{
+                const loginid = {
+                  id : Id,
+                  pw: password
+                }
+               
+                      webAPI
+                  .post(`/user/login`,loginid)
+                  .then((response)=>{
+                    dispatch(setToken(response.data.data.accessToken))
+                    dispatch(setIsUserIn())
+                  })
+                  .catch((error)=>{
+                    console.log(error)
+
+                  })
+                })
+                .catch((error)=>{
+                  console.log(error)
+                })
+              }else{
+                alert('마스터키가 옳지 않습니다.')
+              }
+              
+            }
+          else{
+            const userSetting = {
+              email : email,
+              id : Id,
+              name: name,
+              password : password,
+              role: 'USER'
+            }
+            webAPI
+            .post(`/user/join`,userSetting)
+            .then((response)=>{
+              console.log(response)
+            })
+            .catch((error)=>{
+              console.log(error)
+            })
+              
+            }
+          }
+          }
+          }
+          variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>회원가입</Button> }
     
         <hr style={{width:'500px'}}/>
           <FormGroup>
@@ -228,9 +296,3 @@ function PasswordBox(props){
 }
 
 
-
-// "email": "string",
-// "id": "string",
-// "name": "string",
-// "pw": "string",
-// "role": "USER"

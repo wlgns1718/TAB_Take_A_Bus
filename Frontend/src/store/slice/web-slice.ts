@@ -2,19 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export type user = {
   email :string;
+  id : string;
+  name: string;
   password :string;
-  confirmPwd : string;
-  nickname: string;
-  master: string | null;
+  role: string;
 }
 
-export type CommentData = {
-  id : number,
-  boardId : number,
-  userId : string,
-  content : string,
-  createTime: number[],
+
+export type loginuser = {
+  id : string;
+  password:string;
+  token : string;
 }
+
 export type BoardData = {
   id: number;
   userId: string;
@@ -57,7 +57,7 @@ export interface WebState {
   Token: string | null;
   selectedNoticeId: number | null;
   selectedPostId: number | null;
-  User:user | null;
+  isUserIn:boolean;
 }
 
 const initialState: WebState = {
@@ -69,13 +69,17 @@ const initialState: WebState = {
     "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE3MzIwNTcsImV4cCI6MTY5MTczNTY1N30.1tAqLkg3IDExjUP6fecr5Gm-DD-ukwlFJWtYSCbbidc",
   selectedNoticeId: null,
   selectedPostId: null,
-  User: null,
-};
+  isUserIn :false,
+
+}
 
 const webSlice = createSlice({
   name: "web",
   initialState,
   reducers: {
+    setIsUserIn(state){
+      state.isUserIn = !state.isUserIn
+    },
     setToken(state, action) {
       state.Token = action.payload;
     },
@@ -119,6 +123,7 @@ const webSlice = createSlice({
 });
 
 export const {
+  setIsUserIn,
   changeSelectedNoticeId,
   changeSelectedPostId,
   saveBoardData,
@@ -127,6 +132,7 @@ export const {
   saveNoticeDetailData,
   deleteOneNotice,
   deleteOneBoard,
+  setToken,
 } = webSlice.actions;
 
 export default webSlice;
