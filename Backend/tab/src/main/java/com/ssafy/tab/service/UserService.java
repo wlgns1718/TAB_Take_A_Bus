@@ -1,6 +1,7 @@
 package com.ssafy.tab.service;
 
 import com.ssafy.tab.domain.User;
+import com.ssafy.tab.dto.UserUpdateDto;
 import com.ssafy.tab.repository.UserRepository;
 //import com.ssafy.tab.utils.JwtUtil;
 import com.ssafy.tab.utils.JwtUtil;
@@ -34,6 +35,39 @@ public class UserService {
     /*public int idCheck(String userId) throws Exception {
         return userRepository.idCheck(userId);
     }*/
+
+    @Transactional
+    public boolean updateUser(String userId,UserUpdateDto userUpdateDto) throws Exception {
+        User user = findByUserId(userId);
+        if(user!=null){
+            String dtoPw = userUpdateDto.getUserPw();
+            String dtoName = userUpdateDto.getName();
+            String dtoEmail = userUpdateDto.getEmail();
+
+            System.out.println(dtoPw);
+            System.out.println(dtoName);
+            System.out.println(dtoEmail);
+
+            if(dtoPw!=null){
+                String findedPw = hashing(dtoPw, user.getSalt());
+                if(!findedPw.equals(user.getUserPw())){
+                    user.setUserPw(findedPw);
+                }
+            }
+            if(dtoName!=null){
+                user.setName(dtoName);
+            }
+
+            if(dtoEmail!=null){
+                user.setEmail(dtoEmail);
+            }
+
+            return true;
+        }
+
+        return false;
+
+    }
 
     @Transactional
     public Map<String,String> login(String userId, String password) throws Exception {
@@ -112,6 +146,23 @@ public class UserService {
             return null;
         }
         return users.get(0);
+    }
+
+    public boolean checkId(String id){
+        List<User> users = userRepository.findByUserId(id);
+        if(users.size() > 0){
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    public void updatePw(String userId, String code) throws Exception {
+        User user = findByUserId(userId);
+        String salt = user.getSalt();
+        String newPw = hashing(code,salt);
+        System.out.println(newPw);
+        user.setUserPw(newPw);
     }
 
 

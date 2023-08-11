@@ -51,6 +51,7 @@ public class User {
     @Column(name = "ROLE")
     private Role role;
 
+
     @Override
     public String toString() {
         return "User{" +
