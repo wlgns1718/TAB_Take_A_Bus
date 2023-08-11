@@ -116,4 +116,7 @@ public class BusStationController {
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
-}
+
+    //여행 관련 API 작성, routeId는 해당 버스의 노선 아이디, 프론트단에서 보여줄 땐 routeno을 보여주기(ex, 388)
+//    @GetMapping("/trip/{cityCode}/{routeId}/{tripType}")
+     }

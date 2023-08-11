@@ -48,8 +48,8 @@ public class BusStationService {
         int insertedRecordCount = 0; // 삽입된 레코드 수를 세는 변수
 
         try (
-            Connection connection = DriverManager.getConnection(url, username, password);
-            CSVReader reader = new CSVReader(new FileReader(CSV_FILE_PATH))) {
+                Connection connection = DriverManager.getConnection(url, username, password);
+                CSVReader reader = new CSVReader(new FileReader(CSV_FILE_PATH))) {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             //미리 테이블 한 번 초기화해서 중복 제거
@@ -57,7 +57,7 @@ public class BusStationService {
             PreparedStatement preparedStatement = connection.prepareStatement(truncateSQL);
 
             preparedStatement.executeUpdate();
-            
+
             //INSERT할 쿼리
             String insertSQL = "INSERT INTO " + TABLE_NAME + " (station_no, city_code, city_name, latitude, longtitude, station_name) VALUES (?, ?, ?, ?, ?, ?)";
             preparedStatement = connection.prepareStatement(insertSQL);

@@ -1,12 +1,14 @@
 package com.ssafy.tab.utils;
 
+
+// jjwt 라이브러리를 이용하여 Jwt 로직 구현하는 클래스
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 import java.util.Date;
 
-// jjwt 라이브러리를 이용하여 Jwt 로직 구현하는 클래스
+
 public class JwtUtil {
 
     public static boolean isExpired(String token, String secretKey){
@@ -34,3 +36,4 @@ public class JwtUtil {
     }
 
 }
+

@@ -1,6 +1,7 @@
 package com.ssafy.tab.service;
 
 import com.ssafy.tab.domain.User;
+import com.ssafy.tab.dto.UserUpdateDto;
 import com.ssafy.tab.repository.UserRepository;
 //import com.ssafy.tab.utils.JwtUtil;
 import com.ssafy.tab.utils.JwtUtil;
@@ -28,12 +29,45 @@ public class UserService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Long accessExpiredMs = 1000 * 60 * 60l; // 1시간
+    private Long accessExpiredMs = 1000 * 60 * 60l; // 1시간 (현재 테스트를 위해 5분으로 설정)
     private Long refreshExpiredMs = 1000 * 60 * 600l; // 10시간
 
     /*public int idCheck(String userId) throws Exception {
         return userRepository.idCheck(userId);
     }*/
+
+    @Transactional
+    public boolean updateUser(String userId,UserUpdateDto userUpdateDto) throws Exception {
+        User user = findByUserId(userId);
+        if(user!=null){
+            String dtoPw = userUpdateDto.getUserPw();
+            String dtoName = userUpdateDto.getName();
+            String dtoEmail = userUpdateDto.getEmail();
+
+            System.out.println(dtoPw);
+            System.out.println(dtoName);
+            System.out.println(dtoEmail);
+
+            if(dtoPw!=null){
+                String findedPw = hashing(dtoPw, user.getSalt());
+                if(!findedPw.equals(user.getUserPw())){
+                    user.setUserPw(findedPw);
+                }
+            }
+            if(dtoName!=null){
+                user.setName(dtoName);
+            }
+
+            if(dtoEmail!=null){
+                user.setEmail(dtoEmail);
+            }
+
+            return true;
+        }
+
+        return false;
+
+    }
 
     @Transactional
     public Map<String,String> login(String userId, String password) throws Exception {
@@ -102,12 +136,6 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public Long joinUserKakao(User user) throws Exception { // 카카오 로그인
-        userRepository.save(user);
-        return user.getId();
-    }
-
     public Optional<User> findById(Long id){
         return userRepository.findById(id);
     }
@@ -119,6 +147,33 @@ public class UserService {
         }
         return users.get(0);
     }
+
+    @Transactional
+    public Long joinUserKakao(User user) throws Exception { // 카카오 로그인
+        userRepository.save(user);
+        return user.getId();
+    }
+
+    public boolean checkId(String id){
+        List<User> users = userRepository.findByUserId(id);
+        if(users.size() > 0){
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    public void updatePw(String userId, String code) throws Exception {
+        User user = findByUserId(userId);
+        String salt = user.getSalt();
+        String newPw = hashing(code,salt);
+        System.out.println(newPw);
+        user.setUserPw(newPw);
+    }
+
+
+
+
 
     /*public UserDto getUser(String userId) throws Exception {
         return userRepository.getUser(userId);
@@ -173,6 +228,7 @@ public class UserService {
         UserMapper.saveRefreshToken(userNo,refreshToken);
     }
 
+
     @Transactional
     public void deleteRefreshToken(int userNo) throws Exception {
         UserMapper.deleteRefreshToken(userNo);
@@ -195,3 +251,4 @@ public class UserService {
 
 
 }
+
