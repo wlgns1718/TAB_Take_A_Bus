@@ -19,7 +19,7 @@ import Button from '@mui/joy/Button';
 import { user } from 'store/slice/web-slice'
 import kioskSlice, { checkMaster } from '@/store/slice/kiosk-slice';
 import { KioskState } from '@/store/slice/kiosk-slice';
-import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useSelector, useDispatch } from "react-redux";
 
 
 
@@ -33,6 +33,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
 
   const [user,setUser] = useState<user[]>([]);
 
+  const dispatch = useDispatch();
 
   //유효성검사.
   const validateEmail:Function = (email) => {
@@ -128,10 +129,14 @@ const onChangeMaster = (e)=>{
   }
 }
 
+const isAllValid:boolean = isEmailValid && isConfirmPwd && isPwdValid && isIdValid
+
+
 
 
 	return (
     <div {...props}>
+      <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
 			<div className='signupTop'>
         <h2>회원가입</h2>
         <h5 style={{marginTop:"0px"}}>Take A Bus에 오신것을 환영합니다.</h5>
@@ -150,7 +155,7 @@ const onChangeMaster = (e)=>{
         </div>
         <div className='signUpMidRight'>
         <TextField style={{height:'55px'}} helperText={`${emailMsg}`} id="E-mail"  variant="standard" onChange={onChangeEmail}/>
-        <TextField style={{height:'55px'}} helperText={'성명을입력해주세요.'} id="Name"  variant="standard" /> 
+        <TextField style={{height:'55px',minWidth:'350px'}} helperText={'성명을입력해주세요.'} id="Name"  variant="standard" /> 
         <TextField style={{height:'55px'}} helperText={`${IdMsg}`} id="Id"  variant="standard" onChange={onChangeId} />
         <PasswordBox pass={onChangePass} helptext ={`${pwdMsg}`} id={'pass'} />
         <PasswordBox pass={checkConfirm} helptext ={`${confirmPwdMsg}`} id={'passconf'} />
@@ -158,8 +163,11 @@ const onChangeMaster = (e)=>{
       </div>
       
       <div className='signUpBottom'>
-      <Button variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>회원가입</Button>
-
+        {!isAllValid ? 
+        <Button variant="outlined"  style={{marginBottom:"20px",marginTop:"20px"}} disabled>회원가입</Button> 
+        : 
+        <Button variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>회원가입</Button> }
+    
         <hr style={{width:'500px'}}/>
           <FormGroup>
             <FormControlLabel
@@ -176,6 +184,7 @@ const onChangeMaster = (e)=>{
           <div>
             {master == true ? 
           <PasswordBox pass={onChangeMaster} helptext ={`${masterMsg}`} id={'mastercon'}/> : null }</div>
+          </div>
           </div>
           
     </div>

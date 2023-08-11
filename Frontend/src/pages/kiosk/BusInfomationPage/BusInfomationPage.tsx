@@ -46,7 +46,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     "fetchBus",
     () => {
       busAPI
-        .get(`/${data.cityCode}/${data.busStopId}/${data.stationName}`, {
+        .get(`/${data.cityCode}/${data.busStopId}/api`, {
           timeout: 10000,
         })
         .then((response) => {

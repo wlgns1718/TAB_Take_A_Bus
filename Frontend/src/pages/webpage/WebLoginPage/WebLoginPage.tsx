@@ -46,38 +46,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
             <h2 className="LoginText">로그인</h2>
           </div>
           <div className="inputBox">
-            <div className="loginbox">
-              <TextField
-                fullWidth
-                id="standard-basic"
-                label="ID"
-                variant="standard"
-              />
-              <TextField
-                id="standard-basic"
-                label="Password"
-                variant="standard"
-              />
-              <Button
-                variant="soft"
-                style={{ marginBottom: "20px", marginTop: "20px" }}
-              >
-                로그인
-              </Button>
-              <Button
-                variant="soft"
-                onClick={() => {
-                  navigate("/web/signup");
-                }}
-                style={{ marginBottom: "20px" }}
-              >
-                회원가입
-              </Button>
-            </div>
-          </div>
-        </div>
-     
-      <div className='loginbox'>
+          <div className='loginbox'>
       <TextField fullWidth id="standard-basic" label="ID" variant="standard" />
       <FormControl fullWidth  variant="standard">
           <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
@@ -101,8 +70,11 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
         <Button variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>로그인</Button>
         <Button variant='outlined' onClick={()=>{navigate('/web/signup')}} style={{marginBottom:"20px"}}>회원가입</Button>
 
-        
+         </div>
+        </div>
       </div>
+     
+      
       
     </div>
     

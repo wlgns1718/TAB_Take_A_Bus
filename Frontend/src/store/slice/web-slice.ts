@@ -49,6 +49,7 @@ export interface WebState {
   Token: string | null;
   selectedNoticeId: number | null;
   selectedPostId: number | null;
+  User:user | null;
 }
 
 const initialState: WebState = {
@@ -60,7 +61,8 @@ const initialState: WebState = {
     "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE2NzU5OTgsImV4cCI6MTY5MTY3OTU5OH0.TYVoT8K-9Fyv6UL0DNGfHdDNT1maZiQnBT9YF6vT2dA",
   selectedNoticeId: null,
   selectedPostId: null,
-};
+  User:null
+}
 
 const webSlice = createSlice({
   name: "web",
