@@ -8,8 +8,8 @@ import { BusStoreData, KioskState, increasePassenger } from "@/store/slice/kiosk
 export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
 
   const dispatch = useDispatch();
-  
   const busIconURL = `/bus_side_icon.png?url`;
+  
   return (
     
     <div className="bus-item-container" style={{backgroundColor : item.isStopHere ? "#FF8282" : "E4E1E1"}}>
@@ -44,7 +44,7 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
                 {item.routeType}
                 
               </Grid>
-              <Grid xs={3}>
+              <Grid xs={3} item>
                 {item.vehicleType === '저상버스' && <img style={{zIndex:3,position:"absolute", width:'110px', height:'80px'}} src={`/wheelchair.png?url`}/>}
               </Grid>
             </Grid>

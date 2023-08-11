@@ -10,15 +10,17 @@ import {
   BusStoreData,
   KioskState,
   updateBusData,
+  updateLockedBusData,
 } from "../../../store/slice/kiosk-slice";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { busAPI } from "../../../store/api/api";
-import { useQuery } from "react-query";
+import { arduinoAPI, busAPI } from "../../../store/api/api";
+import { useQuery, QueryClient } from "react-query";
 import { AxiosError } from "axios";
 
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
-  const [comingSoonBusList, setComingSoonBusList] = useState<BusData[]>([]);
+  const [comingSoonBusList, setComingSoonBusList] = useState<BusStoreData[]>([]);
+  const [oldData, setOldData] = useState<BusStoreData[]>([]);
 
   const dispatch = useDispatch();
 
@@ -33,7 +35,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   useEffect(() => {
     // 12분 이내 도착 예정인 버스 리스트
     setComingSoonBusList(
-      data.busData.slice(0, 5).filter((el: BusData) => {
+      data.busData.slice(0, 5).filter((el: BusStoreData) => {
         // 임시로 120분
         return el.eta <= 900;
       })
@@ -44,18 +46,81 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     "fetchBus",
     () => {
       busAPI
-        .get(`/${data.citycode}/${data.busStopId}`, {
-          timeout: 5000,
+        .get(`/${data.cityCode}/${data.busStopId}/api`, {
+          timeout: 10000,
         })
         .then((response) => {
-          console.log(response.data)
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
-            // 도착예정시간 순으로 정렬해서 저장
+            // 도착예정시간 순으로 정렬해서 저장.
+            const addData: BusStoreData[] = response.data.data.map((el) => {
+              el.isStopHere = false;
+              el.passengerNumber = 0;
+              el.isVulnerable = false;
+              el.isPosted = false;
+              return el;
+            });
+
+            const stateBusData: BusStoreData[] = addData.map(
+              (newdata: BusStoreData) => {
+                const recordedItem = data.busData.find((old: BusStoreData) => {
+                  return old.busNo == newdata.busNo;
+                });
+                if (recordedItem) {
+                  if (recordedItem.isStopHere == true) {
+                    newdata = {
+                      ...newdata,
+                      isStopHere: recordedItem.isStopHere,
+                    };
+                  }
+                  if (recordedItem.passengerNumber != newdata.passengerNumber) {
+                    newdata = {
+                      ...newdata,
+                      passengerNumber: recordedItem.passengerNumber,
+                    };
+                  }
+                  if (recordedItem.isVulnerable == true) {
+                    newdata = {
+                      ...newdata,
+                      isVulnerable: recordedItem.isVulnerable,
+                    };
+                  }
+                  if (recordedItem.isPosted == true) {
+                    newdata = { ...newdata, isPosted: recordedItem.isPosted };
+                  }
+                  if (recordedItem.isPosted == false) {
+                    if (newdata.remainingStops == 1) {
+                      arduinoAPI
+                        .post(
+                          `regist`,
+                          {
+                            busStation: `${data.busStopId}`,
+                            count: `${recordedItem.passengerNumber}`,
+                            vehicleNo: `${recordedItem.vehicleNo}`,
+                            routeNo: `${recordedItem.routeId}`,
+                            vulnerable: `${recordedItem.isVulnerable}`,
+                          }
+                        )
+                        .then((response) => {
+                          console.log(response.data);
+                          newdata = { ...newdata, isPosted: true };
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    }
+                  }
+                  return newdata;
+                } else {
+                  return newdata;
+                }
+              }
+            );
+
             dispatch(
               updateBusData(
-                response.data.data.sort((a: BusData, b: BusData) => {
+                stateBusData.sort((a: BusStoreData, b: BusStoreData) => {
                   return a.eta - b.eta;
                 })
               )
@@ -68,11 +133,11 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           throw err;
         });
     },
-    { staleTime: 1000, refetchInterval: 10000 }
+    { staleTime: 10000, refetchInterval: 10000 }
   );
 
   useEffect(() => {
-    // console.log(fetchBusData);
+  //  console.log(data.busData)
   }, [fetchBusData]);
 
   const paginateArray = (arr: BusStoreData[], pageSize: number) => {

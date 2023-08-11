@@ -1,0 +1,41 @@
+.LoginMain{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 600px;
+    padding: 50px;
+    margin: 0 auto;
+    font-family:'Noto Sans KR', sans-serif;
+    background-color: rgba(230, 225, 225, 0.466);
+    border-radius: 3%;
+}
+.Mainin{
+    background-color: white;
+    border-radius: 3%;
+    min-width: 600px;
+    
+    justify-content:space-between;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.LoginText{
+    text-align: center;
+}
+
+.LoginTab{
+    margin-top:0px;
+}
+
+
+.loginbox{
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+
+

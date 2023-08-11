@@ -1,7 +1,10 @@
 import { FC } from "react";
 import { KioskHeaderProps } from "./KioskHeader.props";
-import './KioskHeader.css'
+import "./KioskHeader.css";
 
+export const fillZero = (num: number): string => {
+  return num.toString().padStart(2, "0");
+};
 
 export const KioskHeader: FC<KioskHeaderProps> = (props) => {
   const time = new Date();
@@ -11,9 +14,6 @@ export const KioskHeader: FC<KioskHeaderProps> = (props) => {
   const busStop = "우리집 앞";
   const logoURL = `/대구광역시_logo.png?url`;
 
-  const fillZero = (num: number): string => {
-    return num.toString().padStart(2, "0");
-  };
   return (
     <div {...props}>
       <div

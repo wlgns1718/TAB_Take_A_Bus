@@ -1,0 +1,12 @@
+.web-body{
+  width: 80%;
+  /* display: flex; */
+  min-width: 960px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.main-content-text{
+  background-color: whitesmoke;
+  padding: 30px;
+}
