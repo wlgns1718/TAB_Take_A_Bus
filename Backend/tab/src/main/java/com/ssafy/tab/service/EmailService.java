@@ -44,7 +44,7 @@ public class EmailService  {
             case "register":
                 html = "<h1>Tab 이메일 인증 코드 :"+code+"입니다.</h1>";
                 break;
-            case "findPw":
+            case "tempPw":
                 html = "<h1>Tab 임시 비밀번호는 "+code+"입니다.</h1>";
                 break;
         }
@@ -64,7 +64,7 @@ public class EmailService  {
                 html = makeHtml(type, code);
                 subject = "Tab - 이메일인증코드 입니다.";
                 break;
-            case "findPw":
+            case "tempPw":
                 code = makeCode(10);
                 html = makeHtml(type, code);
                 subject = "Tab - 임시 비밀번호 입니다.";

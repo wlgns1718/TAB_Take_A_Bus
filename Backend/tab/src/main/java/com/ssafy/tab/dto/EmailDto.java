@@ -8,7 +8,7 @@ import lombok.Setter;
 @Data
 public class EmailDto {
     private String userId;
-    private String type; // register 혹은 findPw
+    private String type;
     private String email;
 }
 

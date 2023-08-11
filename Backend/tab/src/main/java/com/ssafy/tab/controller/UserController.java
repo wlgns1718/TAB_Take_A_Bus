@@ -4,6 +4,7 @@ import com.ssafy.tab.domain.User;
 import com.ssafy.tab.dto.EmailDto;
 import com.ssafy.tab.dto.UserJoinDto;
 import com.ssafy.tab.dto.UserLoginDto;
+import com.ssafy.tab.dto.UserUpdateDto;
 import com.ssafy.tab.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -18,9 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-
-import static com.mysql.cj.conf.PropertyKey.logger;
 
 @RestController
 @RequestMapping("/tab/user")
@@ -35,33 +34,34 @@ public class UserController {
 
     private int refreshExpiredMs = 1000 * 60 * 600; // 10시간
 
-/*
-    @ApiOperation(value = "회원정보 by id", notes = "id를 이용하여 회원 정보를 반환한다.", response = Map.class)
-    @GetMapping("/info/{userId}")
-    public ResponseEntity<Map<String, Object>> getInfo(
-            @PathVariable("userId") @ApiParam(value = "조회할 회원의 아이디.", required = true) Long userId,
-            HttpServletRequest request) {
+
+    @ApiOperation(value = "회원정보 수정", notes = "회원정보 수정 진행.", response = Map.class)
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable("userId")String userId, @RequestBody @ApiParam(value = "회원정보 수정에 필요한 정보", required = true) UserUpdateDto userUpdateDto, Authentication authentication){
 
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-
         try {
-            User user = us.findById(userId).get();
-
-            resultMap.put("userInfo", userDto);
-            resultMap.put("code", "200");
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            logger.error("정보조회 실패 : {}", e);
+            String tokenUserId = authentication.getName();
+            if(tokenUserId.equals(userId)){
+                if(us.updateUser(userId,userUpdateDto)){
+                    resultMap.put("code", "200");
+                    resultMap.put("msg","회원정보 수정 성공");
+                }else{
+                    resultMap.put("code", "401");
+                    resultMap.put("msg",userId + "에 해당하는 사용자가 존재하지 않습니다");
+                }
+            }else{
+                resultMap.put("code", "401");
+                resultMap.put("msg","본인의 정보만 수정할 수 있습니다.");
+            }
+        }catch (Exception e){
             resultMap.put("code", "500");
-            status = HttpStatus.ACCEPTED;
+            resultMap.put("msg","회원정보 수정 실패");
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
- */
 
-    
     @ApiOperation(value = "회원가입", notes = "회원가입 진행.", response = Map.class)
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserJoinDto userJoinDto){
@@ -181,9 +181,9 @@ public class UserController {
 
     }
 
-    @ApiOperation(value = "이메일 인증코드 전송", notes = "전송한 인증코드를 반환한다. type = 회원가입 or 비밀번호 재발급", response = Map.class)
-    @PostMapping("/mailCheck")
-    public ResponseEntity<Map<String, Object>> sendMail(@RequestBody EmailDto emailDto){
+    @ApiOperation(value = "이메일 인증코드 전송", notes = "이메일을 통한 본인확인과 임시 비밀번호 발급 기능을 수행합니다.", response = Map.class)
+    @PostMapping("/mail")
+    public ResponseEntity<Map<String, Object>> sendMail(@ApiParam(value = "type 은 \"register\"(회원가입 본인확인에 사용, userId 입력 불필요) 혹은 \"tempPw\"(임시 비밀번호 발급에 사용)", required = true) @RequestBody EmailDto emailDto){
 
         Map<String, Object> resultMap = new HashMap<>();
         String code;
@@ -196,7 +196,7 @@ public class UserController {
                 resultMap.put("data",code);
                 resultMap.put("msg", "본인 확인용 코드입니다.");
                 resultMap.put("code", "200");
-            } else if (emailDto.getType().equals("findPw")) {
+            } else if (emailDto.getType().equals("tempPw")) {
                 User user = us.findByUserId(emailDto.getUserId());
                 if (user.getEmail().equals(emailDto.getEmail())) { // 입력받은 사용자의 이메일 일치여부 검사
                     code = es.sendMail(emailDto);
@@ -212,7 +212,6 @@ public class UserController {
                 resultMap.put("code", "401");
             }
 
-
         }catch (Exception e){
             resultMap.put("msg", "이메일 전송에 실패했습니다.");
             resultMap.put("code", "500");
@@ -221,5 +220,31 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
+
+/*
+    @ApiOperation(value = "회원정보 by id", notes = "id를 이용하여 회원 정보를 반환한다.", response = Map.class)
+    @GetMapping("/info/{userId}")
+    public ResponseEntity<Map<String, Object>> getInfo(
+            @PathVariable("userId") @ApiParam(value = "조회할 회원의 아이디.", required = true) Long userId,
+            HttpServletRequest request) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        try {
+            User user = us.findById(userId).get();
+
+            resultMap.put("userInfo", userDto);
+            resultMap.put("code", "200");
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            logger.error("정보조회 실패 : {}", e);
+            resultMap.put("code", "500");
+            status = HttpStatus.ACCEPTED;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+ */
 
 }

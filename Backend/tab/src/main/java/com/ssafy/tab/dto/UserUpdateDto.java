@@ -9,9 +9,6 @@ import javax.persistence.*;
 @Data
 @RequiredArgsConstructor
 public class UserUpdateDto {
-
-    private String userId;
-
     private String userPw;
 
     private String name;
