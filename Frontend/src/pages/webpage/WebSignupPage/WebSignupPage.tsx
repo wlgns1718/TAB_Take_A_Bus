@@ -1,66 +1,133 @@
 import { FC } from 'react';
 import { WebSignupPageProps } from '.';
 import './WebSignup.css'
-import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch, { SwitchProps } from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import React from 'react'
+import Button from '@mui/joy/Button';
+import user from 'store/slice/web-slice'
+import kioskSlice, { checkMaster } from '@/store/slice/kiosk-slice';
+import { KioskState } from '@/store/slice/kiosk-slice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
 
 
 export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
-  interface userInfo {
-    email :string;
-    password :string;
-    confirmPwd : string;
-    nickname: string;
-  }
+  
+  const kiosdata: KioskState = useSelector(
+    (state: { kiosk: KioskState; web: object }) => {
+      return state.kiosk;
+    }
+  );
 
-  const [user,setUser] = useState<userInfo | null>();
+  const [user,setUser] = useState<user[]>([]);
 
 
   //유효성검사.
-  const validateEmail = (email) => {
+  const validateEmail:Function = (email) => {
     return email
       .toLowerCase()
-      .match(/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/);
+      .match(/^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/);
   };
 
   const validatePwd = (password) => {
     return password
       .toLowerCase()
-      .match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{10,25}$/);
+      .match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/);
   }
 
-  const validateNickname = (nickname) => {
-    return nickname
+  const validateId = (id) => {
+    return id
       .toLowerCase()
-      .match(/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|].{1,8}$/)
+      .match(/^[a-zA-z0-9]{6,15}$/);
   }
 
 
 
 
-const [email, setEmail] = useState<string>("");
-const [password, setPassword] = useState<string>("");
-const [confirmPwd, setConfirmPwd] = useState<string>("");
-const [nickname, setNickname] = useState<string>("");
+
+const [email, setEmail] = useState<string>("ex) abcde123@samsung.com 와 같은 형식으로 작성해주세요.");
+const [password, setPassword] = useState<string>("숫자,영문,특수문자를 포함한 8자리 이상을 필요로합니다.");
+const [confirmPwd, setConfirmPwd] = useState<string>("비밀번호가 일치하지 않습니다.");
+const [Id, setId] = useState<string>("6자 이상 15자 이하 영문,숫자조합을 필요로합니다.");
 const [master, setMaster] = useState<boolean>(false)
 
 const [emailMsg, setEmailMsg] = useState<string>("");
 const [pwdMsg, setPwdMsg] = useState<string>('');
 const [confirmPwdMsg, setConfirmPwdMsg]= useState<string>("")
-const [nicknameMsg, setNicknameMsg] = useState<string>("")
+const [IdMsg, setIdMsg] = useState<string>("")
+const [masterMsg, setMasterMsg] = useState<string>('');
 
 
 // 1-1에 잡아뒀던 유효성 검사 함수로 정리하기
-const isEmailValid = validateEmail(email);
-const isPwdValid = validatePwd(password);
-const isConfirmPwd = password === confirmPwd;
-const isNicknameValid = validateNickname(nickname);
+const isEmailValid:boolean = validateEmail(email);
+const isPwdValid:boolean = validatePwd(password);
+const isConfirmPwd:boolean = password === confirmPwd;
+const isIdValid:boolean = validateId(Id);
+
+
+
+const onChangeEmail = (e)=>{
+  const currentEmail = e.target.value;
+  setEmail(currentEmail);
+  if(validateEmail(currentEmail)){
+    setEmailMsg('올바른 이메일 형식입니다.')
+  }else{
+    setEmailMsg('ex) abcde123@samsung.com 와 같은 형식으로 작성해주세요.')
+  }
+}
+
+const onChangeId = (e)=>{
+  const currentId = e.target.value;
+  setId(currentId)
+  if(validateId(currentId)){
+    setIdMsg('올바른 ID형식입니다.')
+  }else{
+    setIdMsg('6자 이상 15자 이하 영문,숫자조합을 필요로합니다.')
+  }
+}
+
+const onChangePass = (e)=>{
+  const currentPass = e.target.value;
+  setPassword(currentPass)
+  if(validatePwd(currentPass)){
+    setPwdMsg('올바른 비밀번호 형식입니다.')
+  }else{
+    setPwdMsg('숫자,영문,특수문자를 포함한 8자리 이상을 필요로합니다.')
+  }
+}
+
+const checkConfirm = (e)=>{
+  const currentConPass = e.target.value;
+  setConfirmPwd(currentConPass)
+  if(currentConPass == password){
+    setConfirmPwdMsg('비밀번호가 일치합니다.')
+  }else{
+    setConfirmPwdMsg('비밀번호가 일치하지 않습니다.')
+  }
+}
+
+const onChangeMaster = (e)=>{
+  const currentMaster = e.target.value;
+  if(currentMaster==kiosdata.masterkey){
+    setMaster(true)
+    setMasterMsg('마스터키가 일치합니다.')
+  }else{
+    setMasterMsg('마스터키를 입력해주세요')
+  }
+}
+
 
 
 	return (
@@ -74,26 +141,25 @@ const isNicknameValid = validateNickname(nickname);
       <div className='signUpMid'>
         <div className='signUpMidLeft'>
           <p><span style={{color:'red'}}>*</span>이메일</p>
-          <p><span style={{color:'red'}}>*</span>아이디</p>
           <p><span style={{color:'red'}}>*</span>성명</p>
+          <p><span style={{color:'red'}}>*</span>아이디</p>
           <p><span style={{color:'red'}}>*</span>비밀번호</p>
+          <p><span style={{color:'red'}}>*</span>비밀번호 확인</p>
           
           
         </div>
         <div className='signUpMidRight'>
-        <TextField  id="E-mail"  variant="standard" onChange={(e)=>{
-          const currEmail:string = e.target.value
-          setEmail(currEmail)
-
-        }}/>
-
-        <TextField  id="Id"  variant="standard" />
-        <TextField  id="Name"  variant="standard" />
-        <TextField  id="Password"  variant="standard" />
+        <TextField style={{height:'55px'}} helperText={`${emailMsg}`} id="E-mail"  variant="standard" onChange={onChangeEmail}/>
+        <TextField style={{height:'55px'}} helperText={'성명을입력해주세요.'} id="Name"  variant="standard" /> 
+        <TextField style={{height:'55px'}} helperText={`${IdMsg}`} id="Id"  variant="standard" onChange={onChangeId} />
+        <PasswordBox pass={onChangePass} helptext ={`${pwdMsg}`} id={'pass'} />
+        <PasswordBox pass={checkConfirm} helptext ={`${confirmPwdMsg}`} id={'passconf'} />
         </div>
       </div>
       
       <div className='signUpBottom'>
+      <Button variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>회원가입</Button>
+
         <hr style={{width:'500px'}}/>
           <FormGroup>
             <FormControlLabel
@@ -109,12 +175,48 @@ const isNicknameValid = validateNickname(nickname);
           </FormGroup>
           <div>
             {master == true ? 
-          <TextField  id="masterkey"  variant="standard" label="MasterKey를 입력하세요" /> : null }</div>
+          <PasswordBox pass={onChangeMaster} helptext ={`${masterMsg}`} id={'mastercon'}/> : null }</div>
           </div>
+          
     </div>
   );
 };
 
+
+
+
+
+function PasswordBox(props){
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+  return(
+          <FormControl style={{height:'55px'}} fullWidth variant="standard">
+          <Input
+            onChange={props.pass}
+            id={props.id}
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          <FormHelperText id="component-helper-text">
+          {props.helptext}
+        </FormHelperText>
+        </FormControl>
+  )
+  
+}
 
 
 

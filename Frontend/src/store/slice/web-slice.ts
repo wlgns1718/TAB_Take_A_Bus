@@ -1,5 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export type user = {
+  email :string;
+  password :string;
+  confirmPwd : string;
+  nickname: string;
+  master: string | null;
+}
 export type BoardData = {
   id: number;
   userId: string;
