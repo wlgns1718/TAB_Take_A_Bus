@@ -7,7 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ArduinoRepository extends JpaRepository<Bus,String> {
+public interface ArduinoRepository extends JpaRepository<Bus,Long> {
+
+    @Query("select b from Bus b where b.vehicleNo = :busNo")
+    Optional<Bus> findByBusNo(String busNo);
 
 //    @Query("select b.vulnerable from Bus b where b.vhhicle_no = :busNo")
 //    Optional<String> findSalt(@Param("userId")String userId);

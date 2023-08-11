@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+/*
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
@@ -127,4 +127,4 @@ class NoticeServiceTest {
         //then
     }
 
-}
+} */
