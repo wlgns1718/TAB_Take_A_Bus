@@ -6,6 +6,7 @@ import {
   WebState,
   changeSelectedNoticeId,
   deleteOneNotice,
+  saveNoticeDetailData,
 } from "@/store/slice/web-slice";
 import { Container, IconButton, Typography } from "@mui/material";
 import { Button } from "@mui/joy";
@@ -25,12 +26,16 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
   });
 
   useEffect(() => {
+    if(data.selectedNoticeId == postId){
+      setNoticeDetailData(data.noticeDetailData);
+      return
+    }
     noticeAPI
       .get(`detail/${postId}`)
       .then((response) => {
         console.log(response.data);
         if (response.data.code == "200") {
-          setNoticeDetailData(response.data.data);
+          dispatch(saveNoticeDetailData(response.data.data));
         }
       })
       .catch((error) => {
@@ -52,15 +57,25 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
         headers: { Authorization: `Bearer ${data.Token}` },
       })
       .then((response) => {
-        console.log(response.data);
-        dispatch(deleteOneNotice(noticeDetailData.id));
-        dispatch(changeSelectedNoticeId(null));
+        if(response.data.code == '401') {
+          alert("본인의 게시글만 삭제할 수 있습니다.");
+          return;
+        }
+        else{
+          console.log(response.data);
+          dispatch(deleteOneNotice(noticeDetailData.id));
+          dispatch(changeSelectedNoticeId(null));
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  useEffect(() => {
+    setNoticeDetailData(data.noticeDetailData);
+  }, [data.noticeDetailData]);
+  
   if (!noticeDetailData) {
     return <div></div>;
   }

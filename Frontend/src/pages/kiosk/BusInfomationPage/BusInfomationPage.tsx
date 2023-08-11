@@ -14,7 +14,7 @@ import {
 } from "../../../store/slice/kiosk-slice";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { busAPI } from "../../../store/api/api";
+import { arduinoAPI, busAPI } from "../../../store/api/api";
 import { useQuery, QueryClient } from "react-query";
 import { AxiosError } from "axios";
 
@@ -91,29 +91,24 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                   }
                   if (recordedItem.isPosted == false) {
                     if (newdata.remainingStops == 1) {
-                      busAPI
+                      arduinoAPI
                         .post(
-                          `station/${data.cityCode}/${data.busStopId}/${recordedItem.vehicleNo}`,
-                          null,
+                          `regist`,
                           {
-                            params: {
-                              busStation: `${data.busStopId}`,
-                              count: `${recordedItem.passengerNumber}`,
-                              vehicleNo: `${recordedItem.vehicleNo}`,
-                              routeNo: `${recordedItem.routeId}`,
-                              vulnerable: `${recordedItem.isVulnerable}`,
-                            },
+                            busStation: `${data.busStopId}`,
+                            count: `${recordedItem.passengerNumber}`,
+                            vehicleNo: `${recordedItem.vehicleNo}`,
+                            routeNo: `${recordedItem.routeId}`,
+                            vulnerable: `${recordedItem.isVulnerable}`,
                           }
                         )
                         .then((response) => {
-                          console.log(response);
-                          console.log(1111);
+                          console.log(response.data);
+                          newdata = { ...newdata, isPosted: true };
                         })
                         .catch((error) => {
                           console.log(error);
                         });
-                      newdata = { ...newdata, isPosted: true };
-                      console.log("일단 포스티드로바꿈 ");
                     }
                   }
                   return newdata;
