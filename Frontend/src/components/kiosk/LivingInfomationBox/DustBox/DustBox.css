@@ -1,0 +1,29 @@
+.dust-box{
+  flex: 5;
+  height: 450px;
+}
+
+.dust-info-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.micro-dust-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.fine-dust-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dust-text{
+  font-size: 40px;
+  text-align: center;
+}
+
+.measurement-time{
+  text-align: right;
+}
