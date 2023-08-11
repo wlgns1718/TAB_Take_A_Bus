@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { webAPI } from '@/store/api/api';
 import webSlice from '@/store/slice/web-slice';
 import { KioskState } from '@/store/slice/kiosk-slice';
-
+import axios from 'axios';
 export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
   const webData = useSelector((state:{kiosk:KioskState ,web:WebState})=>{
     return state.web
@@ -58,9 +58,10 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
     
   }
 
-
-
-
+  const REDIRECT_URI = 'http://localhost:5173/oauth/kakao'
+  const REST_API_KEY = 'e9fca19300e2496bcccc630ce29801a3'
+  
+  
   return (
     <div style={{ display: "flex" }}>
       <div className="LoginMain" {...props}>
@@ -107,6 +108,10 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
         <Button variant='outlined' onClick={()=>{navigate('/web/signup')}} style={{marginBottom:"20px"}}>회원가입</Button>
 
          </div>
+
+         <a href={`https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`}>
+          카카오로그인
+         </a>
         </div>
       </div>
      

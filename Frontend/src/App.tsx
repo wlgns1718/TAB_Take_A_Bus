@@ -8,7 +8,7 @@ import { WebSurveyPage } from "./pages/webpage/WebSurveyPage";
 import { MobileMain } from "./pages/mobile/MobileMain";
 import { BusInfomationPage } from "./pages/kiosk/BusInfomationPage";
 import { AuthPage } from "./pages/kiosk/AuthPage";
-
+import Kakaopage from "./pages/webpage/kakaopage"
 import "./App.css";
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
           <Link to="/kiosk/auth"> 키오스크 관리자</Link>
         </div>
         <Routes>
+          <Route path="/oauth/kakao" element={<Kakaopage/>}></Route>
           <Route path="/web/*" element={<WebMainPage />}></Route>
           <Route path="/mobile/*" element={<MobileMain />}></Route>
           <Route path="/kiosk">
