@@ -16,7 +16,7 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import React from 'react'
 import Button from '@mui/joy/Button';
-import user from 'store/slice/web-slice'
+import { user } from 'store/slice/web-slice'
 import kioskSlice, { checkMaster } from '@/store/slice/kiosk-slice';
 import { KioskState } from '@/store/slice/kiosk-slice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
