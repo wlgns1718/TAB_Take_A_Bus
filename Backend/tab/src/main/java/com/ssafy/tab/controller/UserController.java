@@ -247,7 +247,7 @@ public class UserController {
 
     @ApiOperation(value = "카카오 로그인", notes = "카카오에서 인증 코드를 받아와서 서버에서 처리", response = Map.class)
     @PostMapping(value="/login/kakao")
-    public Map<String, Object> login(@RequestBody @ApiParam(value = "헤더에 있는 토큰", required = true) KakaoUserDto kakaoUserDto, HttpServletResponse response) {
+    public Map<String, Object> login(@RequestBody @ApiParam(value = "카카오 서버에서 인증을 받은 후 헤더에 있는 code", required = true) KakaoUserDto kakaoUserDto, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
         String code = kakaoUserDto.getCode();
         try {
