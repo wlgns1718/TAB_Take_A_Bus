@@ -1,15 +1,17 @@
 .web-header{
-  background-color: whitesmoke;
+  background-color: white;
   height: 120px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
-  gap: 100px;
 }
 
 .web-header-logo{
-  width: 100px;
-  width: 250px;
+  width: 150px;
+  margin: 0 20px;
+}
+.web-header-logo-img{
+  width: 150px;
 }
 
 .header-links{

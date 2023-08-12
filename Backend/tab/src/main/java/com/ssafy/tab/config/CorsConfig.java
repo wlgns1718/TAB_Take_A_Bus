@@ -11,7 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
+//요거 때문에 LocalDateTime 이 배열로 출력됨
 public class CorsConfig implements WebMvcConfigurer {
 
     @Bean

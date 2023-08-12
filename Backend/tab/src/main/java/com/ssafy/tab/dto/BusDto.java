@@ -1,5 +1,6 @@
 package com.ssafy.tab.dto;
 
+import com.ssafy.tab.domain.Bus;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -31,5 +32,28 @@ public class BusDto {
                 .stationId(busDataDto.getStationId())
                 .vulnerable(busDataDto.isVulnerable())
                 .build();
+    }
+
+    public static BusDto toEntity(Bus bus){
+        return BusDto.builder()
+                .vulnerable(bus.isVulnerable())
+                .stationId(bus.getStationId())
+                .routeNo(bus.getRouteNo())
+                .createDate(bus.getCreateDate())
+                .vehicleNo(bus.getVehicleNo())
+                .id(bus.getId())
+                .build();
+    }
+
+    @Override
+    public String toString() {
+        return "BusDto{" +
+                "id=" + id +
+                ", vehicleNo='" + vehicleNo + '\'' +
+                ", routeNo='" + routeNo + '\'' +
+                ", createDate=" + createDate +
+                ", stationId='" + stationId + '\'' +
+                ", vulnerable=" + vulnerable +
+                '}';
     }
 }

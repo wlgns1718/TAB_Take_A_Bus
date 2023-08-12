@@ -1,10 +1,7 @@
 package com.ssafy.tab.controller;
 
 import com.ssafy.tab.domain.User;
-import com.ssafy.tab.dto.EmailDto;
-import com.ssafy.tab.dto.UserJoinDto;
-import com.ssafy.tab.dto.UserLoginDto;
-import com.ssafy.tab.dto.UserUpdateDto;
+import com.ssafy.tab.dto.*;
 import com.ssafy.tab.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +28,7 @@ public class UserController {
     private final UserService us;
     private final EmailService es;
     private final TokenBlacklistService tokenBlacklistService;
+    private final OAuthService kakao;
 
     private int refreshExpiredMs = 1000 * 60 * 600; // 10시간
 
@@ -246,5 +244,32 @@ public class UserController {
     }
 
  */
+
+    @ApiOperation(value = "카카오 로그인", notes = "카카오에서 인증 코드를 받아와서 서버에서 처리", response = Map.class)
+    @PostMapping(value="/login/kakao")
+    public Map<String, Object> login(@RequestBody @ApiParam(value = "카카오 서버에서 인증을 받은 후 헤더에 있는 code", required = true) KakaoUserDto kakaoUserDto, HttpServletResponse response) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String code = kakaoUserDto.getCode();
+        try {
+            String access_Token = kakao.getKakaoAccessToken(code);
+            Map<String, String> userInfo = kakao.getUserInfo(access_Token);
+            String accessToken = userInfo.get("accessToken");
+            String refreshToken = userInfo.get("refreshToken");
+            Cookie cookie = new Cookie("refreshToken",refreshToken);
+            cookie.setMaxAge(refreshExpiredMs);
+            response.addCookie(cookie);
+            Map<String,String> data = new HashMap<>();
+            data.put("accessToken",accessToken);
+            resultMap.put("data",data);
+            resultMap.put("code", "200");
+            resultMap.put("msg","카카오 로그인 성공");
+            resultMap.put("msg2", userInfo.get("msg"));
+        }
+        catch (Exception e){
+            resultMap.put("code", "500");
+            resultMap.put("msg","카카오 로그인 실패");
+        }
+        return resultMap;
+    }
 
 }

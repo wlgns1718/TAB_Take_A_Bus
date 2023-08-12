@@ -62,8 +62,6 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
 
         // Token 꺼내기
         String token = authorization.split(" ")[1];
-
-
         try {
             JwtUtil.isExpired(token, secretKey);
         }

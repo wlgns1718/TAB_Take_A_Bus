@@ -1,5 +1,6 @@
 package com.ssafy.tab.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.tab.domain.Bus;
 import com.ssafy.tab.dto.BusDataDto;
 import com.ssafy.tab.dto.BusDto;
@@ -23,9 +24,10 @@ public class ArduinoController {
 
     private final ArduinoService arduinoService;
     //아두이노에서 요청해서 넘겨줄 것
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @ApiOperation(value = "아두이노 통신", notes = "아두이노가 통신할 수 있습니다.",response = Map.class)
-    @GetMapping("/{busNo}") //버스 테이블에서 사용할 foriegn key
-    public ResponseEntity<Map<String,Object>> getInfo(@PathVariable("busNo") @ApiParam(value = "버스 번호판", required = true) String busNo){
+    @GetMapping("/{vehicleNo}") //버스 테이블에서 사용할 foriegn key
+    public ResponseEntity<Map<String,Object>> getInfo(@PathVariable("vehicleNo") @ApiParam(value = "버스 번호판", required = true) String vehicleNo){
 
         //busNo로 정보 얻어오기 ex) 경북12가3456
         //만약 BUS_DATA안에 조회가 된다면 1 아니면 0 반환하기
@@ -33,20 +35,25 @@ public class ArduinoController {
         Map<String, Object> resultMap = new HashMap<>();
 
         try{
-            Optional<Bus> info = arduinoService.getInfo(busNo);
-
+            Optional<Bus> info = arduinoService.getInfo(vehicleNo);
+            System.out.println(info);
             if(!info.isPresent()){
                 resultMap.put("code","401");
                 resultMap.put("msg","버스 정보가 없습니다.");
              }else{
                 //만약 해당 버스 정보가 있다면 조회 후 삭제 하기
                 Bus busEntity = info.get();
-                BusDto busDto = new BusDto(busEntity.getVehicleNo(),busEntity.isVulnerable());
+
+                BusDto busDto = BusDto.toEntity(busEntity);
+                System.out.println("daslkdjalskdlksa"+busDto);
                 resultMap.put("code","200");
                 resultMap.put("msg","버스 정보가 있습니다.");
                 resultMap.put("data",busDto);
-                //조회 후 삭제 기능 추가
 
+
+                //조회 후 삭제 기능 추가
+                //Bus 데이터 베이스에 해당 데이터 삭제
+                arduinoService.deleteInfo(busDto.getId());
              }
         }catch (Exception e){
             e.printStackTrace();

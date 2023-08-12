@@ -4,12 +4,12 @@
   /* padding: 1rem; */
 }
 
-@font-face{
-  font-family: "Inter" ;
-  src: url("./font/Inter-VariableFont_slnt,wght.ttf");
-}
-
-.web-body{
+#web-root {
   max-width: 1920px;
   min-width: 960px;
+}
+
+button:focus {
+  border: none;
+  outline: none;
 }

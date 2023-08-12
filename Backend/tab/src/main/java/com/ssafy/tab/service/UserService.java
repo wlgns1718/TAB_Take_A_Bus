@@ -148,6 +148,12 @@ public class UserService {
         return users.get(0);
     }
 
+    @Transactional
+    public Long joinUserKakao(User user) throws Exception { // 카카오 로그인
+        userRepository.save(user);
+        return user.getId();
+    }
+
     public boolean checkId(String id){
         List<User> users = userRepository.findByUserId(id);
         if(users.size() > 0){
@@ -245,3 +251,4 @@ public class UserService {
 
 
 }
+

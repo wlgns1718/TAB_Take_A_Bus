@@ -86,11 +86,11 @@ function Btn({ item }: { item: BusStoreData }) {
         <div className="outer">
           <div className="inner">
             {item.isVulnerable ? (
-              <div className="incontent" style={{ lineHeight: "0%" }}>
+              <div className="incontent" >
                 <p>{item.busNo}</p>
               </div>
             ) : (
-              <div className="incontent" style={{ lineHeight: "0%" }}>
+              <div className="incontent" >
                 <p>{item.busNo}</p>
               </div>
             )}
