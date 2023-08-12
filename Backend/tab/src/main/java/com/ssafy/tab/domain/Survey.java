@@ -14,7 +14,8 @@ public class Survey {
 
     /*
     id : primary key
-    user : user
+    userNo : user테이블 key
+    createDate : 설문 날짜
     startLatitude : 시작지점 위도
     startLontitude : 시작지점 경도
     destinationLatitude : 목적지 위도
@@ -28,6 +29,18 @@ public class Survey {
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "USER_NO")
     private User user;
 
+    @Column(name = "CREATE_DATE")
+    private LocalDateTime createDate;
+
+    public Survey(User user, LocalDateTime createDate, double startLatitude, double startLontitude, double destinationLatitude, double destinationLongtitude) {
+        this.user = user;
+        this.createDate = createDate;
+        this.startLatitude = startLatitude;
+        this.startLontitude = startLontitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongtitude = destinationLongtitude;
+    }
+
     @Column(name = "START_LATITUDE")
     private double startLatitude;
 
@@ -40,12 +53,5 @@ public class Survey {
     @Column(name = "DESTINATION_LONGTITUDE")
     private double destinationLongtitude;
 
-    public Survey(User user, double startLatitude, double startLontitude, double destinationLatitude, double destinationLongtitude) {
-        this.user = user;
-        this.startLatitude = startLatitude;
-        this.startLontitude = startLontitude;
-        this.destinationLatitude = destinationLatitude;
-        this.destinationLongtitude = destinationLongtitude;
-    }
 }
 

@@ -1,7 +1,6 @@
 package com.ssafy.tab.domain;
 
-import com.ssafy.tab.dto.CommentRequestDto;
-import com.ssafy.tab.dto.CommentResponseDto;
+import com.ssafy.tab.dto.CommentDto;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -32,8 +31,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "USER_NO")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BOARD_NO")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "BOARD_NO")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
@@ -44,17 +42,18 @@ public class Comment {
     private LocalDateTime createTime;
 
     //게시글의 내용을 수정하는 기능
-    public void changeComment(CommentRequestDto commentRequestDto, LocalDateTime localDateTime) {
-        this.content = commentRequestDto.getContent();
-        this.createTime = localDateTime;
+    public void changeComment(CommentDto commentDto) {
+        this.content = commentDto.getContent();
+        this.createTime = commentDto.getCreateTime();
     }
 
-    public static Comment toEntity(CommentRequestDto commentRequestDto, User user, Board board, LocalDateTime localDateTime){
+    public static Comment toEntity(CommentDto commentDto, User user, Board board){
         return Comment.builder()
+                .id(commentDto.getId())
                 .user(user)
                 .board(board)
-                .content(commentRequestDto.getContent())
-                .createTime(localDateTime)
+                .content(commentDto.getContent())
+                .createTime(commentDto.getCreateTime())
                 .build();
     }
 }
