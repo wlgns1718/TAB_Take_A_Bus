@@ -93,15 +93,17 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
 
         try{
-            Map<String, String> tokens = us.login(userLoginDto.getId(), userLoginDto.getPw());// 발행된 토큰
-            String accessToken = tokens.get("accessToken");
-            String refreshToken = tokens.get("refreshToken");
+            Map<String, String> result = us.login(userLoginDto.getId(), userLoginDto.getPw());// 발행된 토큰
+            String accessToken = result.get("accessToken");
+            String refreshToken = result.get("refreshToken");
+            String role = result.get("role");
             Cookie cookie = new Cookie("refreshToken",refreshToken);
             cookie.setMaxAge(refreshExpiredMs);
             response.addCookie(cookie);
 
             Map<String,String> data = new HashMap<>();
             data.put("accessToken",accessToken);
+            data.put("role",role);
             resultMap.put("data",data);
             resultMap.put("code", "200");
             resultMap.put("msg","로그인 성공");
