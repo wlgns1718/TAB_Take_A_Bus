@@ -96,6 +96,7 @@ public class UserService {
         user.setRefreshToken(refreshToken);
         resultMap.put("accessToken",accessToken);
         resultMap.put("refreshToken",refreshToken);
+        resultMap.put("role",user.getRole().toString());
         return resultMap; // 위 과정을 성공적으로 거친 후 로그인 수행
     }
 
