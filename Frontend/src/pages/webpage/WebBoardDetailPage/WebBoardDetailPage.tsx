@@ -9,7 +9,7 @@ import {
 } from "@/store/slice/web-slice";
 import { boardAPI } from "@/store/api/api";
 import { Container, IconButton, Typography } from "@mui/material";
-import { Button } from "@mui/joy";
+import { Button, Input, Stack } from "@mui/joy";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { prettyTime } from "../WebBoardPage";
@@ -23,9 +23,39 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // const postId = params.postId;
-    console.log(postId);
+  const [commentContent, setCommentContent] = useState("");
+
+  const handleCommentContent = (e) => {
+    setCommentContent(e.target.value);
+  };
+
+  const postComment = () => {
+    if (!commentContent.trim()) {
+      alert("내용을 입력해주세요");
+      return;
+    }
+    boardAPI
+      .post(
+        `${postId}/comment/`,
+        {
+          content: commentContent,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${data.Token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        updateDetailData();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateDetailData = () => {
     boardAPI
       .get(`${postId}`)
       .then((response) => {
@@ -37,6 +67,12 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    // const postId = params.postId;
+    console.log(postId);
+    updateDetailData();
   }, [postId]);
 
   const deleteBoard = () => {
@@ -47,15 +83,42 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
     if (!confirm("게시글을 삭제하시겠습니까?")) {
       return;
     }
-
     boardAPI
       .delete(`${boardDetailData.id}`, {
         headers: { Authorization: `Bearer ${data.Token}` },
       })
       .then((response) => {
+        if(response.data.code === 401) {
+          alert("본인의 게시글만 삭제할 수 있습니다.");
+          return;
+        } else {
+          console.log(response.data.code);
+          dispatch(deleteOneBoard(boardDetailData.id));
+          dispatch(changeSelectedPostId(null));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteComment = (commentId) => {
+    if (!data.Token) {
+      alert("로그인이 필요한 기능입니다.");
+      return;
+    }
+    if (!confirm("댓글을 삭제하시겠습니까?")) {
+      return;
+    }
+    boardAPI
+      .delete(`${postId}/comment/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${data.Token}`,
+        },
+      })
+      .then((response) => {
         console.log(response.data);
-        dispatch(deleteOneBoard(boardDetailData.id));
-        dispatch(changeSelectedPostId(null));
+        updateDetailData();
       })
       .catch((error) => {
         console.log(error);
@@ -68,7 +131,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
 
   return (
     <div>
-      <Container maxWidth="xl" sx={{ paddingTop: 10 }}>
+      <Container maxWidth="xl" sx={{ paddingTop: 8 }}>
         <div className="detail-header">
           <IconButton
             onClick={() => {
@@ -105,17 +168,49 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
         </div>
       </Container>
       <Container maxWidth="xl" sx={{ paddingTop: 2 }}>
-        <h3> 댓글 영역</h3>
+        <span style={{ fontSize: 16 }}>댓글</span>{" "}
+        <span style={{ fontSize: 12 }}>
+          {boardDetailData.commentResponseDtoList
+            ? boardDetailData.commentResponseDtoList.length
+            : 0}
+          개
+        </span>
+        <hr />
         <div>
-          {boardDetailData.commentResponseDtoList != null ||
-          boardDetailData.commentResponseDtoList.length != 0 ? (
-            boardDetailData.commentResponseDtoList.map((el, index) => {
-              return <div>dd</div>;
-            })
-          ) : (
+          {boardDetailData.commentResponseDtoList == null ||
+          boardDetailData.commentResponseDtoList.length == 0 ? (
             <div>댓글이 아직 없습니다..</div>
+          ) : (
+            boardDetailData.commentResponseDtoList.map((el, index) => {
+              return (
+                <Container maxWidth="xl" sx={{ paddingTop: 8, height: 140 }}>
+                  <Stack direction={"row"}>
+                    <div>{el.userId}</div>
+                    <div>{prettyTime(el.createTime)}</div>|
+                    <Button size="sm" variant="soft">
+                      수정
+                    </Button>
+                    |<Button onClick={() => deleteComment(el.id)}>삭제</Button>
+                  </Stack>
+                  <div>{el.content}</div>
+                </Container>
+              );
+            })
           )}
         </div>
+        <Stack direction={"row"} maxWidth="xl" sx={{ paddingTop: 8 }}>
+          <Input
+            size="md"
+            placeholder="내용을 입력하세요.."
+            variant="outlined"
+            color="neutral"
+            onChange={(value) => handleCommentContent(value)}
+          ></Input>
+          <Button variant="soft" color="neutral" onClick={postComment}>
+            {" "}
+            등록{" "}
+          </Button>
+        </Stack>
       </Container>
     </div>
   );

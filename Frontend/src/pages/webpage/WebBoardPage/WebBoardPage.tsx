@@ -156,7 +156,9 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   useEffect(() => {
     if (!noticeData?.length) {
-      noticeAPI.get("list").then((response) => {
+      noticeAPI.get("list", {params:{
+        page:0, size:1000
+      }}).then((response) => {
         console.log(response.data);
         // setNoticeData(response.data.content);
         dispatch(saveNoticeData(response.data.content));
@@ -166,11 +168,18 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   useEffect(() => {
     if (!boardData?.length) {
-      boardAPI.get("").then((response) => {
-        console.log(response.data.data.content);
-        // setBoardData(response.data.data.content);
-        dispatch(saveBoardData(response.data.data.content));
-      });
+      boardAPI
+        .get("", {
+          params: {
+            page: 0,
+            size: 1000,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.data.content);
+          // setBoardData(response.data.data.content);
+          dispatch(saveBoardData(response.data.data.content));
+        });
     }
   }, []);
 

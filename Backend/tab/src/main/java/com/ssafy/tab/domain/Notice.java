@@ -39,7 +39,7 @@ public class Notice {
     private String content;
 
     @Column(name = "CREATE_TIME")
-    private LocalDateTime createTime;
+    private Timestamp createTime = Timestamp.valueOf(LocalDateTime.now());
 
     public void changeTitle(String title){
         this.title = title;
@@ -49,11 +49,11 @@ public class Notice {
         this.content = content;
     } // setter대신 사용
 
-    public void changeTime(LocalDateTime createTime){
+    public void changeTime(Timestamp createTime){
         this.createTime = createTime;
     } // setter대신 사용
 
-    public Notice(User user, String title, String content, LocalDateTime createTime) {
+    public Notice(User user, String title, String content, Timestamp createTime) {
         this.user = user;
         this.title = title;
         this.content = content;

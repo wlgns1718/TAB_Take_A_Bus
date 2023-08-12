@@ -1,6 +1,9 @@
 import axios from "axios";
 
 
+export const arduinoAPI = axios.create({
+  baseURL: "http://i9d111.p.ssafy.io:8000/tab/arduino/",
+});
 export const busAPI = axios.create({
   baseURL: "http://i9d111.p.ssafy.io:8000/tab/station/",
 });
