@@ -104,8 +104,8 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
   };
   return (
     <div {...props}>
+      <div>게시판 작성</div>
       <div>
-      <div style={{textAlign: 'center', fontSize:30}}>게시판 작성</div>
         <div>
           <Select
             className="board-select"

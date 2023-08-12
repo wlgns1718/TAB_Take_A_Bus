@@ -28,12 +28,11 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
           <NavLink to="/web/survey"> 수요조사 </NavLink>
         </div>
         <div className="header-btns">
-          {webData.isUserIn ? <div>
-          <NavLink to="/web/signup"> 회원가입</NavLink>
+          {!webData.isUserIn ? <div>
           <NavLink to="/web/login/"> 로그인</NavLink>
           </div>
           :
-          <NavLink to="/web/login/"> 로그아웃</NavLink>}
+          <NavLink to="/web/loout/"> 로그아웃</NavLink>}
           
           
         </div>

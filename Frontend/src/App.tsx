@@ -8,7 +8,7 @@ import { WebSurveyPage } from "./pages/webpage/WebSurveyPage";
 import { MobileMain } from "./pages/mobile/MobileMain";
 import { BusInfomationPage } from "./pages/kiosk/BusInfomationPage";
 import { AuthPage } from "./pages/kiosk/AuthPage";
-import Kakaopage from "./pages/webpage/Kakaopage"
+import Kakaopage from "./pages/webpage/kakaopage"
 import "./App.css";
 
 function App() {
