@@ -1,12 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export type user = {
-  email :string;
-  id : string;
-  name: string;
-  password :string;
-  role: string;
-}
 
 export type CommentData = {
   id: number;
@@ -16,12 +9,12 @@ export type CommentData = {
   createTime: number[];
 };
 
-
-export type loginuser = {
-  id : string;
-  password:string;
-  token : string;
-}
+export type LoginData = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+};
 
 export type BoardData = {
   id: number;
@@ -65,7 +58,8 @@ export interface WebState {
   Token: string | null;
   selectedNoticeId: number | null;
   selectedPostId: number | null;
-  isUserIn:boolean;
+  isUserIn: boolean;
+  loginData: LoginData | null;
 }
 
 const initialState: WebState = {
@@ -73,23 +67,25 @@ const initialState: WebState = {
   noticeDetailData: null,
   boardData: [],
   boardDetailData: null,
-  Token:
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE3MzIwNTcsImV4cCI6MTY5MTczNTY1N30.1tAqLkg3IDExjUP6fecr5Gm-DD-ukwlFJWtYSCbbidc",
+  Token: "",
   selectedNoticeId: null,
   selectedPostId: null,
-  isUserIn :false,
-
-}
+  isUserIn: false,
+  loginData: null,
+}; 
 
 const webSlice = createSlice({
   name: "web",
   initialState,
   reducers: {
-    setIsUserIn(state){
-      state.isUserIn = !state.isUserIn
+    setIsUserIn(state, action){
+      state.isUserIn = action.payload.isLogin
     },
     setToken(state, action) {
       state.Token = action.payload;
+    },
+    setLoginUser(state, action) {
+      state.loginData = action.payload.loginData;
     },
     changeSelectedNoticeId(state, action) {
       state.selectedNoticeId = action.payload;
@@ -141,6 +137,7 @@ export const {
   deleteOneNotice,
   deleteOneBoard,
   setToken,
+  setLoginUser,
 } = webSlice.actions;
 
 export default webSlice;
