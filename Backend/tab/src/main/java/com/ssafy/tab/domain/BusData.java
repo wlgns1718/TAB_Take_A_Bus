@@ -1,15 +1,17 @@
 package com.ssafy.tab.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ssafy.tab.dto.BusDataDto;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BusData {
     /*
 
@@ -45,4 +47,31 @@ public class BusData {
 
     @Column(name = "VULNERABLE")
     private boolean vulnerable;
+
+
+    public static BusData toEntity(BusDataDto busDataDto, BusStation busStation){
+        return BusData.builder()
+                .busStation(busStation)
+                .count(busDataDto.getCount())
+                .vulnerable(busDataDto.isVulnerable())
+                .vehicleNo(busDataDto.getVehicleNo())
+                .routeNo(busDataDto.getRouteNo())
+                .boardingTime(LocalDateTime.now())
+                .build();
+    }
+    //버스 정보 등록을 위한 생성자
+
+
+    @Override
+    public String toString() {
+        return "BusData{" +
+                "id=" + id +
+                ", busStation=" + busStation +
+                ", count=" + count +
+                ", boardingTime=" + boardingTime +
+                ", vehicleNo='" + vehicleNo + '\'' +
+                ", routeNo='" + routeNo + '\'' +
+                ", vulnerable=" + vulnerable +
+                '}';
+    }
 }

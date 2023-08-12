@@ -4,8 +4,9 @@ import com.ssafy.tab.domain.Board;
 import com.ssafy.tab.domain.Comment;
 import com.ssafy.tab.domain.Sort;
 import com.ssafy.tab.domain.User;
-import com.ssafy.tab.dto.BoardDto;
-import com.ssafy.tab.dto.CommentDto;
+import com.ssafy.tab.dto.BoardRequestDto;
+import com.ssafy.tab.dto.BoardResponseDto;
+import com.ssafy.tab.dto.CommentResponseDto;
 import com.ssafy.tab.repository.BoardRepository;
 import com.ssafy.tab.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,66 +31,67 @@ public class BoardService {
 
     //전체 게시물 조회
     @Transactional(readOnly = true)
-    public Page<BoardDto> board(Pageable pageable) {
+    public Page<BoardResponseDto> list(Pageable pageable) {
         Page<Board> page = boardRepository.findAll(pageable);
-        return page.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return page.map(b -> new BoardResponseDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 등록
-    public BoardDto registBoard(BoardDto boardDto){
-        return BoardDto.toDto(boardRepository.save(Board.toEntity(boardDto, userService.findById(boardDto.getUserId()).get())));
+    public void createBoard(BoardRequestDto boardRequestDto, String userId){
+        User user = userService.findByUserId(userId);
+        LocalDateTime now = LocalDateTime.now();
+        boardRepository.save(new Board(user, boardRequestDto.getTitle(), boardRequestDto.getContent(), now, boardRequestDto.getSort()));
     }
+
     //게시글 삭제
     public void deleteBoard(Long boardId){
         boardRepository.delete(boardRepository.findById(boardId).get());
     }
 
     //게시글 수정
-    public BoardDto modifyBoard(BoardDto boardDto){
-        Board board = Board.toEntity(boardDto, userService.findById(boardDto.getUserId()).get());
-        board.changeBoard(boardDto);
-        return BoardDto.toDto(board);
+    public void modifyBoard(Long boardId, BoardRequestDto boardRequestDto){
+        Board board = boardRepository.findById(boardId).get();
+        board.changeBoard(boardRequestDto, LocalDateTime.now());
     }
 
     //게시글 자세히보기
     @Transactional(readOnly = true)
-    public BoardDto boardDetail(Long boardId) {
+    public BoardResponseDto boardDetail(Long boardId) {
         Board board = boardRepository.findById(boardId).get();
-        BoardDto boardDto = BoardDto.toDto(board);
+        BoardResponseDto boardResponseDto = BoardResponseDto.toDto(board);
         List<Comment> comments = commentRepository.findByBoard(board);
         for (Comment comment : comments) {
-            System.out.println(comment.getContent());
-            boardDto.addComment(CommentDto.toDto(comment));
+            boardResponseDto.addComment(CommentResponseDto.toDto(comment));
         }
-        return boardDto;
+        return boardResponseDto;
     }
 
     //게시글 머리말대로 검색하기 + 페이징 처리
     @Transactional(readOnly = true)
-    public Page<BoardDto> boardBySort(Sort sort, Pageable pageable) {
+    public Page<BoardResponseDto> boardBySort(Sort sort, Pageable pageable) {
         Page<Board> postsList = boardRepository.findBySort(sort, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return postsList.map(b -> new BoardResponseDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 작성자 이름으로 검색하기 + 페이징 처리
     @Transactional(readOnly = true)
-    public Page<BoardDto> boardByUser(String userName, Pageable pageable) {
+    public Page<BoardResponseDto> boardByUser(String userName, Pageable pageable) {
         Page<Board> postsList = boardRepository.findByUserContaining(userName, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return postsList.map(b -> new BoardResponseDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 제목으로 검색하기 + 페이징 처리
     @Transactional(readOnly = true)
-    public Page<BoardDto> boardByTitle(String string, Pageable pageable) {
+    public Page<BoardResponseDto> boardByTitle(String string, Pageable pageable) {
         Page<Board> postsList = boardRepository.findByTitleContaining(string, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return postsList.map(b -> new BoardResponseDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 내용으로로 검색하기 + 페이징 처리
     @Transactional(readOnly = true)
-    public Page<BoardDto> boardByContent(String string, Pageable pageable) {
+    public Page<BoardResponseDto> boardByContent(String string, Pageable pageable) {
         Page<Board> postsList = boardRepository.findByContentContaining(string, pageable);
-        return postsList.map(b -> new BoardDto(b.getId(), b.getUser().getId(), b.getUser().getName(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
+        return postsList.map(b -> new BoardResponseDto(b.getId(), b.getUser().getUserId(), b.getTitle(), b.getContent(), b.getCreateTime(), b.getSort()));
     }
 
     //게시글 id로 게시글 조회하기.

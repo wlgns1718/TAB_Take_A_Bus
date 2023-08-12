@@ -8,14 +8,6 @@ export type user = {
   role: string;
 }
 
-export type CommentData = {
-  id: number;
-  boardId: number;
-  userId: string;
-  content: string;
-  createTime: number[];
-};
-
 
 export type loginuser = {
   id : string;
@@ -30,7 +22,7 @@ export type BoardData = {
   content: string;
   createTime: number[];
   sort: string;
-  commentResponseDtoList: CommentData[] | null;
+  commentResponseDtoList: [] | null;
 };
 
 export type NoticeData = {
@@ -74,11 +66,10 @@ const initialState: WebState = {
   boardData: [],
   boardDetailData: null,
   Token:
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE3MzIwNTcsImV4cCI6MTY5MTczNTY1N30.1tAqLkg3IDExjUP6fecr5Gm-DD-ukwlFJWtYSCbbidc",
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE2NzU5OTgsImV4cCI6MTY5MTY3OTU5OH0.TYVoT8K-9Fyv6UL0DNGfHdDNT1maZiQnBT9YF6vT2dA",
   selectedNoticeId: null,
   selectedPostId: null,
   isUserIn :false,
-
 }
 
 const webSlice = createSlice({
@@ -102,12 +93,6 @@ const webSlice = createSlice({
     },
     saveNoticeData(state, action) {
       state.noticeData = action.payload;
-    },
-    saveBoardDetailData(state, action) {
-      state.boardDetailData = action.payload;
-    },
-    saveNoticeDetailData(state, action) {
-      state.noticeDetailData = action.payload;
     },
     deleteOneNotice(state, action) {
       const indexToDelete = state.noticeData.findIndex(
@@ -136,8 +121,6 @@ export const {
   changeSelectedPostId,
   saveBoardData,
   saveNoticeData,
-  saveBoardDetailData,
-  saveNoticeDetailData,
   deleteOneNotice,
   deleteOneBoard,
   setToken,
