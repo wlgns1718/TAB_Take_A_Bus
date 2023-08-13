@@ -70,10 +70,6 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
       });
   };
 
-  // useEffect(() => {
-  //   setNoticeDetailData(data.noticeDetailData);
-  // }, [data.noticeDetailData]);
-  
   if (!data.selectedNoticeId) {
     return <div></div>;
   }
@@ -106,7 +102,7 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
           ></div>
         </div>
       </Container>
-      {data.loginData.id == data.boardDetailData.userId ? (
+      {data.loginData.id == data.noticeDetailData.userName ? (
         <Container maxWidth="xl">
           <div className="bottom-buttons">
             <Button

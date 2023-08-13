@@ -171,11 +171,12 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
   
   const CommentItem: React.FC<CommentProps> = ({ el }) => {
 
-    const [commentNewContent, setCommentNewContent] = useState("");
+    const [commentNewContent, setCommentNewContent] = useState();
 
     const handleCommentNewContent = (val) => {
       setCommentNewContent(val);
     };
+
     return (
       <Container maxWidth="xl" sx={{ paddingTop: 8, height: 140 }}>
         <Stack direction={"row"}>
@@ -189,6 +190,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
                     size="md"
                     variant="outlined"
                     color="neutral"
+                    defaultValue={el.content}
                     onChange={(e) =>
                       handleCommentNewContent(e.currentTarget.value)
                     }
