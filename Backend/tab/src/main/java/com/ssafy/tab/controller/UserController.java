@@ -143,9 +143,9 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
-    @ApiOperation(value = "로그아웃", notes = "token을 블랙리스트에 넣어서 로그아웃을 수행", response = Map.class)
+    @ApiOperation(value = "로그아웃", notes = "accessToken을 받아서 서버쪽 로그아웃을 수행", response = Map.class)
     @DeleteMapping("/logout")
-    public ResponseEntity<Map<String, Object>> logout(@RequestHeader("Authorization") @ApiParam(value = "헤더에 있는 토큰", required = true) String authorizationHeader) {
+    public ResponseEntity<Map<String, Object>> logout(@RequestHeader("Authorization") @ApiParam(value = "헤더에 있는 엑세스 토큰 (Authorization : Bearer ~)", required = true) String authorizationHeader) {
         // Authorization 헤더에서 토큰 추출
         Map<String, Object> resultMap = new HashMap<>();
 
