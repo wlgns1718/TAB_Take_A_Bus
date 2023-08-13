@@ -12,7 +12,7 @@ import {
 } from "@mui/joy";
 import SearchIcon from "@mui/icons-material/Search";
 import "./WebBoard.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BoardTable } from "@/components/web/BoardTable";
 import { NoticeTable } from "@/components/web/NoticeTable";
 import { boardAPI, noticeAPI } from "@/store/api/api";
@@ -21,13 +21,13 @@ import {
   BoardData,
   NoticeData,
   WebState,
+  changeSelectedBoard,
   saveBoardData,
   saveNoticeData,
 } from "@/store/slice/web-slice";
 import { WebBoardDetailPage } from "../WebBoardDetailPage";
 import { useDispatch, useSelector } from "react-redux";
 import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
-import { fillZero } from "@/components/kiosk/KioskHeader";
 
 export const POSTPERPAGE: number = 10;
 
@@ -91,8 +91,6 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   const boards: string[] = ["공지사항", "게시판"];
 
-  const [currentBoard, setCurrentBoard] = useState(BOARD.NOTICE);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [currentFreePage, setFreeCurrentPage] = useState(1);
 
@@ -105,7 +103,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   const [selectedPostId, setSelectedPostId] = useState(data.selectedPostId);
 
   const handleCurrentBoard = (value) => {
-    setCurrentBoard(value);
+    dispatch(changeSelectedBoard(value));
   };
 
   const paginateBoard = (arr: BoardData[], pageSize: number) => {
@@ -230,7 +228,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
           return (
             <div
               className={`board-header-item ${
-                currentBoard == name ? "board-selected" : null
+                data.selectedBoard == name ? "board-selected" : null
               }`}
               key={index}
               onClick={() => handleCurrentBoard(name)}
@@ -241,7 +239,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         })}
         <div className="board-header-space"> </div>
       </div>
-      {currentBoard == "공지사항" ? (
+      {data.selectedBoard == "공지사항" ? (
         selectedNoticeId ? (
           <WebNoticeDetailPage postId={selectedNoticeId}></WebNoticeDetailPage>
         ) : (
@@ -254,7 +252,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
       )}
       {/* 공지사항 */}
       <div>
-        {currentBoard == "공지사항" ? (
+        {data.selectedBoard == "공지사항" ? (
           <div>
             <div className="board-select-space"></div>
             <NoticeTable pages={pages} currentPage={currentPage}></NoticeTable>
