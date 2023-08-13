@@ -33,3 +33,11 @@
 #navitems{
   font-family:'Noto Sans KR', sans-serif;
 }
+
+.backmainimg{
+  background: url(/public/visual_businfo.jpg) no-repeat center;;
+  min-width: 768px;
+  min-height: 230px;
+  background-size: cover;
+  margin-bottom: 30px;
+}

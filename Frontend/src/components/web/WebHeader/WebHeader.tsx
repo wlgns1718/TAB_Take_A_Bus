@@ -8,7 +8,11 @@ import { KioskState } from "@/store/slice/kiosk-slice";
 import { WebState } from "@/store/slice/web-slice";
 import { useDispatch } from "react-redux";
 import { webAPI } from "@/store/api/api";
+import { useLocation } from "react-router-dom";
+
+
 export const WebHeader: FC<WebHeaderProps> = (props) => {
+  const location = useLocation();
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const webData = useSelector((state: { kiosk: KioskState; web: WebState }) => {
@@ -17,6 +21,7 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
   const [isUserIn, setIsUserIn] = useState(webData.isUserIn);
   useEffect(() => {
     setIsUserIn(webData.isUserIn);
+    
   }, [webData.isUserIn]);
   return (
     <div {...props}>
@@ -42,6 +47,7 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
             </div>
           ) : (
             <div
+            
               onClick={() => {
                 webAPI
                   .delete(`/user/logout`, {
@@ -54,14 +60,18 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
                   });
                 dispatch(setLogoutUser());
                 alert("로그아웃 되셨습니다.");
-                navigation("/web/login");
+                navigation("/web/home");
               }}
             >
-              로그아웃
+              <p style={{fontSize:"21px",fontWeight:"bold",cursor:"pointer"}}>로그아웃</p>
             </div>
           )}
         </div>
+      
       </div>
+      <div className={location.pathname== 'web/home/' ? '' : "backmainimg"}>
+      </div>
+    
     </div>
   );
 };
