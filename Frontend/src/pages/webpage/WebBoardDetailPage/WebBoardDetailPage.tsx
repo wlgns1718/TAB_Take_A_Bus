@@ -2,10 +2,10 @@ import { FC, useEffect, useState } from "react";
 import { WebBoardDetailPageProps } from ".";
 import {
   BOARD_KOR,
-  BoardData,
   WebState,
   changeSelectedPostId,
   deleteOneBoard,
+  saveBoardDetailData,
 } from "@/store/slice/web-slice";
 import { boardAPI } from "@/store/api/api";
 import { Container, IconButton, Typography } from "@mui/material";
@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { prettyTime } from "../WebBoardPage";
 
 export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
-  const [boardDetailData, setBoardDetailData] = useState<BoardData | null>();
 
   const data: WebState = useSelector((state: { web: WebState }) => {
     return state.web;
@@ -61,7 +60,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       .then((response) => {
         console.log(response.data);
         if (response.data.code == "200") {
-          setBoardDetailData(response.data.data);
+          dispatch(saveBoardDetailData(response.data.data));
         }
       })
       .catch((error) => {
@@ -70,7 +69,6 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
   };
 
   useEffect(() => {
-    // const postId = params.postId;
     console.log(postId);
     updateDetailData();
   }, [postId]);
@@ -84,16 +82,16 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       return;
     }
     boardAPI
-      .delete(`${boardDetailData.id}`, {
+      .delete(`${postId}`, {
         headers: { Authorization: `Bearer ${data.Token}` },
       })
       .then((response) => {
-        if(response.data.code === 401) {
+        if (response.data.code === 401) {
           alert("본인의 게시글만 삭제할 수 있습니다.");
           return;
         } else {
           console.log(response.data.code);
-          dispatch(deleteOneBoard(boardDetailData.id));
+          dispatch(deleteOneBoard(postId));
           dispatch(changeSelectedPostId(null));
         }
       })
@@ -125,7 +123,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       });
   };
 
-  if (!boardDetailData) {
+  if (!data.boardDetailData) {
     return <div></div>;
   }
 
@@ -144,16 +142,18 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
         </div>
         <div className="detail">
           <Typography variant="h4" sx={{ margin: 5 }}>
-            {boardDetailData?.title}
+            {data.boardDetailData?.title}
           </Typography>
 
-          <div>{`작성자 : ${boardDetailData?.userId}`}</div>
-          <div>{BOARD_KOR[boardDetailData.sort]}</div>
+          <div>{`작성자 : ${data.boardDetailData?.userId}`}</div>
+          <div>{BOARD_KOR[data.boardDetailData.sort]}</div>
 
-          <div>{`작성시간 : ${prettyTime(boardDetailData?.createTime)}`}</div>
+          <div>{`작성시간 : ${prettyTime(
+            data.boardDetailData?.createTime
+          )}`}</div>
           {/* html 코드 출력 */}
           <div
-            dangerouslySetInnerHTML={{ __html: boardDetailData?.content }}
+            dangerouslySetInnerHTML={{ __html: data.boardDetailData?.content }}
           ></div>
         </div>
       </Container>
@@ -170,23 +170,23 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       <Container maxWidth="xl" sx={{ paddingTop: 2 }}>
         <span style={{ fontSize: 16 }}>댓글</span>{" "}
         <span style={{ fontSize: 12 }}>
-          {boardDetailData.commentResponseDtoList
-            ? boardDetailData.commentResponseDtoList.length
+          {data.boardDetailData.commentResponseDtoList
+            ? data.boardDetailData.commentResponseDtoList.length
             : 0}
           개
         </span>
         <hr />
         <div>
-          {boardDetailData.commentResponseDtoList == null ||
-          boardDetailData.commentResponseDtoList.length == 0 ? (
+          {data.boardDetailData.commentResponseDtoList == null ||
+          data.boardDetailData.commentResponseDtoList.length == 0 ? (
             <div>댓글이 아직 없습니다..</div>
           ) : (
-            boardDetailData.commentResponseDtoList.map((el, index) => {
+            data.boardDetailData.commentResponseDtoList.map((el, index) => {
               return (
                 <Container maxWidth="xl" sx={{ paddingTop: 8, height: 140 }}>
                   <Stack direction={"row"}>
                     <div>{el.userId}</div>
-                    <div>{prettyTime(el.createTime)}</div>|
+                    <div>{prettyTime(el.createTime, true)}</div>|
                     <Button size="sm" variant="soft">
                       수정
                     </Button>

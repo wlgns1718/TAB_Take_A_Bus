@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 import { WebBoardPostPageProps } from ".";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -40,7 +40,15 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
   };
 
   useEffect(() => {
-    // 로그인 체크
+    if (!data.isUserIn) {
+      alert("로그인이 필요한 기능입니다");
+      if (confirm("로그인 화면으로 이동하시겠습니까?")) {
+        navigate("../../login");
+        return;
+      }
+      navigate(-1);
+      return;
+    }
   }, []);
 
   const postPost = () => {
@@ -61,6 +69,15 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
     if (!sendContentwithoutTags.trim()) {
       alert("상세내용을 입력해주세요");
       return;
+    }
+    if(!data.isUserIn){
+      alert("로그인이 필요한 기능입니다")
+      if(confirm("로그인 화면으로 이동하시겠습니까?")){
+        navigate('../../login')
+        return
+      }
+      navigate(-1)
+      return
     }
     // 머리말이 공지사항이면 noticeAPI 아니면 게시글
     if (category == "공지사항") {
@@ -102,10 +119,19 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
         });
     }
   };
+  // 포커스 이동
+  const quillRef = useRef(null);
+
+  const handleTdClick = () => {
+    if (quillRef.current) {
+      quillRef.current.focus();
+    }
+  };
+
   return (
     <div {...props}>
       <div>
-      <div style={{textAlign: 'center', fontSize:30}}>게시판 작성</div>
+        <div style={{ textAlign: "center", fontSize: 30 }}>게시판 작성</div>
         <div>
           <Select
             className="board-select"
@@ -116,6 +142,7 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
           >
             {options.map((op, index) => {
               return (
+                data.loginData?.role == "USER" && op=='공지사항' ? "" :
                 <Option
                   value={op}
                   key={index}
@@ -143,8 +170,12 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
               </tr>
               <tr>
                 <th>상세내용</th>
-                <td colSpan={3}>
-                  <ReactQuill value={content} onChange={handleContentChange} />
+                <td colSpan={3} onClick={handleTdClick}>
+                  <ReactQuill
+                    value={content}
+                    onChange={handleContentChange}
+                    ref={quillRef}
+                  />
                   <p>{content.valueOf().length}/1000</p>
                 </td>
               </tr>

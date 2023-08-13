@@ -18,7 +18,7 @@ import { prettyTime } from "../WebBoardPage";
 export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
   postId,
 }) => {
-  const [noticeDetailData, setNoticeDetailData] = useState<NoticeDetailData>();
+  // const [noticeDetailData, setNoticeDetailData] = useState<NoticeDetailData>();
 
   const dispatch = useDispatch();
   const data: WebState = useSelector((state: { web: WebState }) => {
@@ -26,10 +26,6 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
   });
 
   useEffect(() => {
-    if(data.selectedNoticeId == postId){
-      setNoticeDetailData(data.noticeDetailData);
-      return
-    }
     noticeAPI
       .get(`detail/${postId}`)
       .then((response) => {
@@ -53,7 +49,7 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
     }
 
     noticeAPI
-      .delete(`delete/${noticeDetailData.id}`, {
+      .delete(`delete/${postId}`, {
         headers: { Authorization: `Bearer ${data.Token}` },
       })
       .then((response) => {
@@ -63,7 +59,7 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
         }
         else{
           console.log(response.data);
-          dispatch(deleteOneNotice(noticeDetailData.id));
+          dispatch(deleteOneNotice(postId));
           dispatch(changeSelectedNoticeId(null));
         }
       })
@@ -72,11 +68,11 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
       });
   };
 
-  useEffect(() => {
-    setNoticeDetailData(data.noticeDetailData);
-  }, [data.noticeDetailData]);
+  // useEffect(() => {
+  //   setNoticeDetailData(data.noticeDetailData);
+  // }, [data.noticeDetailData]);
   
-  if (!noticeDetailData) {
+  if (!data.selectedNoticeId) {
     return <div></div>;
   }
 
@@ -95,14 +91,16 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
         </div>
         <div className="detail">
           <Typography variant="h4" sx={{ margin: 5 }}>
-            {noticeDetailData?.title}
+            {data.noticeDetailData?.title}
           </Typography>
 
-          <div>{`작성자 : ${noticeDetailData?.userName}`}</div>
-          <div>{`작성시간 : ${prettyTime(noticeDetailData?.createTime)}`}</div>
+          <div>{`작성자 : ${data.noticeDetailData?.userName}`}</div>
+          <div>{`작성시간 : ${prettyTime(
+            data.noticeDetailData?.createTime
+          )}`}</div>
           {/* html 코드 출력 */}
           <div
-            dangerouslySetInnerHTML={{ __html: noticeDetailData?.content }}
+            dangerouslySetInnerHTML={{ __html: data.noticeDetailData?.content }}
           ></div>
         </div>
       </Container>

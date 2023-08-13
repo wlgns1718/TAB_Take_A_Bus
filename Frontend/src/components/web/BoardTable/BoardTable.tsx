@@ -35,20 +35,16 @@ export const BoardTable: FC<BoardTableProps> = ({ pages, currentPage }) => {
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  onClick={(e) => {
+                    dispatch(changeSelectedPostId(row.id));
+                  }}
                 >
                   <TableCell component="th" scope="row">
                     {(currentPage - 1) * POSTPERPAGE + index + 1}
                   </TableCell>
                   <TableCell align="center">{BOARD_KOR[row.sort]}</TableCell>
                   <TableCell align="left">
-                    {/* <Link to={`/web/board/detail/${row.id}`}>{row.title}</Link> */}
-                    <span
-                      onClick={(e) => {
-                        dispatch(changeSelectedPostId(row.id));
-                      }}
-                    >
-                      {row.title}
-                    </span>
+                    <span>{row.title}</span>
                   </TableCell>
                   <TableCell align="center">{row.userId}</TableCell>
                   <TableCell align="center">

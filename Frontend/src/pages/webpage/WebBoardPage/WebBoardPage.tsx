@@ -5,14 +5,10 @@ import { Pagination } from "@mui/material";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import {
-  Autocomplete,
   Button,
-  FormControl,
-  FormLabel,
   IconButton,
   Input,
   Stack,
-  dividerClasses,
 } from "@mui/joy";
 import SearchIcon from "@mui/icons-material/Search";
 import "./WebBoard.css";
@@ -35,11 +31,30 @@ import { fillZero } from "@/components/kiosk/KioskHeader";
 
 export const POSTPERPAGE: number = 10;
 
-export const prettyTime = (createTime) => {
+export const prettyTime = (createTime, sec = false) => {
   if (createTime) {
-    return `${createTime[0]}-${fillZero(createTime[1])}-${fillZero(
-      createTime[2]
-    )} ${fillZero(createTime[3])}:${fillZero(createTime[4])}`;
+    const dateTime = new Date(createTime);
+
+    const options: {
+      year: string;
+      month: string;
+      day: string;
+      hour: string;
+      minute: string;
+      second?: string;
+    } = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    if (sec) {
+      options["second"] = "2-digit";
+    }
+    // @ts-ignore
+    const formattedDateTime = dateTime.toLocaleString("ko-KR", options);
+    return formattedDateTime;
   } else {
     return " ";
   }
@@ -60,7 +75,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   const [noticeData, setNoticeData] = useState<NoticeData[]>([]);
   const [boardData, setBoardData] = useState<BoardData[]>([]);
 
-  const options: string[] = [
+  const categorys: string[] = [
     "전체게시판",
     "건의사항",
     "칭찬합니다",
@@ -139,7 +154,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
       .get(`${CATEGORY[searchCategory]}/${searchKeyword}`)
       .then((response) => {
         console.log(response.data);
-        setBoardData(response.data.data.content);
+        setBoardData(response.data.data.content.reverse());
       });
   };
 
@@ -150,7 +165,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     }
     boardAPI.get(url).then((response) => {
       console.log(response.data);
-      setBoardData(response.data.data.content);
+      setBoardData(response.data.data.content.reverse());
     });
   };
 
@@ -161,7 +176,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
       }}).then((response) => {
         console.log(response.data);
         // setNoticeData(response.data.content);
-        dispatch(saveNoticeData(response.data.content));
+        dispatch(saveNoticeData(response.data.content.reverse()));
       });
     }
   }, []);
@@ -178,7 +193,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         .then((response) => {
           console.log(response.data.data.content);
           // setBoardData(response.data.data.content);
-          dispatch(saveBoardData(response.data.data.content));
+          dispatch(saveBoardData(response.data.data.content.reverse()));
         });
     }
   }, []);
@@ -266,7 +281,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
               placeholder="전체게시판"
               size="md"
             >
-              {options.map((op, index) => {
+              {categorys.map((op, index) => {
                 return (
                   <Option
                     value={op}
@@ -325,16 +340,19 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
             </form>
           </div>
         )}
-
-        <div className="board-notice-button">
-          <Button
-            onClick={() => {
-              navigate("post");
-            }}
-          >
-            글 작성
-          </Button>
-        </div>
+        {data.isUserIn ? (
+          <div className="board-notice-button">
+            <Button
+              onClick={() => {
+                navigate("post");
+              }}
+            >
+              글 작성
+            </Button>
+          </div>
+        ) : (
+          " "
+        )}
       </div>
     </div>
   );

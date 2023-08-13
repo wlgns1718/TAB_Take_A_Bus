@@ -34,20 +34,16 @@ export const NoticeTable: FC<NoticeTableProps> = ({ pages, currentPage }) => {
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  onClick={(e) => {
+                    dispatch(changeSelectedNoticeId(row.id));
+                  }}
                 >
                   <TableCell component="th" scope="row">
                     {(currentPage - 1) * POSTPERPAGE + index + 1}
                   </TableCell>
                   <TableCell align="center">공지사항</TableCell>
                   <TableCell align="left">
-                    {/* <Link to={`/web/board/notice/${row.id}`}>{row.title}</Link> */}
-                    <span
-                      onClick={(e) => {
-                        dispatch(changeSelectedNoticeId(row.id));
-                      }}
-                    >
-                      {row.title}
-                    </span>
+                    <span>{row.title}</span>
                   </TableCell>
                   <TableCell align="center">{row.userName}</TableCell>
                   <TableCell align="center">
