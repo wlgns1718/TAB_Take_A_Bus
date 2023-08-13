@@ -1,5 +1,6 @@
 package com.ssafy.tab.service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.ssafy.tab.domain.*;
 import com.ssafy.tab.repository.BusTestRepository;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +95,8 @@ public class BusTestService {
                 busTestRepository.save(bus);
                 result.add(bus);
             }
+        } catch (JsonParseException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,15 +118,37 @@ public class BusTestService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonResponse = objectMapper.readTree(apiResponse);
             JsonNode items = jsonResponse.path("response").path("body").path("items").path("item");
-            for (JsonNode item : items) {
+            //하나의 버스만 있을 경우와 여러 대의 버스가 있을 경우를 따로 처리해줘야함.
+            if (items.isArray()) {
+                for (JsonNode item : items) {
+                    BustestApi bustestApi = BustestApi.builder()
+                            .remainingStops(item.path("arrprevstationcnt").asInt())
+                            .eta(item.path("arrtime").asInt())
+                            .routeId(item.path("routeid").asText())
+                            .routeNo(item.path("routeno").asText())
+                            .busNo(item.path("routeno").asText())
+                            .routeType(item.path("routetp").asText())
+                            .vehicleType(item.path("vehicletp").asText())
+                            .stationId(nodeId)
+                            .build();
+                    BustestApi tempBusTestApi = findPresentLocation(bustestApi);
+                    if (tempBusTestApi.getVehicleNo() == null) {
+                        BustestApi result = findVehicleNo(tempBusTestApi, cityCode);
+                        bustestApiList.add(result);
+                    } else {
+                        bustestApiList.add(tempBusTestApi);
+                    }
+                }
+            } else if (items.isObject()) {
+                // Process as a single object
                 BustestApi bustestApi = BustestApi.builder()
-                        .remainingStops(item.path("arrprevstationcnt").asInt())
-                        .eta(item.path("arrtime").asInt())
-                        .routeId(item.path("routeid").asText())
-                        .routeNo(item.path("routeno").asText())
-                        .busNo(item.path("routeno").asText())
-                        .routeType(item.path("routetp").asText())
-                        .vehicleType(item.path("vehicletp").asText())
+                        .remainingStops(items.path("arrprevstationcnt").asInt())
+                        .eta(items.path("arrtime").asInt())
+                        .routeId(items.path("routeid").asText())
+                        .routeNo(items.path("routeno").asText())
+                        .busNo(items.path("routeno").asText())
+                        .routeType(items.path("routetp").asText())
+                        .vehicleType(items.path("vehicletp").asText())
                         .stationId(nodeId)
                         .build();
                 BustestApi tempBusTestApi = findPresentLocation(bustestApi);
@@ -134,7 +159,11 @@ public class BusTestService {
                     bustestApiList.add(tempBusTestApi);
                 }
             }
-        } catch (Exception e) {
+        } catch (JsonParseException e) {
+            // JsonParseException 예외 처리
+            e.printStackTrace();
+        } catch (IOException e) {
+            // IOException 예외 처리
             e.printStackTrace();
         }
         return bustestApiList;
@@ -142,7 +171,6 @@ public class BusTestService {
 
     //버스 번호와 몇 정거장 남았는지를 DB에 조회해서 현재 위치 가져오기
     public BustestApi findPresentLocation(BustestApi bustestApi) {
-        System.out.println(bustestApi.toString());
         BusTest findBusTest = busTestRepository.findByRouteNoAndStationIdAndRouteId(bustestApi.getRouteNo(), bustestApi.getStationId(), bustestApi.getRouteId());
         List<BusTest> ListBusTest = busTestRepository.findByRouteNoAndRouteId(bustestApi.getRouteNo(), bustestApi.getRouteId());
         int temp = 0;
@@ -175,7 +203,6 @@ public class BusTestService {
             String apiResponse = callApi(apiUrl);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonResponse = objectMapper.readTree(apiResponse);
-
             JsonNode items = jsonResponse.path("response").path("body").path("items").path("item");
             if (items.isArray()) {
                 for (JsonNode item : items) {
@@ -204,7 +231,6 @@ public class BusTestService {
         URL url = new URL(apiUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
