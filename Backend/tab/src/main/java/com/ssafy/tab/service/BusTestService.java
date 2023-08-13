@@ -1,5 +1,6 @@
 package com.ssafy.tab.service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.ssafy.tab.domain.*;
 import com.ssafy.tab.repository.BusTestRepository;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +95,8 @@ public class BusTestService {
                 busTestRepository.save(bus);
                 result.add(bus);
             }
+        } catch (JsonParseException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,7 +137,11 @@ public class BusTestService {
                     bustestApiList.add(tempBusTestApi);
                 }
             }
-        } catch (Exception e) {
+        } catch (JsonParseException e) {
+            // JsonParseException 예외 처리
+            e.printStackTrace();
+        } catch (IOException e) {
+            // IOException 예외 처리
             e.printStackTrace();
         }
         return bustestApiList;
@@ -142,7 +149,6 @@ public class BusTestService {
 
     //버스 번호와 몇 정거장 남았는지를 DB에 조회해서 현재 위치 가져오기
     public BustestApi findPresentLocation(BustestApi bustestApi) {
-        System.out.println(bustestApi.toString());
         BusTest findBusTest = busTestRepository.findByRouteNoAndStationIdAndRouteId(bustestApi.getRouteNo(), bustestApi.getStationId(), bustestApi.getRouteId());
         List<BusTest> ListBusTest = busTestRepository.findByRouteNoAndRouteId(bustestApi.getRouteNo(), bustestApi.getRouteId());
         int temp = 0;
