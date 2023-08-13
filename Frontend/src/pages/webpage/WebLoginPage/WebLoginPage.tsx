@@ -15,7 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { setToken,setIsUserIn, WebState } from '@/store/slice/web-slice';
+import { setToken,setIsUserIn, WebState, setLoginUser, LoginData } from '@/store/slice/web-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { webAPI } from '@/store/api/api';
 import webSlice from '@/store/slice/web-slice';
@@ -43,12 +43,18 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
           webAPI
       .post(`/user/login`,loginid)
       .then((response)=>{
-        dispatch(setToken(response.data.data.accessToken))
-        dispatch(setIsUserIn())
-        console.log('로그인성공')
-        console.log(webData.Token)
-        console.log(webData.isUserIn)
-        navigate('/web/')
+        if( response.data.code == '200'){
+          dispatch(setToken(response.data.data.accessToken))
+          dispatch(setIsUserIn({ isLogin : true}));
+          // dispatch(setLoginUser(loginData));
+          console.log('로그인성공')
+          console.log(webData.Token)
+          console.log(webData.isUserIn)
+          navigate('/web/')
+        }
+        else {
+          alert("로그인에 실패했습니다.");
+        }
       })
       .catch((error)=>{
         console.log(loginid)

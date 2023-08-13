@@ -16,7 +16,7 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import React from 'react'
 import Button from '@mui/joy/Button';
-import { setIsUserIn, user } from 'store/slice/web-slice'
+import { setIsUserIn } from 'store/slice/web-slice'
 import kioskSlice, { checkMaster } from '@/store/slice/kiosk-slice';
 import { KioskState } from '@/store/slice/kiosk-slice';
 import { useSelector, useDispatch } from "react-redux";
@@ -30,8 +30,6 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
       return state.kiosk;
     }
   );
-
-  const [userdata,setUser] = useState<user>();
 
   const dispatch = useDispatch();
 
