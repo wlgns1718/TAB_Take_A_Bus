@@ -262,6 +262,7 @@ public class UserController {
             response.addCookie(cookie);
             Map<String,String> data = new HashMap<>();
             data.put("accessToken",accessToken);
+            data.put("role","USER");
             resultMap.put("data",data);
             resultMap.put("code", "200");
             resultMap.put("msg","카카오 로그인 성공");
