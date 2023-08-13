@@ -9,6 +9,7 @@
 .web-header-logo{
   width: 150px;
   margin: 0 20px;
+  cursor: pointer;
 }
 .web-header-logo-img{
   width: 150px;
@@ -24,4 +25,11 @@
   display: flex;
   justify-content: space-evenly;
   flex : 1 ;
+  padding: 15px 25px;
+  text-align: center;
+  display: inline-block;
+}
+
+#navitems{
+  font-family:'Noto Sans KR', sans-serif;
 }

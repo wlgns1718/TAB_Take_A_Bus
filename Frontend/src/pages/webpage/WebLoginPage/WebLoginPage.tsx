@@ -104,14 +104,16 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
             }
           />
         </FormControl>
+        <div style={{display:"flex",flexDirection:"column"}}>
         <Button onClick={login} variant='solid' style={{marginBottom:"20px",marginTop:"20px"}}>로그인</Button>
-        <Button variant='outlined' onClick={()=>{navigate('/web/signup')}} style={{marginBottom:"20px"}}>회원가입</Button>
+        <a  href={`https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`}>
+          <img style={{width:"300px"}} src="/kakaologin.png?url" alt="" />
+         </a>
+        <Button variant='outlined' onClick={()=>{navigate('/web/signup')}} style={{marginBottom:"30px",marginTop:"10px"}}>회원가입</Button>
+        </div>
 
          </div>
-
-         <a href={`https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`}>
-          카카오로그인
-         </a>
+      
         </div>
       </div>
      
