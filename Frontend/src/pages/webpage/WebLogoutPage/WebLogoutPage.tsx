@@ -15,7 +15,7 @@ export const WebLogoutPage: FC<WebLogoutPageProps> = (props) => {
     return state.web
   })
   useEffect(()=>{ 
-    dispatch(setIsUserIn())
+    dispatch(setIsUserIn(false))
     const header = 
     webAPI.delete(`/user/logout`,)
     dispatch(setToken(null))

@@ -1,32 +1,27 @@
 import { FC, useState, useEffect, useRef } from "react";
-import { WebBoardPostPageProps } from ".";
+import { WebBoardUpdatePageProps } from ".";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button, Input } from "@mui/joy";
-import Option from "@mui/joy/Option";
-import Select from "@mui/joy/Select";
-import "./WebBoardPostPage.css";
 import { boardAPI, noticeAPI } from "@/store/api/api";
-import { BOARD_ENG, WebState } from "@/store/slice/web-slice";
+import {
+  BOARD_ENG,
+  WebState,
+} from "@/store/slice/web-slice";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
+export const WebBoardUpdatePage: FC<WebBoardUpdatePageProps> = (props) => {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const navigate = useNavigate();
 
-  const options: string[] = ["공지사항", "건의사항", "칭찬합니다", "불만사항"];
+  const params = useParams();
 
   const data: WebState = useSelector((state: { web: WebState }) => {
     return state.web;
   });
-
-  const handleCategoryChange = (value) => {
-    setCategory(value);
-  };
-
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
   };
@@ -39,6 +34,8 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
     navigate(-1);
   };
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
     if (!data.isUserIn) {
       alert("로그인이 필요한 기능입니다");
@@ -49,9 +46,37 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
       navigate(-1);
       return;
     }
+    setCategory(params.category);
+    if (params.category == "공지사항") {
+      noticeAPI
+        .get(`detail/${params.postId}`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.code == "200") {
+            setTitle(response.data.data.title);
+            setContent(response.data.data.content);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      boardAPI
+        .get(`${params.postId}`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.code == "200") {
+            setTitle(response.data.data.title);
+            setContent(response.data.data.content);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, []);
 
-  const postPost = () => {
+  const updatePost = () => {
     if (!category) {
       alert("말머리를 선택해주세요");
       return;
@@ -82,8 +107,8 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
     // 머리말이 공지사항이면 noticeAPI 아니면 게시글
     if (category == "공지사항") {
       noticeAPI
-        .post(
-          "write",
+        .put(
+          `modify/${params.postId}`,
           {
             title: `${sendTitle}`,
             context: `${sendContent}`,
@@ -96,12 +121,18 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
         )
         .then((res) => {
           console.log(res.data);
+					if(res.data.code == 200){
+						alert("공지사항이 정상적으로 수정되었습니다")
+					}
           navigate(-1);
+        })
+        .catch((error) => {
+          console.log(error);
         });
     } else {
       boardAPI
-        .post(
-          "",
+        .put(
+          `${params.postId}`,
           {
             title: `${sendTitle}`,
             content: `${sendContent}`,
@@ -115,7 +146,13 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
         )
         .then((res) => {
           console.log(res.data);
+					if(res.data.code == 200){
+						alert("게시글이 정상적으로 수정되었습니다");
+					}
           navigate(-1);
+        })
+        .catch((error) => {
+          console.log(error);
         });
     }
   };
@@ -131,29 +168,8 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
   return (
     <div {...props}>
       <div>
-        <div style={{ textAlign: "center", fontSize: 30 }}>게시판 작성</div>
+        <div style={{ textAlign: "center", fontSize: 30 }}>게시글 수정</div>
         <div>
-          <Select
-            className="board-select"
-            id="category"
-            color="primary"
-            placeholder="말머리 선택"
-            size="md"
-          >
-            {options.map((op, index) => {
-              return data.loginData?.role == "USER" && op == "공지사항" ? (
-                ""
-              ) : (
-                <Option
-                  value={op}
-                  key={index}
-                  onClick={() => handleCategoryChange(op)}
-                >
-                  {op}
-                </Option>
-              );
-            })}
-          </Select>
           <table className="tb_data tb_write">
             <tbody>
               <tr>
@@ -180,16 +196,10 @@ export const WebBoardPostPage: FC<WebBoardPostPageProps> = (props) => {
                   <p>{content.valueOf().length}/1000</p>
                 </td>
               </tr>
-              {/* <tr>
-            <th>첨부파일</th>
-            <td colSpan={3}>
-              <input />
-            </td>
-          </tr> */}
             </tbody>
           </table>
           <div className="post-bottom-buttons">
-            <Button onClick={postPost}>등록</Button>
+            <Button onClick={updatePost}>수정</Button>
             <Button onClick={backToList}>취소</Button>
           </div>
         </div>
