@@ -10,10 +10,8 @@ export type CommentData = {
 };
 
 export type LoginData = {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
+  id: string | null;
+  role: string | null;
 };
 
 export type BoardData = {
@@ -71,7 +69,10 @@ const initialState: WebState = {
   selectedNoticeId: null,
   selectedPostId: null,
   isUserIn: false,
-  loginData: null,
+  loginData: {
+    id: null,
+    role : null
+  },
 }; 
 
 const webSlice = createSlice({
@@ -79,13 +80,21 @@ const webSlice = createSlice({
   initialState,
   reducers: {
     setIsUserIn(state, action){
-      state.isUserIn = action.payload.isLogin
+      state.isUserIn = action.payload
     },
     setToken(state, action) {
       state.Token = action.payload;
     },
     setLoginUser(state, action) {
       state.loginData = action.payload.loginData;
+    },
+    setLogoutUser(state){
+      state.loginData = {
+        id: null,
+        role: null,
+      };
+      state.Token = null
+      state.isUserIn = false
     },
     changeSelectedNoticeId(state, action) {
       state.selectedNoticeId = action.payload;
@@ -138,6 +147,7 @@ export const {
   deleteOneBoard,
   setToken,
   setLoginUser,
+  setLogoutUser,
 } = webSlice.actions;
 
 export default webSlice;
