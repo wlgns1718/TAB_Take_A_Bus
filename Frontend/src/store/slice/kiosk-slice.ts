@@ -100,8 +100,8 @@ const kioskSlice = createSlice({
           el.isVulnerable = true;
           el.passengerNumber += 1;
           el.isStopHere = true;
-          return el;
         }
+        return el;
       });
     },
     checkMaster(state, action) {

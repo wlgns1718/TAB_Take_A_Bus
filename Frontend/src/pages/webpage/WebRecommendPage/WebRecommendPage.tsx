@@ -2,7 +2,8 @@ import { FC, useEffect, useState } from "react";
 import { WebHeader } from "@/components/web/WebHeader";
 import { WebRecommendPageProps } from ".";
 import axios from "axios";
-import { Option, Select } from "@mui/joy";
+import { Button, Option, Select } from "@mui/joy";
+import { webAPI } from "@/store/api/api";
 
 export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   // 도시코드 리스트
@@ -14,9 +15,11 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   const [routes, setRoutes] = useState([]);
 
   const [selectedCity, setSelectedCity] = useState({
-    citycode: "11",
-    cityname: "서울특별시",
+    citycode: null,
+    cityname: null,
   });
+
+  const [isSelectCity, setIsSelectCity] = useState(false);
   const [selectedRouteId, setSelectedRouteId] = useState({
     endnodenm: "세종고속시외버스터미널",
     endvehicletime: 2300,
@@ -28,6 +31,10 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   });
 
   useEffect(() => {
+    if(selectedCity.citycode != null)
+      setIsSelectCity(true);
+    else
+      setIsSelectCity(false);
     axios
       .get(
         `https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getCtyCodeList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&_type=json`
@@ -50,6 +57,13 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
     }
   }, [selectedCity]);
 
+  const getRecommend = () =>{
+    // axios
+    webAPI.get(`/trip/{cityCode}/{routeId}/{tripType}`).then((response) => {
+      console.log(response.data);
+    });
+  }
+
   const handleCityChange = (value) => {
     console.log(value);
     setSelectedCity(value);
@@ -57,7 +71,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   const handleRouteChange = (value) => {
     console.log(value);
     setSelectedRouteId(value);
-  };
+  }
 
   return (
     <div {...props}>
@@ -81,6 +95,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
           size="lg"
           placeholder="버스 노선 선택"
           className="select-bus-route"
+          disabled={!isSelectCity}
         >
           {routes.map((op, index) => {
             return (
@@ -95,6 +110,13 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
             );
           })}
         </Select>
+        <Button
+          onClick={() => {
+            getRecommend();
+          }}
+        >
+          ddd
+        </Button>
       </div>
     </div>
   );
