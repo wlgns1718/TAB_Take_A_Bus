@@ -9,7 +9,6 @@
 .web-header-logo{
   width: 150px;
   margin: 0 20px;
-  cursor: pointer;
 }
 .web-header-logo-img{
   width: 150px;
@@ -25,19 +24,4 @@
   display: flex;
   justify-content: space-evenly;
   flex : 1 ;
-  padding: 15px 25px;
-  text-align: center;
-  display: inline-block;
-}
-
-#navitems{
-  font-family:'Noto Sans KR', sans-serif;
-}
-
-.backmainimg{
-  background: url(/public/visual_businfo.jpg) no-repeat center;;
-  min-width: 768px;
-  min-height: 230px;
-  background-size: cover;
-  margin-bottom: 30px;
 }

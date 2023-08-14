@@ -1,5 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export type user = {
+  email :string;
+  id : string;
+  name: string;
+  password :string;
+  role: string;
+}
+
 export type CommentData = {
   id: number;
   boardId: number;
@@ -8,10 +16,12 @@ export type CommentData = {
   createTime: number[];
 };
 
-export type LoginData = {
-  id: string | null;
-  role: string | null;
-};
+
+export type loginuser = {
+  id : string;
+  password:string;
+  token : string;
+}
 
 export type BoardData = {
   id: number;
@@ -48,7 +58,6 @@ export enum BOARD_ENG {
 }
 
 export interface WebState {
-  selectedBoard : string;
   noticeData: NoticeData[];
   noticeDetailData: NoticeDetailData | null;
   boardData: BoardData[];
@@ -56,49 +65,31 @@ export interface WebState {
   Token: string | null;
   selectedNoticeId: number | null;
   selectedPostId: number | null;
-  isUserIn: boolean;
-  loginData: LoginData | null;
+  isUserIn:boolean;
 }
 
 const initialState: WebState = {
-  selectedBoard: '공지사항',
   noticeData: [],
   noticeDetailData: null,
   boardData: [],
   boardDetailData: null,
-  Token: "",
+  Token:
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE3MzIwNTcsImV4cCI6MTY5MTczNTY1N30.1tAqLkg3IDExjUP6fecr5Gm-DD-ukwlFJWtYSCbbidc",
   selectedNoticeId: null,
   selectedPostId: null,
-  isUserIn: false,
-  loginData: {
-    id: null,
-    role: null,
-  },
-};
+  isUserIn :false,
+
+}
 
 const webSlice = createSlice({
   name: "web",
   initialState,
   reducers: {
-    setIsUserIn(state, action) {
-      state.isUserIn = action.payload;
+    setIsUserIn(state){
+      state.isUserIn = !state.isUserIn
     },
     setToken(state, action) {
       state.Token = action.payload;
-    },
-    setLoginUser(state, action) {
-      state.loginData = action.payload.loginData;
-    },
-    setLogoutUser(state) {
-      state.loginData = {
-        id: null,
-        role: null,
-      };
-      state.Token = null;
-      state.isUserIn = false;
-    },
-    changeSelectedBoard(state, action) {
-      state.selectedBoard = action.payload;
     },
     changeSelectedNoticeId(state, action) {
       state.selectedNoticeId = action.payload;
@@ -141,7 +132,6 @@ const webSlice = createSlice({
 
 export const {
   setIsUserIn,
-  changeSelectedBoard,
   changeSelectedNoticeId,
   changeSelectedPostId,
   saveBoardData,
@@ -151,8 +141,6 @@ export const {
   deleteOneNotice,
   deleteOneBoard,
   setToken,
-  setLoginUser,
-  setLogoutUser,
 } = webSlice.actions;
 
 export default webSlice;

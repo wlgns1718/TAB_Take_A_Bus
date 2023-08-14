@@ -16,7 +16,6 @@ import { Button } from "@mui/joy";
 
 import './WebMainPage.css'
 import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
-import { WebBoardUpdatePage } from "../WebBoardUpdatePage";
 
 export const WebMainPage: FC<WebMainPageProps> = (props) => {
   return (
@@ -25,7 +24,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
       <div className="web-body">
         <Routes>
           <Route
-            path="/home"
+            path="/"
             element={
               <div>
                 <h1>Take A Bus</h1>
@@ -58,7 +57,8 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
           <Route path="board/">
             <Route path="" element={<WebBoardPage />}></Route>
             <Route path="post" element={<WebBoardPostPage />}></Route>
-            <Route path="update/:category/:postId" element={<WebBoardUpdatePage />}></Route>
+            {/* <Route path="detail/:postId" element={<WebBoardDetailPage />}></Route>
+            <Route path="notice/:noticeId" element={<WebNoticeDetailPage />}></Route> */}
           </Route>
           <Route path="recommend" element={<WebRecommendPage />}></Route>
           <Route path="survey" element={<WebSurveyPage />}></Route>
