@@ -269,7 +269,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
                               })
                             );
                             alert("성공적으로 회원가입 되셨습니다");
-                            navigate("/web/home");
+                            navigate("/");
                           }
                         })
                         .catch((error) => {

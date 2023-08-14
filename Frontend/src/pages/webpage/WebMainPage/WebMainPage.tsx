@@ -25,7 +25,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
       <div className="web-body">
         <Routes>
           <Route
-            path="/home"
+            path="/"
             element={
               <div>
                 <h1>Take A Bus</h1>
