@@ -9,7 +9,6 @@
     font-family:'Noto Sans KR', sans-serif;
     background-color: rgba(230, 225, 225, 0.466);
     border-radius: 3%;
-    min-width: 700px;
 }
 .Mainin{
     background-color: white;
@@ -37,3 +36,6 @@
     flex-direction: column;
     min-width: 300px;
 }
+
+
+

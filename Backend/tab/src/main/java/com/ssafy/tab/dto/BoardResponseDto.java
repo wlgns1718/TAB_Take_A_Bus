@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class BoardDto {
+public class BoardResponseDto {
     
     /*
     id : 게시글 id
@@ -26,49 +26,37 @@ public class BoardDto {
      */
 
     Long id;
-    Long userId;
-    String userName;
+    String userId;
     String title;
     String content;
     LocalDateTime createTime;
     Sort sort;
-    List<CommentDto> commentDtoList;
+    List<CommentResponseDto> commentResponseDtoList;
 
     //boardDto에 commentDto를 추가 및 삭제하는 메서드
-    //게시물을 자세히 보기 했을 때마 추가.
-    public void addComment(CommentDto commentDto) {
-        this.commentDtoList.add(commentDto);
+    //게시물을 자세히 보기 했을 때 추가.
+    public void addComment(CommentResponseDto commentResponseDto) {
+        this.commentResponseDtoList.add(commentResponseDto);
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public BoardDto(Long id, Long userId, String userName, String title, String content, LocalDateTime createTime, Sort sort) {
+    public BoardResponseDto(Long id, String userId, String title, String content, LocalDateTime createTime, Sort sort) {
         this.id = id;
         this.userId = userId;
-        this.userName = userName;
         this.title = title;
         this.content = content;
         this.createTime = createTime;
         this.sort = sort;
-        this.commentDtoList = new ArrayList<>();
     }
 
-    public static BoardDto toDto(Board board) {
-        return BoardDto.builder()
+    public static BoardResponseDto toDto(Board board) {
+        return BoardResponseDto.builder()
                 .id(board.getId())
-                .userId(board.getUser().getId())
-                .userName(board.getUser().getName())
+                .userId(board.getUser().getUserId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .createTime(board.getCreateTime())
                 .sort(board.getSort())
-                .commentDtoList(new ArrayList<>())
+                .commentResponseDtoList(new ArrayList<>())
                 .build();
     }
 }
