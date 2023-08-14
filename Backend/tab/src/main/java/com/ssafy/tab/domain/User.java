@@ -51,7 +51,6 @@ public class User {
     @Column(name = "ROLE")
     private Role role;
 
-
     @Override
     public String toString() {
         return "User{" +
@@ -69,13 +68,6 @@ public class User {
     public User(String userId, String userPw, String name, String email, Role role) {
         this.userId = userId;
         this.userPw = userPw;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-    }
-
-    public User(String userId, String name, String email, Role role) {
-        this.userId = userId;
         this.name = name;
         this.email = email;
         this.role = role;
