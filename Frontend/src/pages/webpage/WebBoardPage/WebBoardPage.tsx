@@ -227,6 +227,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         {boards.map((name, index) => {
           return (
             <div
+            style={{ cursor:"pointer"}}
               className={`board-header-item ${
                 data.selectedBoard == name ? "board-selected" : null
               }`}

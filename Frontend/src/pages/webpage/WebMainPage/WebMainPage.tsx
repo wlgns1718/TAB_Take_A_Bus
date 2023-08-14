@@ -12,7 +12,7 @@ import { Web404Page } from "../Web404Page";
 import { Routes, Route } from "react-router-dom";
 import {  Grid } from "@mui/material";
 import { Button } from "@mui/joy";
-
+import Kakaopage from "../Kakaopage";
 
 import './WebMainPage.css'
 import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
@@ -53,6 +53,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
               </div>
             }
           ></Route>
+          <Route path="kakao" element={<Kakaopage />}></Route>
           <Route path="signup" element={<WebSignupPage />}></Route>
           <Route path="login" element={<WebLoginPage />}></Route>
           <Route path="board/">

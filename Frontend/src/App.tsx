@@ -3,7 +3,6 @@ import { WebMainPage } from "./pages/webpage/WebMainPage";
 import { MobileMain } from "./pages/mobile/MobileMain";
 import { BusInfomationPage } from "./pages/kiosk/BusInfomationPage";
 import { AuthPage } from "./pages/kiosk/AuthPage";
-import Kakaopage from "./pages/webpage/Kakaopage"
 import "./App.css";
 
 function App() {
@@ -17,7 +16,6 @@ function App() {
         </div>
         <Routes>
           <Route path="/*" element={<WebMainPage />}></Route>
-          <Route path="/oauth/kakao" element={<Kakaopage/>}></Route>
           <Route path="/mobile/*" element={<MobileMain />}></Route>
           <Route path="/kiosk">
             <Route path="info/:id" element={<BusInfomationPage />}></Route>

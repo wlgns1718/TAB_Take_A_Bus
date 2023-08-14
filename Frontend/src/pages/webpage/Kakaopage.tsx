@@ -11,17 +11,14 @@ function Kakaopage () {
         axios.post('http://i9d111.p.ssafy.io:8000/tab/user/login/kakao',{code:getkakao})
         .then((response)=>{
             console.log(response)
-            navigate('/web/home')
+            navigate('/')
         }).catch((error)=>{
             console.log(error)
+            navigate('/')
         })
     })
     return(
         <div>
-            <h1> 로그인에 성공하였습니다.</h1>
-            <button onClick={()=>{
-                navigate('/')
-            }}>홈화면으로</button>
         </div>
         
 
