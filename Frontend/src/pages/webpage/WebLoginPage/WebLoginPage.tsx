@@ -65,7 +65,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
           console.log("로그인성공");
           navigate("/web/home");
         } else {
-          alert("로그인에 실패했습니다.");
+          alert(response.data.msg)
         }
       })
       .catch((error) => {
