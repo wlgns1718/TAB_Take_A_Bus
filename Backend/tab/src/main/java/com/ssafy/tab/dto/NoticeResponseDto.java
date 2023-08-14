@@ -18,9 +18,9 @@ public class NoticeResponseDto { // 공지사항 응답에 사용되는 DTO
     String userName;
     String title;
     String content;
-    Timestamp createTime;
+    LocalDateTime createTime;
 
-    public NoticeResponseDto(Long id,String userName, String title, String content, Timestamp createTime) {
+    public NoticeResponseDto(Long id,String userName, String title, String content, LocalDateTime createTime) {
         this.id = id;
         this.userName = userName;
         this.title = title;

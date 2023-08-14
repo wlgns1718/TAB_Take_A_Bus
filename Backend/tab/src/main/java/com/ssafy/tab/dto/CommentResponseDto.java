@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class CommentDto {
+public class CommentResponseDto {
 
     /*
     id : 댓글 id
@@ -20,12 +20,12 @@ public class CommentDto {
      */
 
     Long id;
-    Long userId;
+    String userId;
     Long boardId;
     String content;
     LocalDateTime createTime;
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -37,10 +37,10 @@ public class CommentDto {
         this.createTime = createTime;
     }
 
-    public static CommentDto toDto(Comment comment) {
-        return CommentDto.builder()
+    public static CommentResponseDto toDto(Comment comment) {
+        return CommentResponseDto.builder()
                 .id(comment.getId())
-                .userId(comment.getUser().getId())
+                .userId(comment.getUser().getUserId())
                 .boardId(comment.getBoard().getId())
                 .content(comment.getContent())
                 .createTime(comment.getCreateTime())

@@ -42,10 +42,10 @@ public class EmailService  {
         String html = null;
         switch (type) {
             case "register":
-                html = "<h1>4UrTravel : 이메일 인증 코드 :"+code+"입니다.</h1>";
+                html = "<h1>Tab 이메일 인증 코드 :"+code+"입니다.</h1>";
                 break;
-            case "findPw":
-                html = "<h1>4UrTravel : 임시 비밀번호는 "+code+"입니다.</h1>";
+            case "tempPw":
+                html = "<h1>Tab 임시 비밀번호는 "+code+"입니다.</h1>";
                 break;
         }
         return html;
@@ -62,12 +62,12 @@ public class EmailService  {
             case "register":
                 code = makeCode(6);
                 html = makeHtml(type, code);
-                subject = "4UrTravel - 이메일인증코드 입니다.";
+                subject = "Tab - 이메일인증코드 입니다.";
                 break;
-            case "findPw":
+            case "tempPw":
                 code = makeCode(10);
                 html = makeHtml(type, code);
-                subject = "4UrTravel - 임시 비밀번호 입니다.";
+                subject = "Tab - 임시 비밀번호 입니다.";
                 break;
         }
 

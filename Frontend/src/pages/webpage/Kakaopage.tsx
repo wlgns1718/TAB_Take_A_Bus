@@ -8,9 +8,10 @@ function Kakaopage () {
     const navigate = useNavigate();
     useEffect(()=>{
         const getkakao = new URL(window.location.href).searchParams.get('code')
-        axios.post('http://i9d111.p.ssafy.io:8000/tab/user/login/kakao',getkakao)
+        axios.post('http://i9d111.p.ssafy.io:8000/tab/user/login/kakao',{code:getkakao})
         .then((response)=>{
             console.log(response)
+            navigate('/web/home')
         }).catch((error)=>{
             console.log(error)
         })
