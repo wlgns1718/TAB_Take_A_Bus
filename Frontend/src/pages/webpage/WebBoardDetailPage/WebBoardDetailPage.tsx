@@ -264,7 +264,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
           ></div>
         </div>
       </Container>
-      {data.loginData.id == data.boardDetailData.userId ? (
+      {data.loginData?.id == data.boardDetailData?.userId ? (
         <Container maxWidth="xl">
           <div className="bottom-buttons">
             <Button

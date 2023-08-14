@@ -102,7 +102,7 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
           ></div>
         </div>
       </Container>
-      {data.loginData.id == data.noticeDetailData.userName ? (
+      {data.loginData?.id == data.noticeDetailData?.userName ? (
         <Container maxWidth="xl">
           <div className="bottom-buttons">
             <Button
