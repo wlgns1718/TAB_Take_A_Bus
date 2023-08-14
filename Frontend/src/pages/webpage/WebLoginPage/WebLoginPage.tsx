@@ -63,7 +63,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
             })
           );
           console.log("로그인성공");
-          navigate("/web/home");
+          navigate("/home");
         } else {
           alert(response.data.msg)
         }
@@ -158,7 +158,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
                 <Button
                   variant="outlined"
                   onClick={() => {
-                    navigate("/web/signup");
+                    navigate("/signup");
                   }}
                   style={{ marginBottom: "30px", marginTop: "10px" }}
                 >

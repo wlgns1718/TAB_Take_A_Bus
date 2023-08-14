@@ -105,7 +105,9 @@ const kioskSlice = createSlice({
       });
     },
     checkMaster(state, action) {
-      state.busStopId = action.payload;
+      state.busStopId = action.payload.busStopId;
+      state.cityCode = action.payload.cityCode;
+      state.stationName = action.payload.stationName;
       console.log(state.busStopId);
     },
   },
