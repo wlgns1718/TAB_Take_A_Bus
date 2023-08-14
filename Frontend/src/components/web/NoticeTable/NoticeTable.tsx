@@ -66,6 +66,7 @@ export const NoticeTable: FC<NoticeTableProps> = ({ pages, currentPage }) => {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   onClick={(e) => {
+                    window.scrollTo(0,0)
                     dispatch(changeSelectedNoticeId(row.id));
                   }}
                 >
