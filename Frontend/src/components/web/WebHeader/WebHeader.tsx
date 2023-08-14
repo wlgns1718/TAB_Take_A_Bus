@@ -21,7 +21,7 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
   const [isUserIn, setIsUserIn] = useState(webData.isUserIn);
   useEffect(() => {
     setIsUserIn(webData.isUserIn);
-    
+    console.log(location.pathname)
   }, [webData.isUserIn]);
   return (
     <div {...props}>
@@ -69,7 +69,7 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
         </div>
       
       </div>
-      <div className={location.pathname== 'web/home/' ? '' : "backmainimg"}>
+      <div className={location.pathname == '/web/home' ? '' : "backmainimg" }>
       </div>
     
     </div>

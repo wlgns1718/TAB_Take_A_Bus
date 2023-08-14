@@ -23,6 +23,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { webAPI } from "@/store/api/api";
 import { setToken } from "store/slice/web-slice";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+
 
 export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
   const kiosdata: KioskState = useSelector(
@@ -66,18 +69,23 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
   const [master, setMaster] = useState<boolean>(false);
   const [masterCheck, setMasterCheck] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-
+  const [emailCode,setEmailCode] = useState<string>('jhqwjkf  h2urh23dunirhc2ip3urhjkwebfjwehbfjkhWEBFYI2EG ROIUN3YRIHG23RHJKQWEBFJLHQWEGFLUYE  2GOIY2EGFILQUFHKQEJFGqeiy');
+  const [emailCodeChecker,setEmailCodeChecker] = useState<string>('')
+  const [showModal,setShowModal] = useState<boolean>(false);
   const [emailMsg, setEmailMsg] = useState<string>("");
   const [pwdMsg, setPwdMsg] = useState<string>("");
   const [confirmPwdMsg, setConfirmPwdMsg] = useState<string>("");
   const [IdMsg, setIdMsg] = useState<string>("");
   const [masterMsg, setMasterMsg] = useState<string>("");
-
+  const [emailCheckMsg,setEmailCheckMsg] = useState<string>("인증번호를 입력해주세요.");
+  
   // 1-1에 잡아뒀던 유효성 검사 함수로 정리하기
   const isEmailValid: boolean = validateEmail(email);
   const isPwdValid: boolean = validatePwd(password);
   const isConfirmPwd: boolean = password === confirmPwd;
   const isIdValid: boolean = validateId(Id);
+  const [emailcheck,setEmailcheck] = useState<boolean>(false);
+  const [isSameId,setIsSameId] = useState<boolean | null>(null)
 
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
@@ -133,8 +141,47 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
     }
   };
 
+
+  const onEmailKey = (e) =>{
+    setEmailCodeChecker(e.target.value)
+  }
+
+  const onChangeEmailCheck = () => {
+    if (emailCodeChecker == emailCode) {
+      setEmailcheck(true)
+      alert('인증되었습니다.')
+      setEmailCheckMsg("인증되었습니다.");
+      console.log(emailCodeChecker)
+      console.log(emailCode)
+      
+    } else {
+      setEmailCheckMsg("인증번호가 일치하지 않습니다.");
+    }
+  };
+
+  const sendEmailCheck = () =>{
+    const maildata = {
+      email : email,
+      type : "register",
+      userId: "string"
+    }
+    webAPI.post('/user/mail',maildata)
+    .then((response)=>{
+      setEmailCode(response.data.data)
+      console.log(response)
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+    setShowModal(true)
+    alert('작성하신 email로 인증번호가 발급되었습니다.')
+  }
   const isAllValid: boolean =
-    isEmailValid && isConfirmPwd && isPwdValid && isIdValid;
+  isEmailValid && isConfirmPwd && isPwdValid && isIdValid&&emailcheck &&isSameId;
+  /////style 
+  
+
+ 
 
   return (
     <div {...props}>
@@ -151,12 +198,13 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
             Take A Bus에 오신것을 환영합니다.
           </h5>
           <h2>필수정보</h2>
-          <hr style={{ width: "500px" }} />
+          <hr style={{ width: "600px" }} />
         </div>
         <div className="signUpMid">
           <div className="signUpMidLeft">
             <p>
               <span style={{ color: "red" }}>*</span>이메일
+              {showModal ? <div style={{minHeight:"50px"}}></div> : null}
             </p>
             <p>
               <span style={{ color: "red" }}>*</span>성명
@@ -179,6 +227,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               variant="standard"
               onChange={onChangeEmail}
             />
+            {showModal ? <CheckEmailBox check={emailcheck} text={emailCheckMsg} change={onEmailKey}  emailConfirm={onChangeEmailCheck} /> : null}
             <TextField
               style={{ height: "55px", minWidth: "350px" }}
               helperText={"성명을입력해주세요."}
@@ -187,12 +236,15 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               variant="standard"
             />
             <TextField
+              {...isSameId==false ? {error:true} : {error:false} }
               style={{ height: "55px" }}
               helperText={`${IdMsg}`}
               id="Id"
               variant="standard"
               onChange={onChangeId}
             />
+            
+
             <PasswordBox
               pass={onChangePass}
               helptext={`${pwdMsg}`}
@@ -203,6 +255,23 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               helptext={`${confirmPwdMsg}`}
               id={"passconf"}
             />
+          </div>
+          <div style={{display:'flex',flexDirection:'column'}}>
+            <button onClick={isEmailValid ? sendEmailCheck : ()=>{alert('올바른 이메일을 입력해주세요.')}} style={{marginLeft:'20px'}}>이메일 인증</button>
+            <div style={showModal ? {minHeight:"145px"} : {minHeight:"80px"} }></div>
+            <button onClick={()=>{
+              webAPI.get(`user/checkId/${Id}`)
+              .then((response)=>{
+                console.log(response)
+                if(response.data.code == 200){
+                  setIdMsg("사용가능한 아이디입니다.")
+                  setIsSameId(true)
+                }else if(response.data.code == 401){
+                  setIdMsg("중복된 아이디입니다.")
+                 setIsSameId(false)
+                }
+              })
+            }} style={{marginLeft:'20px'}}>ID 중복확인</button>
           </div>
         </div>
 
@@ -222,7 +291,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
                   let role = "";
                   if (master) {
                     role = "MANAGER";
-                    if (masterCheck) {
+                    if (!masterCheck) {
                       alert("마스터키가 옳지 않습니다.");
                       return;
                     }
@@ -347,4 +416,21 @@ function PasswordBox(props) {
       </FormHelperText>
     </FormControl>
   );
+}
+
+
+function CheckEmailBox(props) {
+  return(
+    <div>
+  <TextField
+    {...props.check==false ? {error:true} : {error:false} }
+    style={{height: "55px" }}
+    helperText={`${props.text}`}
+    id="Id"
+    variant="standard"
+    onChange={props.change}
+  />
+  <button onClick={props.emailConfirm}>인증하기</button>
+  </div>
+  )
 }
