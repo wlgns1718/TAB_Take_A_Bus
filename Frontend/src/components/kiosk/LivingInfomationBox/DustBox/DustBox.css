@@ -23,6 +23,9 @@
   font-size: 40px;
   text-align: center;
 }
+.dust-icon{
+  width: 100px;
+}
 
 .measurement-time{
   text-align: right;

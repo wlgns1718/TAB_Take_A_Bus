@@ -29,6 +29,8 @@ type BusStopId = string | null;
 export interface KioskState {
   cityCode: number;
   stationName: string;
+  stationLat:number | null;
+  stationLon:number | null;
   busStopId: BusStopId;
   busData: BusStoreData[];
   nowCarouselPage: number;
@@ -41,6 +43,8 @@ const initialState: KioskState = {
   cityCode: 22,
   busStopId: "DGB7001004100",
   stationName: "약령시앞",
+  stationLat: 35.86897,
+  stationLon: 128.5936,
   masterkey: "123123123",
   busData: [
     {
@@ -108,6 +112,8 @@ const kioskSlice = createSlice({
       state.busStopId = action.payload.busStopId;
       state.cityCode = action.payload.cityCode;
       state.stationName = action.payload.stationName;
+      state.stationLat = action.payload.stationLat;
+      state.stationLon = action.payload.stationLon;
       console.log(state.busStopId);
     },
   },

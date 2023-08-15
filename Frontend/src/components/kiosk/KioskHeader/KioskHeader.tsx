@@ -1,6 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { KioskHeaderProps } from "./KioskHeader.props";
 import "./KioskHeader.css";
+import { useSelector } from "react-redux";
+import { KioskState } from "@/store/slice/kiosk-slice";
 
 export const fillZero = (num: number): string => {
   return num.toString().padStart(2, "0");
@@ -11,8 +13,14 @@ export const KioskHeader: FC<KioskHeaderProps> = (props) => {
   const hour = time.getHours();
   const min = time.getMinutes();
 
-  const busStop = "우리집 앞";
+  const data: KioskState = useSelector((state: { kiosk: KioskState }) => {
+    return state.kiosk;
+  });
+  const [busStationName, setBusStaitionName] = useState("정류장");
   const logoURL = `/대구광역시_logo.png?url`;
+  useEffect(()=>{
+    setBusStaitionName(data.stationName)
+  }, [data.stationName])
 
   return (
     <div {...props}>
@@ -55,7 +63,8 @@ export const KioskHeader: FC<KioskHeaderProps> = (props) => {
           </div>
         </div>
         <div className="busstop-title">
-          이곳은 <span className="busstop-name">{busStop}</span> 정류장 입니다
+          이곳은 <span className="busstop-name">{busStationName}</span> 정류장
+          입니다
         </div>
       </div>
     </div>
