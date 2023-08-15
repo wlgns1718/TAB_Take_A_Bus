@@ -242,7 +242,6 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               onChange={onChangeId}
             />
             
-
             <PasswordBox
               pass={onChangePass}
               helptext={`${pwdMsg}`}

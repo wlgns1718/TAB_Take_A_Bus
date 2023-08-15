@@ -18,6 +18,12 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
   const webData = useSelector((state: { kiosk: KioskState; web: WebState }) => {
     return state.web;
   });
+
+
+
+
+  
+
   const [isUserIn, setIsUserIn] = useState(webData.isUserIn);
   useEffect(() => {
     setIsUserIn(webData.isUserIn);
@@ -69,7 +75,8 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
         </div>
       
       </div>
-      <div className={location.pathname== 'home/' ? '' : "backmainimg"}>
+      
+      <div className={location.pathname == '/' || location.pathname == '/login/' || location.pathname == '/signup/' ? '' : "backmainimg"}>
       </div>
     
     </div>
