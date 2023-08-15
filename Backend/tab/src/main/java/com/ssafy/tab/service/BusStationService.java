@@ -47,7 +47,7 @@ public class BusStationService {
 
 
     @Transactional
-    public boolean busStationData(String cityName){
+    public boolean savebusStationData(String cityName){
         int insertedRecordCount = 0; // 삽입된 레코드 수를 세는 변수
 
         try {
@@ -96,9 +96,16 @@ public class BusStationService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public String presentStationName(String stationNo) {
         BusStation busStation = busStationRepository.findById(stationNo).get();
         return busStation.getStationName();
     }
+
+    @Transactional(readOnly = true)
+    public List<BusStation> findBusStationData() {
+        List<BusStation> busStationList = busStationRepository.findAll();
+        return busStationList;
+    }
 }
+

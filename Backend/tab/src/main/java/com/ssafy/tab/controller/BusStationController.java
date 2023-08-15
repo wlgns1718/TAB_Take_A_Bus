@@ -2,6 +2,7 @@ package com.ssafy.tab.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ssafy.tab.domain.BusStation;
 import com.ssafy.tab.domain.BustestApi;
 import com.ssafy.tab.service.BusStationService;
 import com.ssafy.tab.service.BusTestService;
@@ -29,16 +30,19 @@ public class BusStationController {
     /*
     도시를 입력하면 그에 해당하는 버스 정류장을 DB에 저장해주는 REST API
      */
-    @ApiOperation(value = "도시에 해당하는 모든 버스 정류장 DB 저장", notes = "도시 이름은 한글로 CSV에 파일에 명시된 대로 작성해야 불러올 수 있습니다. /구미시", response = Map.class)
+    @ApiOperation(value = "도시에 해당하는 모든 버스 정류장 DB 저장 후 모든 정류장에 대한 정보 반환", notes = "도시 이름은 한글로 CSV에 파일에 명시된 대로 작성해야 불러올 수 있습니다. /구미시", response = Map.class)
     @GetMapping("/{cityName}")
     public ResponseEntity<Map<String, Object>> StationData(@PathVariable("cityName") @ApiParam(value = "도시 한글 이름", required = true) String cityName) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
 
         try{
-            if(busStationService.busStationData(cityName)){
+            if(busStationService.savebusStationData(cityName)){
+                List<BusStation> busStationData = busStationService.findBusStationData();
                 resultMap.put("code", "200");
                 resultMap.put("msg", "성공적으로 " +  cityName + "에 해당하는 정류장 데이터를 DB에 올렸습니다.");
+                resultMap.put("data", busStationData);
+
             }else{
                 resultMap.put("code", "500");
                 resultMap.put("msg", "해당 하는 도시의 이름을 다시 입력해주세요.");

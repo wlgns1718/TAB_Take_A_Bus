@@ -277,6 +277,8 @@ public class BusTestService {
             String getResponse = tempResponse.substring(index);
             //Json객체로 생성
 
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
