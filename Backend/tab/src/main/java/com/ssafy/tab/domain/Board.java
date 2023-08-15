@@ -3,7 +3,6 @@ package com.ssafy.tab.domain;
 import com.ssafy.tab.dto.BoardRequestDto;
 import com.ssafy.tab.dto.BoardResponseDto;
 import lombok.*;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -63,7 +62,6 @@ public class Board {
         this.sort = boardRequestDto.getSort();
         this.createTime = dateTime;
     }
-
     public static Board toEntity(BoardResponseDto boardResponseDto, User user) {
         return Board.builder()
                 .id(boardResponseDto.getId())
