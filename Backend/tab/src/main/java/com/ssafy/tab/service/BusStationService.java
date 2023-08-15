@@ -5,11 +5,13 @@ import com.opencsv.exceptions.CsvValidationException;
 import com.ssafy.tab.domain.BusStation;
 import com.ssafy.tab.repository.BusStationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -39,7 +41,8 @@ public class BusStationService {
     @Value("${spring.datasource.hikari.password}")
     private String password;
 
-    final String CSV_FILE_PATH = "src/main/resources/2022년_전국버스정류장 위치정보_데이터.csv";
+    final String CSV_FILE_PATH = "2022년_전국버스정류장 위치정보_데이터.csv";
+//    final String CSV_FILE_PATH = "src/main/resources/2022년_전국버스정류장 위치정보_데이터.csv";
     final String TABLE_NAME = "bus_station";
 
 
@@ -47,9 +50,11 @@ public class BusStationService {
     public boolean busStationData(String cityName){
         int insertedRecordCount = 0; // 삽입된 레코드 수를 세는 변수
 
-        try (
-                Connection connection = DriverManager.getConnection(url, username, password);
-                CSVReader reader = new CSVReader(new FileReader(CSV_FILE_PATH))) {
+        try {
+
+            Connection connection = DriverManager.getConnection(url, username, password);
+            ClassPathResource resource = new ClassPathResource(CSV_FILE_PATH);
+            CSVReader reader = new CSVReader(new InputStreamReader(resource.getInputStream()));
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             //미리 테이블 한 번 초기화해서 중복 제거

@@ -1,10 +1,7 @@
 package com.ssafy.tab.controller;
 
 import com.ssafy.tab.domain.User;
-import com.ssafy.tab.dto.EmailDto;
-import com.ssafy.tab.dto.UserJoinDto;
-import com.ssafy.tab.dto.UserLoginDto;
-import com.ssafy.tab.dto.UserUpdateDto;
+import com.ssafy.tab.dto.*;
 import com.ssafy.tab.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +28,7 @@ public class UserController {
     private final UserService us;
     private final EmailService es;
     private final TokenBlacklistService tokenBlacklistService;
+    private final OAuthService kakao;
 
     private int refreshExpiredMs = 1000 * 60 * 600; // 10시간
 
@@ -93,17 +91,17 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody @ApiParam(value = "로그인", required = true) UserLoginDto userLoginDto, HttpServletResponse response){
         Map<String, Object> resultMap = new HashMap<>();
-
         try{
-            Map<String, String> tokens = us.login(userLoginDto.getId(), userLoginDto.getPw());// 발행된 토큰
-            String accessToken = tokens.get("accessToken");
-            String refreshToken = tokens.get("refreshToken");
+            Map<String, String> result = us.login(userLoginDto.getId(), userLoginDto.getPw());// 발행된 토큰
+            String accessToken = result.get("accessToken");
+            String refreshToken = result.get("refreshToken");
+            String role = result.get("role");
             Cookie cookie = new Cookie("refreshToken",refreshToken);
             cookie.setMaxAge(refreshExpiredMs);
             response.addCookie(cookie);
-
             Map<String,String> data = new HashMap<>();
             data.put("accessToken",accessToken);
+            data.put("role",role);
             resultMap.put("data",data);
             resultMap.put("code", "200");
             resultMap.put("msg","로그인 성공");
@@ -143,9 +141,9 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
-    @ApiOperation(value = "로그아웃", notes = "token을 블랙리스트에 넣어서 로그아웃을 수행", response = Map.class)
+    @ApiOperation(value = "로그아웃", notes = "accessToken을 받아서 서버쪽 로그아웃을 수행", response = Map.class)
     @DeleteMapping("/logout")
-    public ResponseEntity<Map<String, Object>> logout(@RequestHeader("Authorization") @ApiParam(value = "헤더에 있는 토큰", required = true) String authorizationHeader) {
+    public ResponseEntity<Map<String, Object>> logout(@RequestHeader("Authorization") @ApiParam(value = "헤더에 있는 엑세스 토큰 (Authorization : Bearer ~)", required = true) String authorizationHeader) {
         // Authorization 헤더에서 토큰 추출
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -246,5 +244,35 @@ public class UserController {
     }
 
  */
+
+    @ApiOperation(value = "카카오 로그인", notes = "카카오에서 인증 코드를 받아와서 서버에서 처리", response = Map.class)
+    @PostMapping(value="/login/kakao")
+    public Map<String, Object> login(@RequestBody @ApiParam(value = "카카오 서버에서 인증을 받은 후 헤더에 있는 code", required = true) KakaoUserDto kakaoUserDto, HttpServletResponse response) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String code = kakaoUserDto.getCode();
+        try {
+            String access_Token = kakao.getKakaoAccessToken(code);
+            Map<String, String> userInfo = kakao.getUserInfo(access_Token);
+            String accessToken = userInfo.get("accessToken");
+            String refreshToken = userInfo.get("refreshToken");
+            Cookie cookie = new Cookie("refreshToken",refreshToken);
+            cookie.setMaxAge(refreshExpiredMs);
+            response.addCookie(cookie);
+            Map<String,String> data = new HashMap<>();
+            data.put("id", userInfo.get("id"));
+            data.put("accessToken",accessToken);
+            data.put("role","USER");
+            resultMap.put("data",data);
+            resultMap.put("code", "200");
+            resultMap.put("msg","카카오 로그인 성공");
+            resultMap.put("msg2", userInfo.get("msg"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            resultMap.put("code", "500");
+            resultMap.put("msg","카카오 로그인 실패");
+        }
+        return resultMap;
+    }
 
 }

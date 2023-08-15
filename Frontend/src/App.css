@@ -1,0 +1,15 @@
+#root {
+  max-width: 2160px;
+  max-height: 3840px;
+  /* padding: 1rem; */
+}
+
+#web-root {
+  max-width: 1920px;
+  min-width: 960px;
+}
+
+button:focus {
+  border: none;
+  outline: none;
+}

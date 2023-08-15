@@ -96,6 +96,7 @@ public class UserService {
         user.setRefreshToken(refreshToken);
         resultMap.put("accessToken",accessToken);
         resultMap.put("refreshToken",refreshToken);
+        resultMap.put("role",user.getRole().toString());
         return resultMap; // 위 과정을 성공적으로 거친 후 로그인 수행
     }
 
@@ -146,6 +147,12 @@ public class UserService {
             return null;
         }
         return users.get(0);
+    }
+
+    @Transactional
+    public Long joinUserKakao(User user) throws Exception { // 카카오 로그인
+        userRepository.save(user);
+        return user.getId();
     }
 
     public boolean checkId(String id){
@@ -245,3 +252,4 @@ public class UserService {
 
 
 }
+
