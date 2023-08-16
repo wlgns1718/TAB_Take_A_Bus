@@ -316,18 +316,13 @@ public class BusTestService {
         URL apiurl = null;
         HttpURLConnection conn = null;
         BufferedReader br = null;
-        JSONParser jsonParser = new JSONParser();
-        System.out.println("infos정보 찾기");
-//        System.out.println(infos.toString());
-        for(String[] temp : infos){
-            System.out.println(Arrays.toString(temp));
-        }
+        JSONParser jsonParser = new JSONParser();;
         for (String[] gps : infos) {
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=");
                 sb.append(keyList.get(keyIndex));
-                sb.append("&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A&mapX=");
+                sb.append("&numOfRows=20&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A&mapX=");
                 sb.append(gps[2]);
                 sb.append("&mapY=");
                 sb.append(gps[1]);
@@ -363,7 +358,6 @@ public class BusTestService {
                     tripDto.setFirstimage2(String.valueOf(json.get("firstimage2")));
                     trips.add(tripDto);
                 }
-                System.out.println(gps[0]);
                 list.put(gps[0],trips);
 
 
