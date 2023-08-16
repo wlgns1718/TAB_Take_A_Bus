@@ -1,27 +1,31 @@
 import { FC, useEffect } from "react";
 import { AuthPageProps } from ".";
 import "./AuthPage.css";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useDispatch } from "react-redux";
-import {
-  checkMaster,
-  KioskState,
-} from "@/store/slice/kiosk-slice";
+import { checkMaster, KioskState } from "@/store/slice/kiosk-slice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import React, { FunctionComponent, useState, useRef, ChangeEvent } from "react";
+import React, { useState, useRef, ChangeEvent } from "react";
 import KeyboardWrapper from "./keyboard/keyBoard";
-import { Option, Select } from "@mui/joy";
-// import Papa from "papaparse";
 import { busAPI } from "@/store/api/api";
+import { Select, MenuItem } from "@mui/material";
+
 
 export const AuthPage: FC<AuthPageProps> = (props) => {
+  type BusStopData = {
+    id: string;
+    cityName: string;
+    cityCode: number;
+    stationName: string;
+    latitude: number;
+    longtitude: number;
+  };
+
   const [authKey, setAuthkey] = useState<string>("");
   const [busStopId, setBusStopId] = useState<string>("");
   const [AuthBus, setAuthBus] = useState<string | null>(null);
 
-  // const [csvData, setCsvData] = useState([]);
   const citis = [
     { 도시명: "가평군", 도시코드: "31370" },
     { 도시명: "강릉시", 도시코드: "32030" },
@@ -179,12 +183,14 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
     { 도시명: "횡성군", 도시코드: "32320" },
   ];
 
-  const [busStopList, setBusStopList] = useState();
+  const [busStopList, setBusStopList] = useState<BusStopData[]>([]);
 
   const [selectedCity, setSelectedCity] = useState({
-    도시명: "서울특별시",
+    도시명: "대구광역시",
     도시코드: "11",
   });
+  const [isCitySelect, setIsCitySelect] = useState<boolean>(false);
+
   const keyboard = useRef(null);
 
   const onChangeInputAuth = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -205,30 +211,42 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
     }
   );
 
-  const updateBusStopList = () =>{
-    busAPI.get(`${selectedCity.도시명}`).then((response) => {
-      const busStops = response.data.data.map(
-        (item) =>
-          {return {
-            busStopId : item.정류장ID, 
-            busStationName : item.정류장명,
-          }}
-      );
-      setBusStopList(busStops);
+  const updateBusStopList = (cityName) => {
+    busAPI.get(`${cityName}`, { timeout: 300000 }).then((response) => {
+      console.log(response.data);
+      if (response.data.code == 200) {
+        setBusStopList(response.data.data);
+      } else {
+        console.log(response.data.msg);
+      }
     });
-  }
+  };
 
   const settingKiosk = () => {
     if (data.masterkey == authKey) {
-        busAPI.get(`${selectedCity.도시코드}/${busStopId}`).then((response) => {
-          console.log(response.data);
-          busAPI.get(`present/${busStopId}`).then((response) => {
-            console.log(response.data);
-            dispatch(checkMaster({busStopId,cityCode:selectedCity.도시코드,stationName:selectedCity.도시명}));
-            navigate(`/kiosk/info/${busStopId}`);
-          });
-        });
+      console.log(busStopId);
 
+      const searchStation = busStopList.find((el) => el.id == busStopId);
+      console.log(searchStation);
+      if (searchStation == null) {
+        alert("입력한 정류장번호에 해당하는 정류장이 존재하지 않습니다");
+        return;
+      }
+      busAPI
+        .get(`${selectedCity.도시코드}/${busStopId}`, { timeout: 10000 })
+        .then((response) => {
+          console.log(response.data);
+          dispatch(
+            checkMaster({
+              busStopId,
+              cityCode: selectedCity.도시코드,
+              stationLat: searchStation.latitude,
+              stationLon: searchStation.longtitude,
+              stationName: searchStation.stationName,
+            })
+          );
+          navigate(`/kiosk/info/${busStopId}`);
+        });
     } else {
       alert("마스터키가 틀렸습니다. 다시 입력 해주세요.");
       setAuthkey("");
@@ -239,8 +257,20 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
 
   const handleCityChange = (value) => {
     console.log(value);
+    if(selectedCity.도시명 == value){
+      return
+    }
+    updateBusStopList(value.도시명);
     setSelectedCity(value);
   };
+
+  useEffect(() => {
+    if (busStopList.length == 0) {
+      setIsCitySelect(false);
+    } else {
+      setIsCitySelect(true);
+    }
+  }, [busStopList]);
 
   return (
     <div className="mainbox" {...props}>
@@ -256,46 +286,50 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
           정류장 선택
         </h1>
       </div>
+      <div style={{ width: 1300, margin: "0 auto" }}>
+        <div style={{ height: 200, marginBottom: 150, fontSize: 250 }}>
+          <Select
+            placeholder="시/군 선택"
+            defaultValue="대구광역시"
+            value={selectedCity.도시명}
+            className="select-city"
+            style={{ height: 100, fontSize: 30 }}
+          >
+            {citis.map((op, index) => {
+              return (
+                <MenuItem
+                  key={index}
+                  value={op.도시명}
+                  onClick={() => handleCityChange(op)}
+                  className="options-city"
+                  style={{ height: 100, fontSize: 30 }}
+                >
+                  {op.도시명}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </div>
 
-      <Select
-        size="lg"
-        placeholder="시/군 선택"
-        defaultValue="대구광역시"
-        value={selectedCity.도시명}
-        className="select-city"
-      >
-        {citis.map((op, index) => {
-          return (
-            <Option
-              key={index}
-              value={op.도시명}
-              onClick={() => handleCityChange(op)}
-              className="options-city"
-            >
-              {op.도시명}
-            </Option>
-          );
-        })}
-      </Select>
+        <div className="Authkey">
+          <input
+            className="keyboardinput"
+            value={authKey}
+            placeholder={"masterKey를 입력해주세요"}
+            onChange={(e) => onChangeInputAuth(e)}
+            onClick={() => setAuthBus("Auth")}
+          />
+        </div>
 
-      <div className="Authkey">
-        <input
-          className="keyboardinput"
-          value={authKey}
-          placeholder={"masterKey를 입력해주세요"}
-          onChange={(e) => onChangeInputAuth(e)}
-          onClick={() => setAuthBus("Auth")}
-        />
-      </div>
-
-      <div className="Buskey">
-        <input
-          className="keyboardinput"
-          value={busStopId}
-          placeholder={"정류장 번호를 입력해 주세요."}
-          onChange={(e) => onChangeInputBusId(e)}
-          onClick={() => setAuthBus("Bus")}
-        />
+        <div className="Buskey">
+          <input
+            className="keyboardinput"
+            value={busStopId}
+            placeholder={"정류장 번호를 입력해 주세요."}
+            onChange={(e) => onChangeInputBusId(e)}
+            onClick={() => setAuthBus("Bus")}
+          />
+        </div>
       </div>
       <div>
         {AuthBus == "Auth" ? (
@@ -314,6 +348,7 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
           style={{ fontSize: "100px", marginTop: "100px" }}
           className="button"
           variant="contained"
+          disabled={!isCitySelect}
         >
           확인
         </Button>

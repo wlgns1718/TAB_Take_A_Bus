@@ -2,8 +2,9 @@ import { FC } from "react";
 import { WeatherBoxProps } from ".";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-
 import "./WeatherBox.css";
+import { KioskState } from "@/store/slice/kiosk-slice";
+import { useSelector } from "react-redux";
 
 // 날씨 아이콘 : https://openweathermap.org/weather-conditions
 // OpenWeather API
@@ -26,7 +27,7 @@ interface WeatherData {
   };
 }
 
-const useTempData = true;
+const useTempData = false;
 
 const tempdata: WeatherData = {
   weather: [
@@ -70,12 +71,15 @@ function useInterval(callback: () => void, delay: number | null) {
 
 export const WeatherBox: FC<WeatherBoxProps> = (props) => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+    const data: KioskState = useSelector((state: { kiosk: KioskState }) => {
+      return state.kiosk;
+    });
 
   // toomany request 주의!
   const fetchWeatherData = async () => {
     const apiKey = "40da27bfa864f510e9a34a1c6a8423fb";
-    const lat = 36.12;
-    const lon = 128.34;
+    const lat = data.stationLat;
+    const lon = data.stationLon;
 
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=kr`;
 
@@ -110,7 +114,7 @@ export const WeatherBox: FC<WeatherBoxProps> = (props) => {
             className="weather-icon"
           />
           <div className="weather-textbox">
-            <div>{weatherData.weather[0].main}</div>
+            <div>{weatherData.weather[0].description}</div>
 
             <div>{(weatherData.main.temp - 273.15).toFixed(1)} °C</div>
             <div>{weatherData.main.humidity} %</div>
