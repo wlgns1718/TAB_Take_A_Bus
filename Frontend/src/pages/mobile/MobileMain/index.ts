@@ -1,2 +1,2 @@
-export * from './MobileMain';
-export * from './MobileMain.props';
+export * from "./MobileMain";
+export * from "./MobileMain.props";

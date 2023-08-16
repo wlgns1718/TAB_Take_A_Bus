@@ -4,13 +4,10 @@ import { ArrivalBusListItem } from "../ArrivalBusListItem";
 import Carousel from "react-material-ui-carousel";
 import "./ArrivalBusList.css";
 import {
-  BusData,
   BusStoreData,
-  KioskState,
   syncCarouselPage,
 } from "../../../store/slice/kiosk-slice";
 import { useDispatch, useSelector } from "react-redux";
-import { CarouselProps } from "react-material-ui-carousel/dist/components/types";
 
 export const ArrivalBusList: FC<ArrivalBusListProps> = ({ pages }) => {
   const dispatch = useDispatch();

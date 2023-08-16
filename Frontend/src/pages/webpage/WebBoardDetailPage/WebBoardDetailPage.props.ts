@@ -1,3 +1,3 @@
 export interface WebBoardDetailPageProps {
-  postId:number;
-};
+  postId: number;
+}

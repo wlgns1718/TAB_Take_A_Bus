@@ -1,1 +1,1 @@
-export interface Web404PageProps {};
+export interface Web404PageProps {}

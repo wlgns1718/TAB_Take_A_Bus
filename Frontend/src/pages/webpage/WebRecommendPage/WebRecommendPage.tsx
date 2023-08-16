@@ -4,6 +4,7 @@ import { WebRecommendPageProps } from ".";
 import axios from "axios";
 import { Button, Option, Select } from "@mui/joy";
 import { webAPI } from "@/store/api/api";
+import './WebRecommendPage.css'
 
 export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   // citycode 리스트

@@ -1,1 +1,1 @@
-export interface MobileMainProps {};
+export interface MobileMainProps {}

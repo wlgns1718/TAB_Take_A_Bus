@@ -4,10 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button, Input } from "@mui/joy";
 import { boardAPI, noticeAPI } from "@/store/api/api";
-import {
-  BOARD_ENG,
-  WebState,
-} from "@/store/slice/web-slice";
+import { BOARD_ENG, WebState } from "@/store/slice/web-slice";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -121,9 +118,9 @@ export const WebBoardUpdatePage: FC<WebBoardUpdatePageProps> = (props) => {
         )
         .then((res) => {
           console.log(res.data);
-					if(res.data.code == 200){
-						alert("공지사항이 정상적으로 수정되었습니다")
-					}
+          if (res.data.code == 200) {
+            alert("공지사항이 정상적으로 수정되었습니다");
+          }
           navigate(-1);
         })
         .catch((error) => {
@@ -146,9 +143,9 @@ export const WebBoardUpdatePage: FC<WebBoardUpdatePageProps> = (props) => {
         )
         .then((res) => {
           console.log(res.data);
-					if(res.data.code == 200){
-						alert("게시글이 정상적으로 수정되었습니다");
-					}
+          if (res.data.code == 200) {
+            alert("게시글이 정상적으로 수정되었습니다");
+          }
           navigate(-1);
         })
         .catch((error) => {

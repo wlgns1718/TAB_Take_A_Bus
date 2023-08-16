@@ -3,16 +3,21 @@ import { ArrivalBusListItemProps } from ".";
 import "./ArrivalBusListItem.css";
 import { Grid } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { BusStoreData, KioskState, increasePassenger } from "@/store/slice/kiosk-slice";
+import {
+  BusStoreData,
+  KioskState,
+  increasePassenger,
+} from "@/store/slice/kiosk-slice";
 
 export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
-
   const dispatch = useDispatch();
   const busIconURL = `/bus_side_icon.png?url`;
-  
+
   return (
     <div
-      className={`bus-item-container ${item.isStopHere ? 'bus-stop-on' : 'bus-stop-off'}`}
+      className={`bus-item-container ${
+        item.isStopHere ? "bus-stop-on" : "bus-stop-off"
+      }`}
     >
       <div className="bus-item-top">
         <div>
@@ -31,10 +36,7 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
               alignItems={"center"}
             >
               <Grid display={"flex"} item xs={6} justifyContent={"center"}>
-                <img
-                  src={`/${item.routeType}.png?url`}
-                  alt={item.routeType}
-                />
+                <img src={`/${item.routeType}.png?url`} alt={item.routeType} />
               </Grid>
               <Grid display={"flex"} item xs={6} justifyContent={"start"}>
                 {item.busNo.length >= 3 ? (
@@ -127,10 +129,7 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
             src={busIconURL}
             style={{
               left: `${
-                ((item.remainingStops >= 4
-                  ? 0
-                  : 4 - item.remainingStops) /
-                  5) *
+                ((item.remainingStops >= 4 ? 0 : 4 - item.remainingStops) / 5) *
                   720 +
                 85
               }px`,
@@ -140,10 +139,7 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
             className="current-station-name"
             style={{
               left: `${
-                ((item.remainingStops >= 4
-                  ? 0
-                  : 4 - item.remainingStops) /
-                  5) *
+                ((item.remainingStops >= 4 ? 0 : 4 - item.remainingStops) / 5) *
                   720 +
                 85
               }px`,

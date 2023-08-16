@@ -1,2 +1,2 @@
-export * from './WebRecommendPage';
-export * from './WebRecommendPage.props';
+export * from "./WebRecommendPage";
+export * from "./WebRecommendPage.props";

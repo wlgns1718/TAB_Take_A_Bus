@@ -1,1 +1,1 @@
-export interface WebBoardPageProps {};
+export interface WebBoardPageProps {}

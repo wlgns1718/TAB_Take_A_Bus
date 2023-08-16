@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import { ComingSoonBusListProps } from '.';
+import { FC } from "react";
+import { ComingSoonBusListProps } from ".";
 import { BusData } from "../../../store/slice/kiosk-slice";
-import './ComingSoonBusList.css'
+import "./ComingSoonBusList.css";
 
 interface ComingSoonBusListItemProps {
   item: BusData;
@@ -31,18 +31,13 @@ const ComingBusItem: FC<ComingSoonBusListItemProps> = ({ item }) => {
   );
 };
 
-
 export const ComingSoonBusList: FC<ComingSoonBusListProps> = (props) => {
-	return (
+  return (
     <div {...props} className="comingsoon-box">
       <div className="comingsoon-text">곧 도착</div>
-      {
-        props.data.map((item : BusData, index: number)=>{
-          return <ComingBusItem key={index} item={item}/>;
-        })
-
-      }
-
+      {props.data.map((item: BusData, index: number) => {
+        return <ComingBusItem key={index} item={item} />;
+      })}
     </div>
   );
 };
