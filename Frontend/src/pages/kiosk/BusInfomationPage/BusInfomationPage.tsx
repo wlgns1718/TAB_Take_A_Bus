@@ -88,8 +88,10 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                   }
                   if (recordedItem.isPosted == true) {
                     newdata = { ...newdata, isPosted: recordedItem.isPosted };
+                    return newdata
                   }
-                  if (recordedItem.isPosted == false) {
+                  else{
+                    console.log(recordedItem.isPosted);
                     if (newdata.remainingStops == 1) {
                       arduinoAPI
                         .post(
@@ -103,20 +105,29 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                           }
                         )
                         .then((response) => {
-                          console.log(response.data);
+                          console.log(
+                            `${recordedItem.vehicleNo}`,
+                            response.data
+                          );
                           newdata = { ...newdata, isPosted: true };
+                          return newdata;
                         })
                         .catch((error) => {
                           console.log(error);
+                          return newdata;
                         });
                     }
+                    else{
+                      return newdata;
+                    }
                   }
-                  return newdata;
                 } else {
                   return newdata;
                 }
               }
             );
+            console.log(stateBusData);
+            
 
             dispatch(
               updateBusData(

@@ -9,6 +9,8 @@ import {
 } from "react-kakao-maps-sdk";
 import { Button } from "@mui/joy";
 
+let { kakao }:any = window;
+
 export const WebSurveyPage: FC<WebSurveyPageProps> = (props) => {
 
   const markerImageSize = new kakao.maps.Size(40, 42);
