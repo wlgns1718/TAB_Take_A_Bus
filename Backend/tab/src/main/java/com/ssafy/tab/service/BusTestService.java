@@ -313,7 +313,7 @@ public class BusTestService {
 
         return tripInfos;
     }
-    public Map<String,Object> findAllTripInfo(List<String[]> infos,int keyIndex,String tripType){
+    public Map<String,Object> findAllTripInfo(List<String[]> infos,int keyIndex,String tripType)throws JsonProcessingException, IOException,ParseException{
         Map<String,Object> list = new HashMap<>();
         URL apiurl = null;
         HttpURLConnection conn = null;
@@ -325,7 +325,7 @@ public class BusTestService {
             System.out.println(Arrays.toString(temp));
         }
         for (String[] gps : infos) {
-            try {
+
                 StringBuilder sb = new StringBuilder();
                 sb.append("https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=");
                 sb.append(keyList.get(keyIndex));
@@ -367,12 +367,7 @@ public class BusTestService {
                 }
                 System.out.println(gps[0]);
                 list.put(gps[0],trips);
-            }catch (NullPointerException e){
-                e.printStackTrace();
-                continue;
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+
 
         }
         return list;
