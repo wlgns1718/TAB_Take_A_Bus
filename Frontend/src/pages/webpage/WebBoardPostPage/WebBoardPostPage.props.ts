@@ -1,1 +1,1 @@
-export interface WebBoardPostPageProps {};
+export interface WebBoardPostPageProps {}

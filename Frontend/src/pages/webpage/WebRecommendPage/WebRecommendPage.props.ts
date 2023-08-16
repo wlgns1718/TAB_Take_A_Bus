@@ -1,1 +1,1 @@
-export interface WebRecommendPageProps {};
+export interface WebRecommendPageProps {}

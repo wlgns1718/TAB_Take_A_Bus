@@ -18,9 +18,9 @@ export const KioskHeader: FC<KioskHeaderProps> = (props) => {
   });
   const [busStationName, setBusStaitionName] = useState("정류장");
   const logoURL = `/대구광역시_logo.png?url`;
-  useEffect(()=>{
-    setBusStaitionName(data.stationName)
-  }, [data.stationName])
+  useEffect(() => {
+    setBusStaitionName(data.stationName);
+  }, [data.stationName]);
 
   return (
     <div {...props}>

@@ -4,12 +4,7 @@ import Paper from "@mui/material/Paper";
 import { Pagination } from "@mui/material";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
-import {
-  Button,
-  IconButton,
-  Input,
-  Stack,
-} from "@mui/joy";
+import { Button, IconButton, Input, Stack } from "@mui/joy";
 import SearchIcon from "@mui/icons-material/Search";
 import "./WebBoard.css";
 import { useNavigate } from "react-router-dom";
@@ -169,13 +164,18 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   useEffect(() => {
     if (!noticeData?.length) {
-      noticeAPI.get("list", {params:{
-        page:0, size:1000
-      }}).then((response) => {
-        console.log(response.data);
-        // setNoticeData(response.data.content);
-        dispatch(saveNoticeData(response.data.content.reverse()));
-      });
+      noticeAPI
+        .get("list", {
+          params: {
+            page: 0,
+            size: 1000,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          // setNoticeData(response.data.content);
+          dispatch(saveNoticeData(response.data.content.reverse()));
+        });
     }
   }, []);
 
@@ -227,7 +227,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         {boards.map((name, index) => {
           return (
             <div
-            style={{ cursor:"pointer"}}
+              style={{ cursor: "pointer" }}
               className={`board-header-item ${
                 data.selectedBoard == name ? "board-selected" : null
               }`}

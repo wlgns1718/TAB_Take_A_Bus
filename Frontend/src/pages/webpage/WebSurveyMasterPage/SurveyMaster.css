@@ -1,0 +1,6 @@
+.surveyResult{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family:'Noto Sans KR', sans-serif;
+}

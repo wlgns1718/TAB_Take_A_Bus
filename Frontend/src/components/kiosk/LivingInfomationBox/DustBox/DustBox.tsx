@@ -235,7 +235,9 @@ export const DustBox: FC<DustBoxProps> = (props) => {
       </div>
       {dustInfo ? (
         <div className="measurement-time">
-          <p>측정 시간: {dustInfo.dataTime}, {measuringStation}</p>
+          <p>
+            측정 시간: {dustInfo.dataTime}, {measuringStation}
+          </p>
         </div>
       ) : (
         <div className="">
