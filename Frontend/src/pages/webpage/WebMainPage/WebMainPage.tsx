@@ -17,6 +17,7 @@ import WebSurveyPerterPage from "../WebSurveyPeterPage/WebSurveyPeterPage";
 import './WebMainPage.css'
 import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
 import { WebBoardUpdatePage } from "../WebBoardUpdatePage";
+import WebSurveyMaster from "../WebSurveyMasterPage/WebSurveyMaster";
 
 export const WebMainPage: FC<WebMainPageProps> = (props) => {
   return (
@@ -63,6 +64,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
           </Route>
           <Route path="recommend" element={<WebRecommendPage />}></Route>
           <Route path="survey" element={<WebSurveyPerterPage />}></Route>
+          <Route path="surveyMaster" element={<WebSurveyMaster/>}></Route>
           <Route path="*" element={<Web404Page />}></Route>
         </Routes>
       </div>
