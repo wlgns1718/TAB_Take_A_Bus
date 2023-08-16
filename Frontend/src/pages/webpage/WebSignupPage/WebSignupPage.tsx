@@ -25,8 +25,6 @@ import { setToken } from "store/slice/web-slice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
-
 export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
   const kiosdata: KioskState = useSelector(
     (state: { kiosk: KioskState; web: object }) => {
@@ -69,23 +67,27 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
   const [master, setMaster] = useState<boolean>(false);
   const [masterCheck, setMasterCheck] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  const [emailCode,setEmailCode] = useState<string>('jhqwjkf  h2urh23dunirhc2ip3urhjkwebfjwehbfjkhWEBFYI2EG ROIUN3YRIHG23RHJKQWEBFJLHQWEGFLUYE  2GOIY2EGFILQUFHKQEJFGqeiy');
-  const [emailCodeChecker,setEmailCodeChecker] = useState<string>('')
-  const [showModal,setShowModal] = useState<boolean>(false);
+  const [emailCode, setEmailCode] = useState<string>(
+    "jhqwjkf  h2urh23dunirhc2ip3urhjkwebfjwehbfjkhWEBFYI2EG ROIUN3YRIHG23RHJKQWEBFJLHQWEGFLUYE  2GOIY2EGFILQUFHKQEJFGqeiy"
+  );
+  const [emailCodeChecker, setEmailCodeChecker] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [emailMsg, setEmailMsg] = useState<string>("");
   const [pwdMsg, setPwdMsg] = useState<string>("");
   const [confirmPwdMsg, setConfirmPwdMsg] = useState<string>("");
   const [IdMsg, setIdMsg] = useState<string>("");
-  const [masterMsg, setMasterMsg] = useState<string>("마스터키를 입력해주세요.");
-  const [emailCheckMsg,setEmailCheckMsg] = useState<string>("인증번호를 입력해주세요.");
-  
+  const [masterMsg, setMasterMsg] =
+    useState<string>("마스터키를 입력해주세요.");
+  const [emailCheckMsg, setEmailCheckMsg] =
+    useState<string>("인증번호를 입력해주세요.");
+
   // 1-1에 잡아뒀던 유효성 검사 함수로 정리하기
   const isEmailValid: boolean = validateEmail(email);
   const isPwdValid: boolean = validatePwd(password);
   const isConfirmPwd: boolean = password === confirmPwd;
   const isIdValid: boolean = validateId(Id);
-  const [emailcheck,setEmailcheck] = useState<boolean>(false);
-  const [isSameId,setIsSameId] = useState<boolean | null>(null)
+  const [emailcheck, setEmailcheck] = useState<boolean>(false);
+  const [isSameId, setIsSameId] = useState<boolean | null>(null);
 
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
@@ -132,54 +134,55 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
     }
   };
 
-  const [masterchange,setmasterchage] = useState<string>('')
-  
+  const [masterchange, setmasterchage] = useState<string>("");
+
   const onChangeMaster = (e) => {
     const currentMaster = e.target.value;
-    setmasterchage(currentMaster)
+    setmasterchage(currentMaster);
   };
 
-
-  const onEmailKey = (e) =>{
-    setEmailCodeChecker(e.target.value)
-  }
+  const onEmailKey = (e) => {
+    setEmailCodeChecker(e.target.value);
+  };
 
   const onChangeEmailCheck = () => {
     if (emailCodeChecker == emailCode) {
-      setEmailcheck(true)
-      alert('인증되었습니다.')
+      setEmailcheck(true);
+      alert("인증되었습니다.");
       setEmailCheckMsg("인증되었습니다.");
-      console.log(emailCodeChecker)
-      console.log(emailCode)
-      
+      console.log(emailCodeChecker);
+      console.log(emailCode);
     } else {
       setEmailCheckMsg("인증번호가 일치하지 않습니다.");
     }
   };
 
-  const sendEmailCheck = () =>{
+  const sendEmailCheck = () => {
     const maildata = {
-      email : email,
-      type : "register",
-      userId: "string"
-    }
-    webAPI.post('/user/mail',maildata)
-    .then((response)=>{
-      setEmailCode(response.data.data)
-      console.log(response)
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
-    setShowModal(true)
-    alert('작성하신 email로 인증번호가 발급되었습니다.')
-  }
+      email: email,
+      type: "register",
+      userId: "string",
+    };
+    webAPI
+      .post("/user/mail", maildata)
+      .then((response) => {
+        setEmailCode(response.data.data);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setShowModal(true);
+    alert("작성하신 email로 인증번호가 발급되었습니다.");
+  };
   const isAllValid: boolean =
-  isEmailValid && isConfirmPwd && isPwdValid && isIdValid&&emailcheck &&isSameId;
-  /////style 
-  
-
- 
+    isEmailValid &&
+    isConfirmPwd &&
+    isPwdValid &&
+    isIdValid &&
+    emailcheck &&
+    isSameId;
+  /////style
 
   return (
     <div {...props}>
@@ -202,7 +205,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
           <div className="signUpMidLeft">
             <p>
               <span style={{ color: "red" }}>*</span>이메일
-              {showModal ? <div style={{minHeight:"50px"}}></div> : null}
+              {showModal ? <div style={{ minHeight: "50px" }}></div> : null}
             </p>
             <p>
               <span style={{ color: "red" }}>*</span>성명
@@ -225,7 +228,14 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               variant="standard"
               onChange={onChangeEmail}
             />
-            {showModal ? <CheckEmailBox check={emailcheck} text={emailCheckMsg} change={onEmailKey}  emailConfirm={onChangeEmailCheck} /> : null}
+            {showModal ? (
+              <CheckEmailBox
+                check={emailcheck}
+                text={emailCheckMsg}
+                change={onEmailKey}
+                emailConfirm={onChangeEmailCheck}
+              />
+            ) : null}
             <TextField
               style={{ height: "55px", minWidth: "350px" }}
               helperText={"성명을입력해주세요."}
@@ -234,14 +244,14 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               variant="standard"
             />
             <TextField
-              {...isSameId==false ? {error:true} : {error:false} }
+              {...(isSameId == false ? { error: true } : { error: false })}
               style={{ height: "55px" }}
               helperText={`${IdMsg}`}
               id="Id"
               variant="standard"
               onChange={onChangeId}
             />
-            
+
             <PasswordBox
               pass={onChangePass}
               helptext={`${pwdMsg}`}
@@ -253,22 +263,39 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               id={"passconf"}
             />
           </div>
-          <div style={{display:'flex',flexDirection:'column'}}>
-            <button onClick={isEmailValid ? sendEmailCheck : ()=>{alert('올바른 이메일을 입력해주세요.')}} style={{marginLeft:'20px',fontWeight:"bold"}}>이메일 인증</button>
-            <div style={showModal ? {minHeight:"145px"} : {minHeight:"80px"} }></div>
-            <button onClick={()=>{
-              webAPI.get(`user/checkId/${Id}`)
-              .then((response)=>{
-                console.log(response)
-                if(response.data.code == 200){
-                  setIdMsg("사용가능한 아이디입니다.")
-                  setIsSameId(true)
-                }else if(response.data.code == 401){
-                  setIdMsg("중복된 아이디입니다.")
-                 setIsSameId(false)
-                }
-              })
-            }} style={{marginLeft:'20px',fontWeight:"bold"}}>ID 중복확인</button>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <button
+              onClick={
+                isEmailValid
+                  ? sendEmailCheck
+                  : () => {
+                      alert("올바른 이메일을 입력해주세요.");
+                    }
+              }
+              style={{ marginLeft: "20px", fontWeight: "bold" }}
+            >
+              이메일 인증
+            </button>
+            <div
+              style={showModal ? { minHeight: "145px" } : { minHeight: "80px" }}
+            ></div>
+            <button
+              onClick={() => {
+                webAPI.get(`user/checkId/${Id}`).then((response) => {
+                  console.log(response);
+                  if (response.data.code == 200) {
+                    setIdMsg("사용가능한 아이디입니다.");
+                    setIsSameId(true);
+                  } else if (response.data.code == 401) {
+                    setIdMsg("중복된 아이디입니다.");
+                    setIsSameId(false);
+                  }
+                });
+              }}
+              style={{ marginLeft: "20px", fontWeight: "bold" }}
+            >
+              ID 중복확인
+            </button>
           </div>
         </div>
 
@@ -369,20 +396,33 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
           </FormGroup>
           <div>
             {master == true ? (
-              <div style={{display:'flex',flexDirection:"column",justifyContent:'center'}}>
-              <PasswordBox
-                pass={onChangeMaster}
-                helptext={`${masterMsg}`}
-                id={"mastercon"}
-              />
-              <button onClick={() =>{
-                {if(masterchange == kiosdata.masterkey){
-                  setMasterCheck(true)
-                  alert('마스터키가 일치합니다.')
-                }else{
-                  alert('마스터키가 일치하지 않습니다.')
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
-              }} style={{marginBottom:"50px",fontWeight:"bold"}}>마스터키 확인</button>
+              >
+                <PasswordBox
+                  pass={onChangeMaster}
+                  helptext={`${masterMsg}`}
+                  id={"mastercon"}
+                />
+                <button
+                  onClick={() => {
+                    {
+                      if (masterchange == kiosdata.masterkey) {
+                        setMasterCheck(true);
+                        alert("마스터키가 일치합니다.");
+                      } else {
+                        alert("마스터키가 일치하지 않습니다.");
+                      }
+                    }
+                  }}
+                  style={{ marginBottom: "50px", fontWeight: "bold" }}
+                >
+                  마스터키 확인
+                </button>
               </div>
             ) : null}
           </div>
@@ -425,19 +465,18 @@ function PasswordBox(props) {
   );
 }
 
-
 function CheckEmailBox(props) {
-  return(
+  return (
     <div>
-  <TextField
-    {...props.check==false ? {error:true} : {error:false} }
-    style={{height: "55px" }}
-    helperText={`${props.text}`}
-    id="Id"
-    variant="standard"
-    onChange={props.change}
-  />
-  <button onClick={props.emailConfirm}>인증하기</button>
-  </div>
-  )
+      <TextField
+        {...(props.check == false ? { error: true } : { error: false })}
+        style={{ height: "55px" }}
+        helperText={`${props.text}`}
+        id="Id"
+        variant="standard"
+        onChange={props.change}
+      />
+      <button onClick={props.emailConfirm}>인증하기</button>
+    </div>
+  );
 }

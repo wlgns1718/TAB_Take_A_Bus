@@ -1,8 +1,8 @@
-.kiosk-header{
+.kiosk-header {
   display: flex;
   height: 440px;
   width: 2140px;
-  background-color: #208EF4;
+  background-color: #208ef4;
   padding: 10px;
   border-radius: 0 0 40px 40px;
   margin-bottom: 20px;
@@ -14,20 +14,18 @@
   color: white;
 }
 .busstop-name {
-  color: #FFD704;
+  color: #ffd704;
 }
 
-#logo{
+#logo {
   position: relative;
-  
-  left: 20px;
 
+  left: 20px;
 }
 
-.time-box{
+.time-box {
   font-size: xx-large;
   color: white;
   position: relative;
   top: 35px;
 }
-

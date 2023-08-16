@@ -1,1 +1,1 @@
-export interface WebSignupPageProps {};
+export interface WebSignupPageProps {}

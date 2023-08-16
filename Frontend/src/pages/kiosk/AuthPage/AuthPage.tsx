@@ -187,7 +187,7 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
 
   const [selectedCity, setSelectedCity] = useState({
     도시명: "대구광역시",
-    도시코드: "11",
+    도시코드: 22,
   });
   const [isCitySelect, setIsCitySelect] = useState<boolean>(false);
 
@@ -257,8 +257,8 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
 
   const handleCityChange = (value) => {
     console.log(value);
-    if(selectedCity.도시명 == value){
-      return
+    if (isCitySelect && selectedCity.도시명 == value) {
+      return;
     }
     updateBusStopList(value.도시명);
     setSelectedCity(value);
@@ -271,6 +271,10 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
       setIsCitySelect(true);
     }
   }, [busStopList]);
+
+  useEffect(() => {
+    updateBusStopList(selectedCity.도시명)
+  },[]);
 
   return (
     <div className="mainbox" {...props}>
@@ -287,10 +291,9 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
         </h1>
       </div>
       <div style={{ width: 1300, margin: "0 auto" }}>
-        <div style={{ height: 200, marginBottom: 150, fontSize: 250 }}>
+        <div style={{ height: 100, marginBottom: 50, fontSize: 35 }}>
           <Select
             placeholder="시/군 선택"
-            defaultValue="대구광역시"
             value={selectedCity.도시명}
             className="select-city"
             style={{ height: 100, fontSize: 30 }}
@@ -315,6 +318,7 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
           <input
             className="keyboardinput"
             value={authKey}
+            type="password"
             placeholder={"masterKey를 입력해주세요"}
             onChange={(e) => onChangeInputAuth(e)}
             onClick={() => setAuthBus("Auth")}

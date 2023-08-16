@@ -10,7 +10,7 @@ import {
   saveNoticeDetailData,
 } from "@/store/slice/web-slice";
 import { Container, IconButton, Typography } from "@mui/material";
-import { Button } from "@mui/joy";
+import { Button, Chip, Stack } from "@mui/joy";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import "./WebNoticeDetailPage.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,12 +54,11 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
         headers: { Authorization: `Bearer ${data.Token}` },
       })
       .then((response) => {
-        if(response.data.code == '401') {
+        if (response.data.code == "401") {
           alert("본인의 게시글만 삭제할 수 있습니다.");
           return;
-        }
-        else{
-          alert("공지사항이 삭제되었습니다")
+        } else {
+          alert("공지사항이 삭제되었습니다");
           console.log(response.data);
           dispatch(deleteOneNotice(postId));
           dispatch(changeSelectedNoticeId(null));
@@ -88,42 +87,51 @@ export const WebNoticeDetailPage: FC<WebNoticeDetailPageProps> = ({
           <div style={{ fontSize: "30px", fontWeight: "bold" }}>공지사항</div>
         </div>
         <div className="detail">
-          <Typography variant="h4" sx={{ margin: 5 }}>
+          <Typography variant="h4" sx={{ margin: 2 }}>
             {data.noticeDetailData?.title}
           </Typography>
-
-          <div>{`작성자 : ${data.noticeDetailData?.userName}`}</div>
-          <div>{`작성시간 : ${prettyTime(
-            data.noticeDetailData?.createTime
-          )}`}</div>
+          <Stack direction={"row"} gap={1}>
+            <Chip>공지사항</Chip>
+            <Chip>{`${data.noticeDetailData?.userName}`}</Chip>
+            <Chip>{`${prettyTime(data.noticeDetailData?.createTime)}`}</Chip>
+          </Stack>
+          <hr />
           {/* html 코드 출력 */}
-          <div
-            dangerouslySetInnerHTML={{ __html: data.noticeDetailData?.content }}
-          ></div>
-        </div>
-      </Container>
-      {data.loginData?.id == data.noticeDetailData?.userName ? (
-        <Container maxWidth="xl">
-          <div className="bottom-buttons">
-            <Button
-              color="neutral"
-              onClick={() => {
-                navigate(
-                  `update/공지사항/${postId}`
-                );
+          <Container sx={{ margin: 3 }}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data.noticeDetailData?.content,
               }}
-              variant="soft"
+            ></div>
+          </Container>
+        </div>
+        {data.loginData?.id == data.noticeDetailData?.userName ? (
+          <Container maxWidth="xl">
+            <Stack
+              direction={"row"}
+              className="bottom-buttons"
+              gap={1}
+              sx={{ justifyContent: "center" }}
             >
-              수정
-            </Button>
-            <Button color="neutral" onClick={deleteNotice} variant="soft">
-              삭제
-            </Button>
-          </div>
-        </Container>
-      ) : (
-        " "
-      )}
+              <Button
+                color="neutral"
+                onClick={() => {
+                  navigate(`update/공지사항/${postId}`);
+                }}
+                variant="soft"
+              >
+                수정
+              </Button>
+              <Button color="neutral" onClick={deleteNotice} variant="soft">
+                삭제
+              </Button>
+            </Stack>
+          </Container>
+        ) : (
+          " "
+        )}
+        <hr />
+      </Container>
     </div>
   );
 };

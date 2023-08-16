@@ -10,7 +10,7 @@ import {
 } from "@/store/slice/web-slice";
 import { boardAPI } from "@/store/api/api";
 import { Container, IconButton, Typography } from "@mui/material";
-import { Button, Input, Stack } from "@mui/joy";
+import { Button, Chip, Input, Stack } from "@mui/joy";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { prettyTime } from "../WebBoardPage";
@@ -20,7 +20,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
   const data: WebState = useSelector((state: { web: WebState }) => {
     return state.web;
   });
-  const [updateCommentId, setUpdateCommentId] = useState<null | number>(null)
+  const [updateCommentId, setUpdateCommentId] = useState<null | number>(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,9 +31,11 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
     setCommentContent(e.target.value);
   };
 
-
-
   const postComment = () => {
+    if (!data.Token) {
+      alert("로그인이 필요한 기능입니다.");
+      return;
+    }
     if (!commentContent.trim()) {
       alert("내용을 입력해주세요");
       return;
@@ -53,6 +55,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       .then((response) => {
         console.log(response.data);
         updateDetailData();
+        setCommentContent("");
       })
       .catch((error) => {
         console.log(error);
@@ -152,7 +155,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
       )
       .then((response) => {
         console.log(response.data);
-        setUpdateCommentId(null)
+        setUpdateCommentId(null);
         updateDetailData();
       })
       .catch((error) => {
@@ -165,12 +168,10 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
   }
 
   interface CommentProps {
-    el : CommentData;
-    children : any;
+    el: CommentData;
   }
-  
-  const CommentItem: React.FC<CommentProps> = ({ el }) => {
 
+  const CommentItem: React.FC<CommentProps> = ({ el }) => {
     const [commentNewContent, setCommentNewContent] = useState();
 
     const handleCommentNewContent = (val) => {
@@ -178,14 +179,23 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
     };
 
     return (
-      <Container maxWidth="xl" sx={{ paddingTop: 8, height: 140 }}>
-        <Stack direction={"row"}>
-          <div>{el.userId}</div>
-          <div>{prettyTime(el.createTime, true)}</div>
+      <Container
+        maxWidth="xl"
+        sx={{
+          paddingTop: 2,
+          minHeight: 100,
+          backgroundColor: "whitesmoke",
+          borderRadius: 3,
+          marginBottom: 1,
+        }}
+      >
+        <Stack direction={"row"} gap={1} sx={{}}>
+          <Chip>{el.userId}</Chip>
+          <Chip>{prettyTime(el.createTime, true)}</Chip>
           {data.loginData.id == el.userId ? (
-            <Stack direction={"row"}>
+            <Stack direction={"row"} gap={1}>
               {updateCommentId == el.id ? (
-                <Stack direction={"row"}>
+                <Stack direction={"row"} gap={1}>
                   <Input
                     size="md"
                     variant="outlined"
@@ -229,7 +239,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
             ""
           )}
         </Stack>
-        <div>{el.content}</div>
+        <Container sx={{ marginY: 2 }}>{el.content}</Container>
       </Container>
     );
   };
@@ -248,20 +258,23 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
           <div style={{ fontSize: "30px", fontWeight: "bold" }}>게시판</div>
         </div>
         <div className="detail">
-          <Typography variant="h4" sx={{ margin: 5 }}>
+          <Typography variant="h4" sx={{ margin: 2 }}>
             {data.boardDetailData?.title}
           </Typography>
-
-          <div>{`작성자 : ${data.boardDetailData?.userId}`}</div>
-          <div>{BOARD_KOR[data.boardDetailData.sort]}</div>
-
-          <div>{`작성시간 : ${prettyTime(
-            data.boardDetailData?.createTime
-          )}`}</div>
+          <Stack direction={"row"} gap={1}>
+            <Chip>{BOARD_KOR[data.boardDetailData.sort]}</Chip>
+            <Chip color="primary">{`${data.boardDetailData?.userId}`}</Chip>
+            <Chip>{`${prettyTime(data.boardDetailData?.createTime)}`}</Chip>
+          </Stack>
+          <hr />
           {/* html 코드 출력 */}
-          <div
-            dangerouslySetInnerHTML={{ __html: data.boardDetailData?.content }}
-          ></div>
+          <Container sx={{ margin: 3 }}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data.boardDetailData?.content,
+              }}
+            ></div>
+          </Container>
         </div>
       </Container>
       {data.loginData?.id == data.boardDetailData?.userId ? (
@@ -301,17 +314,18 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
             <div>댓글이 아직 없습니다..</div>
           ) : (
             data.boardDetailData.commentResponseDtoList.map((el, index) => {
-              return <CommentItem el={el} key={index}>
-              </CommentItem>;
+              return <CommentItem el={el} key={index}></CommentItem>;
             })
           )}
         </div>
-        <Stack direction={"row"} maxWidth="xl" sx={{ paddingTop: 8 }}>
+        <Stack direction={"row"} sx={{ paddingTop: 3 }} gap={1}>
           <Input
             size="md"
+            sx={{ minWidth: 500 }}
             placeholder="내용을 입력하세요.."
             variant="outlined"
             color="neutral"
+            value={commentContent}
             onChange={(e) => handleCommentContent(e)}
           ></Input>
           <Button variant="soft" color="neutral" onClick={postComment}>

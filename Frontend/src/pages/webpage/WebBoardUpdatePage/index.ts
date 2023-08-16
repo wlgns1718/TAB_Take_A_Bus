@@ -1,2 +1,2 @@
-export * from './WebBoardUpdatePage';
-export * from './WebBoardUpdatePage.props';
+export * from "./WebBoardUpdatePage";
+export * from "./WebBoardUpdatePage.props";

@@ -1,2 +1,2 @@
-export * from './WeatherBox';
-export * from './WeatherBox.props';
+export * from "./WeatherBox";
+export * from "./WeatherBox.props";

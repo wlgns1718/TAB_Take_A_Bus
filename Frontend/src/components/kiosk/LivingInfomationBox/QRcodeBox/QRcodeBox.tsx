@@ -5,7 +5,7 @@ import { QRCodeSVG  } from "qrcode.react";
 import "./QRcodeBox.css";
 
 export const QRcodeBox: FC<QRcodeBoxProps> = (props) => {
-  const [address, setAdress] = useState("naver.com");
+  const [address, setAdress] = useState("https://i9d111.p.ssafy.io/");
   setAdress;
   return (
     <div {...props} className="qrcode-box">

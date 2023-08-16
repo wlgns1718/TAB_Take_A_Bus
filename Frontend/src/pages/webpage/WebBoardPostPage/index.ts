@@ -1,2 +1,2 @@
-export * from './WebBoardPostPage';
-export * from './WebBoardPostPage.props';
+export * from "./WebBoardPostPage";
+export * from "./WebBoardPostPage.props";

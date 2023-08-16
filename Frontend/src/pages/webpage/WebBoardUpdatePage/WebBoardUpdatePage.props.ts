@@ -1,1 +1,1 @@
-export interface WebBoardUpdatePageProps {};
+export interface WebBoardUpdatePageProps {}

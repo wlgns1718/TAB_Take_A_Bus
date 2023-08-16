@@ -71,9 +71,9 @@ function useInterval(callback: () => void, delay: number | null) {
 
 export const WeatherBox: FC<WeatherBoxProps> = (props) => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-    const data: KioskState = useSelector((state: { kiosk: KioskState }) => {
-      return state.kiosk;
-    });
+  const data: KioskState = useSelector((state: { kiosk: KioskState }) => {
+    return state.kiosk;
+  });
 
   // toomany request 주의!
   const fetchWeatherData = async () => {
@@ -100,8 +100,6 @@ export const WeatherBox: FC<WeatherBoxProps> = (props) => {
 
   const func = useTempData ? tempFetchWeatherData : fetchWeatherData;
   useInterval(func, 600000);
-  // useInterval(tempFetchWeatherData, 600000);
-  // console.log(fetchWeatherData);
 
   return (
     <div {...props} className="weather-box">
@@ -110,7 +108,7 @@ export const WeatherBox: FC<WeatherBoxProps> = (props) => {
         <div className="weather-box-detail">
           <img
             src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@4x.png`}
-            alt={`${weatherData?.weather[0].description}`+'_icon'}
+            alt={`${weatherData?.weather[0].description}` + "_icon"}
             className="weather-icon"
           />
           <div className="weather-textbox">
@@ -121,7 +119,7 @@ export const WeatherBox: FC<WeatherBoxProps> = (props) => {
           </div>
         </div>
       ) : (
-        <div> 로딩 중 ...</div>
+        <div className="weather-textbox"> 로딩 중 ...</div>
       )}
     </div>
   );

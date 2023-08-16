@@ -1,2 +1,2 @@
-export * from './WebSignupPage';
-export * from './WebSignupPage.props';
+export * from "./WebSignupPage";
+export * from "./WebSignupPage.props";
