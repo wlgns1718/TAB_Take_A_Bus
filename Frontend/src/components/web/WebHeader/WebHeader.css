@@ -37,7 +37,7 @@
 .backmainimg{
   background: url(/public/visual_businfo.jpg) no-repeat center;;
   min-width: 768px;
-  min-height: 230px;
+  min-height: 200px;
   background-size: cover;
   margin-bottom: 30px;
 }

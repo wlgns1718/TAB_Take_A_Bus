@@ -3,6 +3,9 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { DustBoxProps } from ".";
 import "./DustBox.css";
+import proj4 from "proj4";
+import { useSelector } from "react-redux";
+import { KioskState } from "@/store/slice/kiosk-slice";
 
 // 미세먼지 정보를 담을 인터페이스 (API 응답 데이터 구조에 맞게 정의)
 interface DustData {
@@ -14,12 +17,70 @@ interface DustData {
 
 export const DustBox: FC<DustBoxProps> = (props) => {
   const [dustInfo, setDustInfo] = useState<DustData | null>(null);
+  const [measuringStation, setMeasuringStation] = useState("종로구");
+
+  const [state10, setState10] = useState(1);
+  const [state25, setState25] = useState(1);
+
+  const dustState = [
+    {
+      icon: "/good.jpg?url",
+      text: "좋음",
+    },
+    {
+      icon: "/soso.jpg?url",
+      text: "보통",
+    },
+    {
+      icon: "/bad.jpg?url",
+      text: "나쁨",
+    },
+    {
+      icon: "/worst.jpg?url",
+      text: "최악",
+    },
+  ];
+
+  const data: KioskState = useSelector((state: { kiosk: KioskState }) => {
+    return state.kiosk;
+  });
+
+  const TM =
+    "+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=1000000 +y_0=2000000 +ellps=GRS80 +units=m +no_defs";
+
+  useEffect(() => {
+    fetchMeasuringStation();
+  }, []);
+
+  const fetchMeasuringStation = async () => {
+    const [tmx, tmy] = convertLatLngToTM(data.stationLon, data.stationLat);
+    console.log("tmx, tmy :", tmx, tmy);
+    axios
+      .get(
+        `https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=vg04G9ynpCLz1hobrfscOxzbc5l7eekaJGTiY6DeHxeEND3j%2FJ%2BTtcVlTP1%2F0OPAvW%2FsnRPZBDDLR9cXKpPzpg%3D%3D&returnType=json&tmX=${tmx}&tmY=${tmy}&ver=1.0`
+      )
+      .then((response) => {
+        // 가까운 측정소 이름을 저장
+        console.log(response);
+        setMeasuringStation(response.data.response.body.items[0].stationName);
+      })
+      .catch((error) => {
+        console.error("Error fetching dust information:", error);
+      });
+  };
+
+  // proj4 라이브러리에 정의 추가
+  proj4.defs("TM", TM);
+
+  const convertLatLngToTM = (lon: number, lat: number): [number, number] => {
+    return proj4("WGS84", "TM", [lon, lat]);
+  };
 
   // const busStop = "정류장이름";
   // const latitude: number = 36.12;
   // const longitude: number = 128.34;
 
-  const useTempData = true;
+  const useTempData = false;
 
   const tempDustData = {
     pm25Grade1h: "1",
@@ -43,6 +104,30 @@ export const DustBox: FC<DustBoxProps> = (props) => {
     pm10Grade: "2",
     o3Value: "0.040",
   };
+
+  useEffect(() => {
+    if (dustInfo == null) {
+      return;
+    }
+    if (dustInfo.pm10Value <= 15) {
+      setState10(0);
+    } else if (dustInfo.pm10Value <= 35) {
+      setState10(1);
+    } else if (dustInfo.pm10Value <= 75) {
+      setState10(2);
+    } else {
+      setState10(3);
+    }
+    if (dustInfo.pm25Value <= 15) {
+      setState25(0);
+    } else if (dustInfo.pm25Value <= 35) {
+      setState25(1);
+    } else if (dustInfo.pm25Value <= 75) {
+      setState25(2);
+    } else {
+      setState25(3);
+    }
+  }, [dustInfo]);
 
   function useInterval(callback: () => void, delay: number | null) {
     const savedCallback = useRef<typeof callback>(callback);
@@ -78,10 +163,7 @@ export const DustBox: FC<DustBoxProps> = (props) => {
               "vg04G9ynpCLz1hobrfscOxzbc5l7eekaJGTiY6DeHxeEND3j/J+TtcVlTP1/0OPAvW/snRPZBDDLR9cXKpPzpg==",
             numOfRows: 1,
             pageNo: 1,
-            // 위도와 경도를 이용하여 가장 가까운 측정소 이름을 찾습니다.
-            // 이 부분은 추가적인 로직이 필요합니다.
-            // 예를 들어, 다른 API를 이용하거나 미리 측정소와 위도/경도 정보를 매핑해둔 데이터를 사용해야 합니다.
-            stationName: "형곡동", // 측정소 이름 (예: 강남구)
+            stationName: measuringStation, // 측정소 이름 (예: 강남구)
             dataTerm: "DAILY",
             ver: "1.3",
             returnType: "json",
@@ -125,23 +207,35 @@ export const DustBox: FC<DustBoxProps> = (props) => {
         <div className="fine-dust-box">
           <div className="info-title">미세먼지</div>
           <div className="dust-text">
-            <div>아이콘</div>
-            <div>좋음</div>
+            <div>
+              <img
+                className="dust-icon"
+                src={dustState[state10].icon}
+                alt={`10_${dustState[state10].icon}_icon`}
+              />
+            </div>
+            <div>{dustState[state10].text}</div>
             <div>{dustInfo?.pm10Value} ㎍/㎥</div>
           </div>
         </div>
         <div className="micro-dust-box">
           <div className="info-title">초미세먼지</div>
           <div className="dust-text">
-            <div>아이콘</div>
-            <div>좋음</div>
+            <div>
+              <img
+                className="dust-icon"
+                src={dustState[state25].icon}
+                alt={`10_${dustState[state25].icon}_icon`}
+              />
+            </div>
+            <div>{dustState[state25].text}</div>
             <div>{dustInfo?.pm25Value} ㎍/㎥</div>
           </div>
         </div>
       </div>
       {dustInfo ? (
         <div className="measurement-time">
-          <p>측정 시간: {dustInfo.dataTime}</p>
+          <p>측정 시간: {dustInfo.dataTime}, {measuringStation}</p>
         </div>
       ) : (
         <div className="">

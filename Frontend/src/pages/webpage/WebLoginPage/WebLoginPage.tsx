@@ -75,7 +75,15 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
       });
   };
 
-  const REDIRECT_URI = "http://localhost:5173/oauth/kakao";
+    const logOnkeyPress = (e) =>{
+      if (e.key ==='Enter') {
+        login()
+      }
+    }
+  
+
+
+  const REDIRECT_URI = "https://i9d111.p.ssafy.io/kakao/";
   const REST_API_KEY = "e9fca19300e2496bcccc630ce29801a3";
 
   return (
@@ -104,12 +112,14 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
                 onChange={(e) => {
                   setId(e.target.value);
                 }}
+                onKeyDown={logOnkeyPress}
               />
               <FormControl fullWidth variant="standard">
                 <InputLabel htmlFor="standard-adornment-password">
                   Password
                 </InputLabel>
                 <Input
+                  onKeyDown={logOnkeyPress}
                   onChange={(e) => {
                     setPassword(e.target.value);
                   }}
@@ -148,7 +158,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
                 <Button
                   variant="outlined"
                   onClick={() => {
-                    navigate("/signup");
+                    navigate("/signup/");
                   }}
                   style={{ marginBottom: "30px", marginTop: "10px" }}
                 >

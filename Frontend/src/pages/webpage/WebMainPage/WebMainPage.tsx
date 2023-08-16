@@ -12,8 +12,8 @@ import { Web404Page } from "../Web404Page";
 import { Routes, Route } from "react-router-dom";
 import {  Grid } from "@mui/material";
 import { Button } from "@mui/joy";
-
-
+import Kakaopage from "../Kakaopage";
+import WebSurveyPerterPage from "../WebSurveyPeterPage/WebSurveyPeterPage";
 import './WebMainPage.css'
 import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
 import { WebBoardUpdatePage } from "../WebBoardUpdatePage";
@@ -53,6 +53,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
               </div>
             }
           ></Route>
+          <Route path="kakao" element={<Kakaopage />}></Route>
           <Route path="signup" element={<WebSignupPage />}></Route>
           <Route path="login" element={<WebLoginPage />}></Route>
           <Route path="board/">
@@ -61,7 +62,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
             <Route path="update/:category/:postId" element={<WebBoardUpdatePage />}></Route>
           </Route>
           <Route path="recommend" element={<WebRecommendPage />}></Route>
-          <Route path="survey" element={<WebSurveyPage />}></Route>
+          <Route path="survey" element={<WebSurveyPerterPage />}></Route>
           <Route path="*" element={<Web404Page />}></Route>
         </Routes>
       </div>

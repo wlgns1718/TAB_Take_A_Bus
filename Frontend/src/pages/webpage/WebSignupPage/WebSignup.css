@@ -4,6 +4,7 @@
     justify-content: start;
     align-items: start;
     font-weight: bold;
+    margin-bottom: 30px;
 }
 .signUpMid{
     display: flex;
