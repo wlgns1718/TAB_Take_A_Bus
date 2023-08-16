@@ -307,7 +307,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   const [isSelectCity, setIsSelectCity] = useState(false);
   const [selectedRouteId, setSelectedRouteId] = useState<Route>();
-
+  const [clickedRoute,setClickedRoute] = useState<boolean>(false);
   useEffect(() => {
     if (routes != null) setIsSelectCity(true);
     else setIsSelectCity(false);
@@ -470,7 +470,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         cycleNavigation={true}
         swipe={true}
         animation="fade"
-        height={700}
+        height={600}
         interval={10000}
         stopAutoPlayOnHover={true}
         navButtonsAlwaysVisible={false}
@@ -479,21 +479,46 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       >
         {TripImgs.map((img, index) => {
           return (
-            <div>
+            <div style={{display:"flex",
+            justifyContent:"center",
+            alignItems:"center",
+            flexDirection:"column"}}>
+              <h1
+            style={{
+              textAlign: "center",
+              // fontWeight: "normal",
+              color: "black",
+              fontFamily:'Noto Sans KR, sans-serif',
+              marginBottom:"20px",
+              marginTop:"60px",
+              fontWeight:"bold"
+            }}
+          >
+            TAB 플레이스
+          </h1>
+          
+         
+          <p style={{fontFamily:'Noto Sans KR, sans-serif',}}>대한민국 버스가 다니는 구석구석
+          <br />
+          정류장별 핫플레이스와 맛집 정보를 확인해 보세요
+          </p>
+          <hr style={{width:"500px", marginBottom:"40px"}} />
               <div
                 style={{
+                  marginTop:"5px",
                   backgroundImage: `url(${img.src})`,
-                  width: "100%",
-                  height: 700,
+                  width: "80%",
+                  height: '400px',
                   backgroundSize: "cover",
-                  filter: "brightness(60%)",
+                  filter: "brightness(60%)"
+
                 }}
                 key={index}
               ></div>
               <div
                 style={{
                   color: "white",
-                  fontSize: 25,
+                  fontSize: "11px",
                   position: "relative",
                   fontFamily: "fantasy",
                   top: -60,
@@ -508,6 +533,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       </Carousel>
       <div
         style={{
+          marginBottom:"30px",
           position: "relative",
           top: -550,
           zIndex: 2,
@@ -516,7 +542,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       >
         <div
           style={{
-            backgroundColor: "rgba(0,0,0,0.3) ",
+            // backgroundColor: "rgba(0,0,0,0.3) ",
             width: 400,
             padding: 1,
             marginLeft: "auto",
@@ -524,38 +550,27 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
             marginBottom: -200,
           }}
         >
-          <h1
-            style={{
-              textAlign: "center",
-              fontWeight: "normal",
-              color: "white",
-              fontFamily: "monospace",
-            }}
-          >
-            TAB 플레이스
-          </h1>
+          
         </div>
         <div
           style={{
             textAlign: "center",
             fontWeight: "normal",
             position: "relative",
-            top: 250,
+            top: 400,
             fontSize: 25,
             color: "white",
             opacity: 1,
           }}
         >
-          <span>요즘 인기 있는 곳는 다 모였네!</span>
+          {/* <span>요즘 인기 있는 곳는 다 모였네!</span> */}
           <br />
-          <span>대한민국 버스가 다니는 구석구석</span>
-          <br />
-          <span>정류장별 핫플레이스와 맛집 정보를 확인해 보세요</span>
+        
           <br />
         </div>
       </div>
 
-      <Container
+      <Container 
         maxWidth="md"
         sx={{
           display: "flex",
@@ -569,7 +584,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
               <Option
                 key={index}
                 value={op.cityname}
-                onClick={() => handleCityChange(op)}
+                onClick={() => {handleCityChange(op)}}
                 className="options-city"
               >
                 {op.cityname}
@@ -618,15 +633,17 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         <Button
           onClick={() => {
             getRecommend();
+            setClickedRoute(true);
           }}
           color="primary"
           variant="soft"
           size="lg"
+          style={{marginTop:"20px", marginBottom:"20px"}}
         >
           TAB 해서 추천받기
         </Button>
       </Container>
-      <div>
+      {clickedRoute ? <div>
         {isLoading ? (
           <Container
             sx={{ display: "flex", justifyContent: "center", marginY: 5 }}
@@ -642,7 +659,8 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
             추천받은 데이터가 없습니다
           </Container>
         )}
-      </div>
+      </div> : '' }
+      
     </div>
   );
 };

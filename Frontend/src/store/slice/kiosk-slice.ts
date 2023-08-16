@@ -85,27 +85,41 @@ const kioskSlice = createSlice({
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
-      state.busData.map((el) => {
+      const plusBus = state.busData.map((el) => {
         if (el.vehicleNo == vehicleNo) {
-          el.passengerNumber += 1;
-          el.isStopHere = true;
+          return{
+            ...el,
+            passengerNumber : el.passengerNumber +1,
+            isStopHere : true,
+          };
         }
         return el;
       });
+      return{
+        ...state,
+        busData: plusBus
+      };
     },
     syncCarouselPage(state, action) {
       state.nowCarouselPage = action.payload.now;
     },
     SetVulnerable(state, action) {
       const vehicleNo = action.payload.vehicleNo;
-      state.busData.map((el) => {
+      const plusVulnerBus = state.busData.map((el) => {
         if (el.vehicleNo == vehicleNo) {
-          el.isVulnerable = true;
-          el.passengerNumber += 1;
-          el.isStopHere = true;
+          return{
+            ...el,
+            isVulnerable : true,
+            passengerNumber: el.passengerNumber+ 1,
+            isStopHere : true,
+          };
         }
         return el;
-      });
+      }); 
+      return {
+        ...state,
+        busData: plusVulnerBus
+      };
     },
     checkMaster(state, action) {
       state.busStopId = action.payload.busStopId;

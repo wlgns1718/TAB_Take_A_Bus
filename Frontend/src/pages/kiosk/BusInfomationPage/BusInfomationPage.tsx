@@ -53,6 +53,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
           } else if (response.data.code == "200") {
+            console.log(response.data)
             // 도착예정시간 순으로 정렬해서 저장.
             const addData: BusStoreData[] = response.data.data.map((el) => {
               el.isStopHere = false;
