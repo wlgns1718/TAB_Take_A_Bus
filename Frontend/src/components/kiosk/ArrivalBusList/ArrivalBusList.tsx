@@ -8,6 +8,7 @@ import {
   syncCarouselPage,
 } from "../../../store/slice/kiosk-slice";
 import { useDispatch, useSelector } from "react-redux";
+import { Container } from "@mui/joy";
 
 export const ArrivalBusList: FC<ArrivalBusListProps> = ({ pages }) => {
   const dispatch = useDispatch();
@@ -15,6 +16,18 @@ export const ArrivalBusList: FC<ArrivalBusListProps> = ({ pages }) => {
   return (
     <div className="bus-list-container">
       <Carousel
+        indicatorIconButtonProps={{
+          style: {
+            padding: "0px", // 1
+            color: "red", // 3
+          },
+        }}
+        indicatorContainerProps={{
+          style: {
+            marginTop: "0px", // 5
+            textAlign: "left", // 4
+          },
+        }}
         duration={500}
         cycleNavigation={true}
         swipe={true}
@@ -30,11 +43,17 @@ export const ArrivalBusList: FC<ArrivalBusListProps> = ({ pages }) => {
           return;
         }}
       >
-        {pages.map((page) => {
-          return page.map((item: BusStoreData, index: number) => {
-            return <ArrivalBusListItem item={item} key={index} />;
-          });
-        })}
+        {pages.length ? (
+          pages.map((page) => {
+            return page.map((item: BusStoreData, index: number) => {
+              return <ArrivalBusListItem item={item} key={index} />;
+            });
+          })
+        ) : (
+          <Container sx={{ fontSize: 60, marginTop: 20, textAlign: "center" }}>
+            도착 예정 정보가 없습니다..
+          </Container>
+        )}
       </Carousel>
     </div>
   );
