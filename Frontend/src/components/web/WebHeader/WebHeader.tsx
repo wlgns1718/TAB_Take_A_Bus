@@ -44,7 +44,9 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
           <NavLinkForm dest="/" word="홈" />
           <NavLinkForm dest="/board" word="게시판" />
           <NavLinkForm dest="/recommend/" word="관광/맛집" />
-          <NavLinkForm dest="/survey" word="수요조사" />
+          {webData.loginData.role=="MANAGER" ? <NavLinkForm dest="/surveyMaster" word="수요조사 결과" /> : <NavLinkForm dest="/survey" word="수요조사" />}
+          
+          
         </div>
         <div className="header-btns" id="navitems">
           {!isUserIn ? (

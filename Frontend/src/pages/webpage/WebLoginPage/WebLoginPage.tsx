@@ -53,6 +53,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
       .then((response) => {
         if (response.data.code == 200 || response.data.code == 202) {
           dispatch(setToken(response.data.data.accessToken));
+          console.log(webData.Token)
           dispatch(setIsUserIn(true));
           dispatch(
             setLoginUser({

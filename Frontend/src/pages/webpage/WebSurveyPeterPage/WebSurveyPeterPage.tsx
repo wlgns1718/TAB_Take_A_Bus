@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./WebSurveyPeterPage.css";
+import webSlice from "@/store/slice/web-slice";;
+import { WebState } from "@/store/slice/web-slice";
+import { KioskState } from "@/store/slice/kiosk-slice";
+import { useSelector } from "react-redux";
+
+
 
 interface LatLng {
   lat: number;
@@ -11,6 +17,14 @@ function WebSurveyPerterPage() {
   const [start, setStart] = useState<LatLng>({ lat: 0, lng: 0 });
   const [dest, setDest] = useState<LatLng>({ lat: 0, lng: 0 });
   const [reset,setReset] = useState<boolean>(false);
+
+
+  const webdata: WebState = useSelector(
+    (state: { kiosk: KioskState; web: WebState }) => {
+      return state.web;
+    }
+  );
+
   let startImageSrc =
     "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png";
   let startImageSize = new kakao.maps.Size(50, 45);
@@ -152,7 +166,7 @@ function WebSurveyPerterPage() {
         onClick={() => {
           axios
             .post(
-              "http://localhost:8000/tab/survey",
+              "https://i9d111.p.ssafy.io/tab/survey",
               {
                 destinationLatitude: dest.lat,
                 destinationLongtitude: dest.lng,
@@ -162,7 +176,7 @@ function WebSurveyPerterPage() {
               {
                 headers: {
                   Authorization:
-                    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJtYW5hZ2VyIiwiaWF0IjoxNjkxOTk2NTIxLCJleHAiOjE2OTIwMDAxMjF9.g-RjqL862I5GkO8hTf5MUVelM0covZIoJaec5OxskGc",
+                    `Bearer ${webdata.Token}`,
                 },
               }
             )
