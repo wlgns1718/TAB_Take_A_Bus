@@ -151,7 +151,11 @@ public class BusStationController {
         Map<String,Object> resultMap = new HashMap<>();
 
         try{
-            Map<String,Object> tripInfos = busTestService.getTripInfo(cityCode,routeId,tripType,keyIndex);
+            Map<String,List<TripInfoDto>> tripInfos = busTestService.getTripInfo(cityCode,routeId,tripType,keyIndex);
+            System.out.println("controller에서 확인해봅니다.");
+            for (Object value : tripInfos.values()) {
+                System.out.println(value);
+            }
             resultMap.put("code","200");
             resultMap.put("msg","성공적으로 API를 불러왔습니다.");
             resultMap.put("data",tripInfos);
