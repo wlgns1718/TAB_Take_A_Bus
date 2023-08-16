@@ -229,12 +229,12 @@ public class BusTestService {
         }
     }
 
-    public Map<String,Object> getTripInfo(String cityCode, String routeId, String tripType,int keyIndex)throws JsonProcessingException {
+    public Map<String, List<TripInfoDto>> getTripInfo(String cityCode, String routeId, String tripType, int keyIndex)throws JsonProcessingException {
 
         //공공데이터 포털 Key
         String key = keyList.get(keyIndex);
         //여행지 정보 담기
-        Map<String,Object> tripInfos = new HashMap<>();
+        Map<String,List<TripInfoDto>> tripInfos = new HashMap<>();
 
         // 1. cityCode와 routeId로 해당 버스가 갈 수 있는 모든 정류장 추출
         // 2. 모든 정류장에서 몇 정거장마다 위도,경도 추출
@@ -266,8 +266,6 @@ public class BusTestService {
             br.close();
             //불러온 값에서 key = response인 값을 불러오기
             JSONObject response = (JSONObject) jsonObject.get("response");
-            System.out.println("=============================================");
-            System.out.println(response);
             //해당 routeId가 갈 수 있는 모든 정류장 가져오기
             JSONObject items = (JSONObject) ((JSONObject) response.get("body")).get("items");
 
@@ -313,19 +311,14 @@ public class BusTestService {
 
         return tripInfos;
     }
-    public Map<String,Object> findAllTripInfo(List<String[]> infos,int keyIndex,String tripType){
-        Map<String,Object> list = new HashMap<>();
+    public Map<String,List<TripInfoDto>> findAllTripInfo(List<String[]> infos,int keyIndex,String tripType)throws JsonProcessingException, IOException,ParseException{
+        Map<String,List<TripInfoDto>> list = new HashMap<>();
         URL apiurl = null;
         HttpURLConnection conn = null;
         BufferedReader br = null;
-        JSONParser jsonParser = new JSONParser();
-        System.out.println("infos정보 찾기");
-//        System.out.println(infos.toString());
-        for(String[] temp : infos){
-            System.out.println(Arrays.toString(temp));
-        }
+        JSONParser jsonParser = new JSONParser();;
         for (String[] gps : infos) {
-            try {
+
                 StringBuilder sb = new StringBuilder();
                 sb.append("https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=");
                 sb.append(keyList.get(keyIndex));
@@ -365,14 +358,8 @@ public class BusTestService {
                     tripDto.setFirstimage2(String.valueOf(json.get("firstimage2")));
                     trips.add(tripDto);
                 }
-                System.out.println(gps[0]);
                 list.put(gps[0],trips);
-            }catch (NullPointerException e){
-                e.printStackTrace();
-                continue;
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+
 
         }
         return list;
