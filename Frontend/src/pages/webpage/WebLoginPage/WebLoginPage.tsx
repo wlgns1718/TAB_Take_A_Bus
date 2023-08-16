@@ -64,7 +64,7 @@ export const WebLoginPage: FC<WebLoginPageProps> = (props) => {
             })
           );
           console.log("로그인성공");
-          navigate("/home");
+          navigate("/");
         } else {
           alert(response.data.msg)
         }
