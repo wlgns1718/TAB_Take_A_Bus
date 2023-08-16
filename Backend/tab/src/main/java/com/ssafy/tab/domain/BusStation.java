@@ -30,7 +30,4 @@ public class BusStation {
 
     @Column(name = "LONGTITUDE")
     private Double longtitude; // 경도
-
-    @OneToMany(mappedBy = "busStation",cascade = CascadeType.ALL)
-    List<BusData> data = new ArrayList<>();
 }
