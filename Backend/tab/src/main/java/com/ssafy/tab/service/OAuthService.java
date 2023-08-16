@@ -66,6 +66,8 @@ public class OAuthService {
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
+            System.out.println();
+
             if(responseCode != 200){
                 throw new Exception();
             }
@@ -97,7 +99,7 @@ public class OAuthService {
     }
 
     public Map<String, String> getUserInfo(String access_Token) {
-        //    요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
+        //요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
         Map<String, String> userInfo = new HashMap<>();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         try {
@@ -122,7 +124,6 @@ public class OAuthService {
 
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
-
             String id = element.getAsJsonObject().get("id").getAsString();
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             String nickname = properties.getAsJsonObject().get("nickname").getAsString();
@@ -159,6 +160,7 @@ public class OAuthService {
                 String accessToken = JwtUtil.createToken(id, secretKey, accessExpiredMs);
                 String refreshToken = JwtUtil.createToken(id, secretKey, refreshExpiredMs);
                 joinUser.setRefreshToken(refreshToken);
+                userInfo.put("id", id);
                 userInfo.put("accessToken", accessToken);
                 userInfo.put("refreshToken", refreshToken);
             }
