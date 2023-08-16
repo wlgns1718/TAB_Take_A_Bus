@@ -201,7 +201,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       code: 39,
       text: "음식점",
     },
-  ];
+  ];  
   const [routes, setRoutes] = useState([]);
 
   const [selectedTripType, setSelectedTripType] = useState<{code:number, text:string}>();
