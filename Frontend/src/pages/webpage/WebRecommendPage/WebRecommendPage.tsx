@@ -242,7 +242,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   const getRecommend = () => {
     // axios
-    webAPI.get(`/trip/${selectedCity.citycode}/${selectedRouteId.routeno}/${selectedTripType.code}`).then((response) => {
+    webAPI.get(`/trip/${selectedCity.citycode}/${selectedRouteId.routeid}/${selectedTripType.code}`).then((response) => {
       console.log(response.data);
     });
   };
@@ -324,6 +324,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
           ddd
         </Button>
       </div>
+      <div className="l-line"></div>
     </div>
   );
 };
