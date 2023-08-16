@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.tab.domain.BusStation;
 import com.ssafy.tab.domain.BustestApi;
+import com.ssafy.tab.dto.TripInfoDto;
 import com.ssafy.tab.service.BusStationService;
 import com.ssafy.tab.service.BusTestService;
 import io.swagger.annotations.ApiOperation;
@@ -142,5 +143,36 @@ public class BusStationController {
     }
 
     //여행 관련 API 작성, routeId는 해당 버스의 노선 아이디, 프론트단에서 보여줄 땐 routeno을 보여주기(ex, 388)
-    //@GetMapping("/trip/{cityCode}/{routeId}/{tripType}")
+    @ApiOperation(value = "해당 버스번호가 갈 수 있는 관광지 정보 조회 API", notes = "12:관광지, 14:문화시설, 15:축제공연행사, 25:여행코스, 28:레포츠, 32:숙박, 38:쇼핑, 39:음식점", response = Map.class)
+    @GetMapping("/trip/{cityCode}/{routeId}/{tripType}")
+    public ResponseEntity<Map<String, Object>> tripData(@PathVariable("cityCode") @ApiParam(value = "도시코드",required = true)String cityCode,
+                                                        @PathVariable("routeId") @ApiParam(value = "버스 ID") String routeId,
+                                                        @PathVariable("tripType") @ApiParam(value = "관광 정보 타입") String tripType)throws Exception{
+        Map<String,Object> resultMap = new HashMap<>();
+
+        try{
+            Map<String,Object> tripInfos = busTestService.getTripInfo(cityCode,routeId,tripType,keyIndex);
+            resultMap.put("code","200");
+            resultMap.put("msg","성공적으로 API를 불러왔습니다.");
+            resultMap.put("data",tripInfos);
+        } catch (JsonProcessingException e) {
+            String message = e.getMessage();
+            keyIndex = (keyIndex + 1) % 5;
+            e.printStackTrace();
+            resultMap.put("code", "500");
+            resultMap.put("msg", "API키가 만료 되었습니다. 다시 요청하면 자동으로 키가 바뀝니다. 다시 요청하세요.");
+            resultMap.put("errorMessage", message);
+        } catch (IOException e){
+
+            String message = e.getMessage();
+            e.printStackTrace();
+            resultMap.put("code","500");
+            resultMap.put("msg","API호출에 실패했습니다!");
+            resultMap.put("errorMessage",message);
+
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+    }
+
  }
