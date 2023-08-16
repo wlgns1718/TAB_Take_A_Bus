@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardOverflow,
+  CircularProgress,
   Container,
   Divider,
   Option,
@@ -17,6 +18,7 @@ import {
 import { busAPI, webAPI } from "@/store/api/api";
 import "./WebRecommendPage.css";
 import MapIcon from "@mui/icons-material/Map";
+import Carousel from "react-material-ui-carousel";
 
 export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   // citycode 리스트
@@ -235,114 +237,63 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       text: "음식점",
     },
   ];
+
+  const TripImgs = [
+    { src: "/Trip_강원_속초아이_1920x1080.png?url", name: "강원 속초아이" },
+    {
+      src: "/Trip_경기_포천_허브아일랜드_1920x1080.png?url",
+      name: "포천 허브아일랜드",
+    },
+    { src: "/Trip_경남_거제_외도_1920x1080.png?url", name: "경남_거제_외도" },
+    {
+      src: "/Trip_경남_남해_상상양떼목장편백숲_1920x1080.png?url",
+      name: "남해 상상양떼목장편백숲",
+    },
+    {
+      src: "/Trip_경북_포항_이가리닻전망대_1920x1080.png?url",
+      name: "포항 이가리닻전망대",
+    },
+    {
+      src: "/Trip_대구_군위_화본역_1920x1080.png?url",
+      name: "대구 군위 화본역",
+    },
+    {
+      src: "/Trip_대구_달서구_이월드_1920x1080.png?url",
+      name: "대구 달서구 이월드",
+    },
+    { src: "/Trip_대구_이월드_1920x1080.png?url", name: "대구 이월드" },
+    { src: "/Trip_부산_감지해변_1920x1080.png?url", name: "부산 감지해변" },
+    { src: "/Trip_부산_미포철길_1920x1080.png?url", name: "부산 미포철길" },
+    {
+      src: "/Trip_부산_송도해상케이블카_1920x1080.png?url",
+      name: "부산 송도해상케이블카",
+    },
+    {
+      src: "/Trip_인천_송도_센트럴파크_1920x1080.png?url",
+      name: "인천 송도 센트럴파크",
+    },
+    {
+      src: "/Trip_인천_트리플스트리트_1920x1080.png?url",
+      name: "인천 트리플스트리트",
+    },
+    { src: "/Trip_전남_여수_백도_1920x1080.png?url", name: "전남 여수 백도" },
+    {
+      src: "/Trip_전북_고창_고창갯벌_1920x1080.png?url",
+      name: "전북 고창 고창갯벌",
+    },
+    { src: "/Trip_제주_비양도_1920x1080.png?url", name: "제주 비양도" },
+    { src: "/Trip_제주_수월봉_1920x1080.png?url", name: "제주 수월봉" },
+    {
+      src: "/Trip_제주_신창풍차해안도로_1920x1080.png?url",
+      name: "제주 신창풍차해안도로",
+    },
+  ];
   const [routes, setRoutes] = useState([]);
 
-  const [tripData, setTripData] = useState<object>({
-    신천3치안센터앞: [
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 128.6276707967,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 128.627670796,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage: "",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 128.6276707967,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 128.6276707967,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-    ],
-    홈플러스동촌점건너: [
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: null,
-        mapy: null,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 128.6276707967,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 128.6276707967,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 128.6276707967,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-      {
-        addr1: "대구광역시 동구 동부로26길 6",
-        firstimage:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        firstimage2:
-          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
-        mapx: 28.6276707967,
-        mapy: 35.8753644169,
-        tel: "",
-        title: "대구 메리어트 호텔",
-      },
-    ],
-  });
+  const [tripData, setTripData] = useState<object>({});
 
   const [isexistResult, setIsexistResult] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [selectedTripType, setSelectedTripType] = useState<{
     code: number;
@@ -374,12 +325,12 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
     }
   }, [selectedCity]);
   useEffect(() => {
-    if (tripData) {
-      setIsexistResult(true);
-    } else {
+    if (Object.keys(tripData).length === 0) {
       setIsexistResult(false);
+    } else {
+      setIsexistResult(true);
     }
-  }, [isexistResult]);
+  }, [tripData]);
 
   const getRecommend = () => {
     if (!selectedCity) {
@@ -394,7 +345,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       alert("관광지을 선택해주세요");
       return;
     }
-    // axios
+    setIsLoading(true);
     busAPI
       .get(
         `/trip/${selectedCity?.citycode}/${selectedRouteId?.routeid}/${selectedTripType?.code}`,
@@ -403,6 +354,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       .then((response) => {
         console.log(response.data);
         setTripData(response.data.data);
+        setIsLoading(false);
       });
   };
 
@@ -419,12 +371,14 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
     setSelectedTripType(value);
   };
 
-  const RouteTripList = ({ key, value, index }) => {
-    console.log(key, value);
-    let maxIndex = 4;
+  const RouteTripList = ({ title, value, key }) => {
+    console.log(title, value);
+    const [maxIndex, setMaxIndex] = useState<number>(4);
     return (
-      <Container sx={{ marginTop: 10 }} key={index}>
-        <Container sx={{ fontSize: 30 }}>{key}에서 하차시</Container>
+      <Container sx={{ marginTop: 10 }} key={key}>
+        <Container sx={{ fontSize: 30, marginY: 2 }}>
+          <div className="underline-title fromLeft">{title}에서 내리면</div>
+        </Container>
         <Container
           sx={{
             display: "flex",
@@ -453,13 +407,22 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
                 <CardContent>
                   <Stack direction={"row"} justifyContent={"space-between"}>
                     <div>
-                      <Typography level="title-md">
-                        <a
-                          href={`https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${el.title}`}
-                        >
-                          {el.title}
-                        </a>
-                      </Typography>
+                      <Stack direction={"row"}>
+                        <Typography level="title-md">
+                          <a
+                            href={`https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${el.title}`}
+                          >
+                            {el.title}
+                          </a>
+                        </Typography>
+                        {el?.tel ? (
+                          <Typography level="body-sm" marginLeft={2}>
+                            {el.tel}
+                          </Typography>
+                        ) : (
+                          ""
+                        )}
+                      </Stack>
                       <Typography level="body-sm">{el.addr1}</Typography>
                     </div>
                     <Button
@@ -478,21 +441,23 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
               </Card>
             );
           })}
-          {value.length > 4 ? (
-            <Button
-              onClick={() => {
-                if (maxIndex == 4) {
-                  maxIndex = 1000;
-                } else {
-                  maxIndex = 4;
-                }
-              }}
-            >
-              더보기
-            </Button>
-          ) : (
-            ""
-          )}
+          <Container sx={{ display: "flex", justifyContent: "right" }}>
+            {value.length > 4 ? (
+              <Button
+                onClick={() => {
+                  if (maxIndex == 4) {
+                    setMaxIndex(100);
+                  } else {
+                    setMaxIndex(4);
+                  }
+                }}
+              >
+                {maxIndex == 4 ? "더보기" : "접어두기"}
+              </Button>
+            ) : (
+              ""
+            )}
+          </Container>
         </Container>
       </Container>
     );
@@ -500,8 +465,104 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   return (
     <div {...props}>
-      <h1 style={{ textAlign: "center" }}>버스 노선 장소 추천 서비스</h1>
-      <Container maxWidth="md">
+      <Carousel
+        duration={500}
+        cycleNavigation={true}
+        swipe={true}
+        animation="fade"
+        height={700}
+        interval={10000}
+        stopAutoPlayOnHover={true}
+        navButtonsAlwaysVisible={false}
+        sx={{ marginTop: -3.5 }}
+        IndicatorIcon={false}
+      >
+        {TripImgs.map((img, index) => {
+          return (
+            <div>
+              <div
+                style={{
+                  backgroundImage: `url(${img.src})`,
+                  width: "100%",
+                  height: 700,
+                  backgroundSize: "cover",
+                  filter: "brightness(60%)",
+                }}
+                key={index}
+              ></div>
+              <div
+                style={{
+                  color: "white",
+                  fontSize: 25,
+                  position: "relative",
+                  fontFamily: "fantasy",
+                  top: -60,
+                  left: 20,
+                }}
+              >
+                {img.name} @대한민국 구석구석
+              </div>
+            </div>
+          );
+        })}
+      </Carousel>
+      <div
+        style={{
+          position: "relative",
+          top: -550,
+          zIndex: 2,
+          userSelect: "none",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgba(0,0,0,0.3) ",
+            width: 400,
+            padding: 1,
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginBottom: -200,
+          }}
+        >
+          <h1
+            style={{
+              textAlign: "center",
+              fontWeight: "normal",
+              color: "white",
+              fontFamily: "monospace",
+            }}
+          >
+            TAB 플레이스
+          </h1>
+        </div>
+        <div
+          style={{
+            textAlign: "center",
+            fontWeight: "normal",
+            position: "relative",
+            top: 250,
+            fontSize: 25,
+            color: "white",
+            opacity: 1,
+          }}
+        >
+          <span>요즘 인기 있는 곳는 다 모였네!</span>
+          <br />
+          <span>대한민국 버스가 다니는 구석구석</span>
+          <br />
+          <span>정류장별 핫플레이스와 맛집 정보를 확인해 보세요</span>
+          <br />
+        </div>
+      </div>
+
+      <Container
+        maxWidth="md"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <Select size="lg" placeholder="시/군 선택" className="select-city">
           {citis.map((op, index) => {
             return (
@@ -558,19 +619,30 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
           onClick={() => {
             getRecommend();
           }}
+          color="primary"
+          variant="soft"
+          size="lg"
         >
-          추천 받기
+          TAB 해서 추천받기
         </Button>
       </Container>
-      {/* <div>
-        {isexistResult ? (
+      <div>
+        {isLoading ? (
+          <Container
+            sx={{ display: "flex", justifyContent: "center", marginY: 5 }}
+          >
+            <CircularProgress color="primary" variant="plain" />
+          </Container>
+        ) : isexistResult ? (
           Object.entries(tripData).map(([key, value], index) => {
-            <RouteTripList key={key} value={value} index={index}/>
+            return <RouteTripList title={key} value={value} key={index} />;
           })
         ) : (
-          <div>검색된 데이터가 없습니다</div>
+          <Container sx={{ marginTop: 10, textAlign: "center" }}>
+            추천받은 데이터가 없습니다
+          </Container>
         )}
-      </div> */}
+      </div>
     </div>
   );
 };
