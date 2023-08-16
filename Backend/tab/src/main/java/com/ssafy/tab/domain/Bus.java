@@ -49,7 +49,6 @@ public class Bus {
                 .routeNo(busDto.getRouteNo())
                 .createDate(LocalDateTime.now())
                 .vulnerable(busDto.isVulnerable())
-                .stationId(busDto.getStationId())
                 .build();
     }
 

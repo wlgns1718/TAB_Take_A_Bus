@@ -51,7 +51,7 @@ public class ArduinoController {
                 resultMap.put("data",busDto);
                 //조회 후 삭제 기능 추가
                 //Bus 데이터 베이스에 해당 데이터 삭제
-//                arduinoService.deleteInfo(busDto.getId());
+                arduinoService.deleteInfo(busDto.getId());
              }
         }catch (Exception e){
             e.printStackTrace();
@@ -65,16 +65,17 @@ public class ArduinoController {
     @PostMapping("/regist")
     public ResponseEntity<Map<String, Object>> registInfo(@RequestBody @ApiParam(value = "버스 탑승정보를 위한 데이터", required = true)BusDataDto busDataDto){
         Map<String,Object> resultMap = new HashMap<>();
-        //bus정보 등록하기
-        //만약 count가 1이상이라면 Bus 테이블에 INSERT
-        System.out.println("컨트롤러단에서 확인해보겠습니다"+busDataDto);
         try{
-            //==================================
-            arduinoService.createBus(busDataDto);
-            //==================================
+            if(busDataDto.getCount() >= 1){
+                arduinoService.createBus(busDataDto);
+                resultMap.put("code","200");
+                resultMap.put("msg","버스 정보 등록 완료!");
+            }
+            else{
+                resultMap.put("code","200");
+                resultMap.put("msg","탑승 인원이 0명이라 등록되지 않습니다.");
+            }
 
-            resultMap.put("code","200");
-            resultMap.put("msg","버스 정보 등록 완료!");
 
         }catch (Exception e){
             e.printStackTrace();
