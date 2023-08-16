@@ -76,7 +76,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
   const [pwdMsg, setPwdMsg] = useState<string>("");
   const [confirmPwdMsg, setConfirmPwdMsg] = useState<string>("");
   const [IdMsg, setIdMsg] = useState<string>("");
-  const [masterMsg, setMasterMsg] = useState<string>("");
+  const [masterMsg, setMasterMsg] = useState<string>("마스터키를 입력해주세요.");
   const [emailCheckMsg,setEmailCheckMsg] = useState<string>("인증번호를 입력해주세요.");
   
   // 1-1에 잡아뒀던 유효성 검사 함수로 정리하기
@@ -132,13 +132,11 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
     }
   };
 
+  const [masterchange,setmasterchage] = useState<string>('')
+  
   const onChangeMaster = (e) => {
     const currentMaster = e.target.value;
-    if (currentMaster == kiosdata.masterkey) {
-      setMasterCheck(true);
-    } else {
-      setMasterMsg("마스터키를 입력해주세요");
-    }
+    setmasterchage(currentMaster)
   };
 
 
@@ -244,7 +242,6 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
               onChange={onChangeId}
             />
             
-
             <PasswordBox
               pass={onChangePass}
               helptext={`${pwdMsg}`}
@@ -257,7 +254,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
             />
           </div>
           <div style={{display:'flex',flexDirection:'column'}}>
-            <button onClick={isEmailValid ? sendEmailCheck : ()=>{alert('올바른 이메일을 입력해주세요.')}} style={{marginLeft:'20px'}}>이메일 인증</button>
+            <button onClick={isEmailValid ? sendEmailCheck : ()=>{alert('올바른 이메일을 입력해주세요.')}} style={{marginLeft:'20px',fontWeight:"bold"}}>이메일 인증</button>
             <div style={showModal ? {minHeight:"145px"} : {minHeight:"80px"} }></div>
             <button onClick={()=>{
               webAPI.get(`user/checkId/${Id}`)
@@ -271,7 +268,7 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
                  setIsSameId(false)
                 }
               })
-            }} style={{marginLeft:'20px'}}>ID 중복확인</button>
+            }} style={{marginLeft:'20px',fontWeight:"bold"}}>ID 중복확인</button>
           </div>
         </div>
 
@@ -372,11 +369,21 @@ export const WebSignupPage: FC<WebSignupPageProps> = (props) => {
           </FormGroup>
           <div>
             {master == true ? (
+              <div style={{display:'flex',flexDirection:"column",justifyContent:'center'}}>
               <PasswordBox
                 pass={onChangeMaster}
                 helptext={`${masterMsg}`}
                 id={"mastercon"}
               />
+              <button onClick={() =>{
+                {if(masterchange == kiosdata.masterkey){
+                  setMasterCheck(true)
+                  alert('마스터키가 일치합니다.')
+                }else{
+                  alert('마스터키가 일치하지 않습니다.')
+                }}
+              }} style={{marginBottom:"50px",fontWeight:"bold"}}>마스터키 확인</button>
+              </div>
             ) : null}
           </div>
         </div>

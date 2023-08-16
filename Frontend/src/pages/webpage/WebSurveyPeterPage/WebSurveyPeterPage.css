@@ -1,0 +1,40 @@
+
+
+
+.mainServeyBox{
+  display: flex;
+  flex-direction: column;
+}  
+
+
+.peterSurveyBtn{
+  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  background-color: #016FF2;
+  color: white;
+  font-family:'Noto Sans KR', sans-serif;
+
+}
+.surveyTop{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family:'Noto Sans KR', sans-serif;
+  flex-direction: column;
+}
+.resetBtn{
+  font-family:'Noto Sans KR', sans-serif;
+  margin-bottom: 30px;
+  color: white;
+  background-color: #F65555;
+}
+#text {
+
+    /*
+    animation-name: blink-effect;
+    animation-duration: 1s;
+    animation-iteration-count:infinite;
+    animation-timing-function:step-end;
+    */
+}

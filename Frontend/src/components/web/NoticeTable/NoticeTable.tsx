@@ -62,7 +62,7 @@ export const NoticeTable: FC<NoticeTableProps> = ({ pages, currentPage }) => {
             {pages?.length ? (
               pages[currentPage - 1].map((row, index) => (
                 <TableRow
-                  style={{ height: TableStyle.rowHeight }}
+                  style={{ height: TableStyle.rowHeight, cursor:"pointer" }}
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   onClick={(e) => {
