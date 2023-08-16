@@ -4,7 +4,7 @@ import { WebState } from "@/store/slice/web-slice";
 import { KioskState } from "@/store/slice/kiosk-slice";
 import { useSelector } from "react-redux";
 import './SurveyMaster.css'
-
+import { WebSurveyMasterProps } from ".";
 
 let { google }:any = window; // window 전역 객체에 등록된 google를 함수형 컴포넌트에서 인식 시키기 위함
 
