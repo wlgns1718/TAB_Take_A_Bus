@@ -14,6 +14,7 @@ export const MobileMain: FC<MobileMainProps> = (props) => {
   const [stationId, setStationId] = useState<string>("");
 
   const fetchData = () => {
+    
     const apiUrl = `https://i9d111.p.ssafy.io/tab/arduino/${vehicleNo}`;
 
     fetch(apiUrl)
@@ -42,6 +43,7 @@ export const MobileMain: FC<MobileMainProps> = (props) => {
 
     const interval = setInterval(() => { // 10초마다 feth요청 반복
       fetchData(); 
+      
     }, 10000); 
 
     return () => {
@@ -57,15 +59,34 @@ export const MobileMain: FC<MobileMainProps> = (props) => {
         code === "200"
           ?
           <div className="content">
-            <h1>차량번호 : {vehicleNo}</h1>
-            <h1>이번 정류장 : [{stationId}]</h1>
-            <h2>탑승객이 있습니다.</h2>
-            <h2>{vulnerable===true ? '교통약자O' : '교통약자X'}</h2>
+            
+            <div className="content-header">
+              <div style={{display:"flex"}}>
+                <h1 className="white">차량번호</h1>
+                <h1 className="yellow"> : {vehicleNo}</h1>
+              </div>
+              <div style={{ display: "flex" }}>
+                <h1 className="white">이번 정류장</h1>
+                <h1 className="yellow">: [{stationId}]</h1>
+              </div>
+            </div>
+            <div className="content-body">
+              <h1 className="blinking-text"> 탑승객이 있습니다.</h1>
+              <h1 className="yellow blinking-text">{vulnerable === true ? '교통약자O' : '교통약자X'}</h1>
+            </div>
           </div>
           :
           <div className="content">
-            <h1>차량번호 : {vehicleNo}</h1>
-            <h2>탑승객이 없습니다.</h2>
+            <div className="content-header">
+              <div style={{display:"flex"}}>
+                  <h1 className="white">차량번호</h1>
+                  <h1 className="yellow"> : {vehicleNo}</h1>
+              </div>
+              
+            </div>
+            <div className="content-body">
+              <h1> 탑승객이 없습니다.</h1>
+            </div>
           </div>
       }
       
