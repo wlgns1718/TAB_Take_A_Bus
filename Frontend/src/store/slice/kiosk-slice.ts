@@ -98,7 +98,6 @@ const kioskSlice = createSlice({
     },
     SetVulnerable(state, action) {
       const vehicleNo = action.payload.vehicleNo;
-      const remainingStops = action.payload.remainingStops;
       state.busData.map((el) => {
         if (el.vehicleNo == vehicleNo) {
           el.isVulnerable = true;

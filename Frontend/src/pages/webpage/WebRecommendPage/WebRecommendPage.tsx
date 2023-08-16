@@ -1,10 +1,22 @@
 import { FC, useEffect, useState } from "react";
-import { WebHeader } from "@/components/web/WebHeader";
 import { WebRecommendPageProps } from ".";
 import axios from "axios";
-import { Button, Option, Select } from "@mui/joy";
-import { webAPI } from "@/store/api/api";
-import './WebRecommendPage.css'
+import {
+  AspectRatio,
+  Button,
+  Card,
+  CardContent,
+  CardOverflow,
+  Container,
+  Divider,
+  Option,
+  Select,
+  Stack,
+  Typography,
+} from "@mui/joy";
+import { busAPI, webAPI } from "@/store/api/api";
+import "./WebRecommendPage.css";
+import MapIcon from "@mui/icons-material/Map";
 
 export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   // citycode 리스트
@@ -12,6 +24,26 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   // 노선 리스트
   //  https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&pageNo=1&numOfRows=100&_type=xml&cityCode=37050
+  type TripPlace = {
+    addr1: string;
+    firstimage: string;
+    firstimage2: string;
+    mapx: number | null;
+    mapy: number | null;
+    tel: string;
+    title: string;
+  };
+
+  type Route = {
+    endnodenm: string;
+    endvehicletime: number;
+    routeid: string;
+    routeno: string;
+    routetp: string;
+    startnodenm: string;
+    startvehicletime: string;
+  };
+
   const citis = [
     { cityname: "가평군", citycode: "31370" },
     { cityname: "강릉시", citycode: "32030" },
@@ -202,10 +234,120 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       code: 39,
       text: "음식점",
     },
-  ];  
+  ];
   const [routes, setRoutes] = useState([]);
 
-  const [selectedTripType, setSelectedTripType] = useState<{code:number, text:string}>();
+  const [tripData, setTripData] = useState<object>({
+    신천3치안센터앞: [
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 128.6276707967,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 128.627670796,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage: "",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 128.6276707967,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 128.6276707967,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+    ],
+    홈플러스동촌점건너: [
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: null,
+        mapy: null,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 128.6276707967,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 128.6276707967,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 128.6276707967,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+      {
+        addr1: "대구광역시 동구 동부로26길 6",
+        firstimage:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        firstimage2:
+          "http://tong.visitkorea.or.kr/cms/resource/53/2721553_image2_1.jpg",
+        mapx: 28.6276707967,
+        mapy: 35.8753644169,
+        tel: "",
+        title: "대구 메리어트 호텔",
+      },
+    ],
+  });
+
+  const [isexistResult, setIsexistResult] = useState<boolean>(false);
+
+  const [selectedTripType, setSelectedTripType] = useState<{
+    code: number;
+    text: string;
+  }>();
 
   const [selectedCity, setSelectedCity] = useState({
     citycode: null,
@@ -213,20 +355,12 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   });
 
   const [isSelectCity, setIsSelectCity] = useState(false);
-  const [selectedRouteId, setSelectedRouteId] = useState({
-    endnodenm: "세종고속시외버스터미널",
-    endvehicletime: 2300,
-    routeid: "SJB293000024",
-    routeno: 430,
-    routetp: "간선버스",
-    startnodenm: "가톨릭꽃동네대학교",
-    startvehicletime: "0620",
-  });
+  const [selectedRouteId, setSelectedRouteId] = useState<Route>();
 
   useEffect(() => {
-    if (selectedCity.citycode != null) setIsSelectCity(true);
+    if (routes != null) setIsSelectCity(true);
     else setIsSelectCity(false);
-  }, [selectedCity]);
+  }, [routes]);
   useEffect(() => {
     if (citis.length > 0) {
       axios
@@ -239,12 +373,37 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         });
     }
   }, [selectedCity]);
+  useEffect(() => {
+    if (tripData) {
+      setIsexistResult(true);
+    } else {
+      setIsexistResult(false);
+    }
+  }, [isexistResult]);
 
   const getRecommend = () => {
+    if (!selectedCity) {
+      alert("도시를 선택해주세요");
+      return;
+    }
+    if (!selectedRouteId) {
+      alert("노선을 선택해주세요");
+      return;
+    }
+    if (!selectedTripType) {
+      alert("관광지을 선택해주세요");
+      return;
+    }
     // axios
-    webAPI.get(`/trip/${selectedCity.citycode}/${selectedRouteId.routeno}/${selectedTripType.code}`).then((response) => {
-      console.log(response.data);
-    });
+    busAPI
+      .get(
+        `/trip/${selectedCity?.citycode}/${selectedRouteId?.routeid}/${selectedTripType?.code}`,
+        { timeout: 10000 }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setTripData(response.data.data);
+      });
   };
 
   const handleCityChange = (value) => {
@@ -260,10 +419,89 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
     setSelectedTripType(value);
   };
 
+  const RouteTripList = ({ key, value, index }) => {
+    console.log(key, value);
+    let maxIndex = 4;
+    return (
+      <Container sx={{ marginTop: 10 }} key={index}>
+        <Container sx={{ fontSize: 30 }}>{key}에서 하차시</Container>
+        <Container
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 2,
+            justifyContent: "left",
+          }}
+        >
+          {value?.slice(0, maxIndex).map((el: TripPlace, idx) => {
+            return (
+              <Card variant="outlined" sx={{ width: "45%" }} key={idx}>
+                <CardOverflow>
+                  <AspectRatio ratio="2">
+                    <img
+                      src={
+                        el.firstimage
+                          ? `${el.firstimage}`
+                          : `/place_basic.jpg?url`
+                      }
+                      srcSet={`${el.firstimage}`}
+                      loading="lazy"
+                      alt=""
+                    />
+                  </AspectRatio>
+                </CardOverflow>
+                <CardContent>
+                  <Stack direction={"row"} justifyContent={"space-between"}>
+                    <div>
+                      <Typography level="title-md">
+                        <a
+                          href={`https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${el.title}`}
+                        >
+                          {el.title}
+                        </a>
+                      </Typography>
+                      <Typography level="body-sm">{el.addr1}</Typography>
+                    </div>
+                    <Button
+                      style={{ flexShrink: 1 }}
+                      disabled={el.mapx ? false : true}
+                      onClick={() => {
+                        window.open(
+                          `http://maps.naver.com/?menu=location&mapMode=0&lat=${el.mapx}&lng=${el.mapy}&dlevel=12&enc=b64mapMode`
+                        );
+                      }}
+                    >
+                      <MapIcon />
+                    </Button>
+                  </Stack>
+                </CardContent>
+              </Card>
+            );
+          })}
+          {value.length > 4 ? (
+            <Button
+              onClick={() => {
+                if (maxIndex == 4) {
+                  maxIndex = 1000;
+                } else {
+                  maxIndex = 4;
+                }
+              }}
+            >
+              더보기
+            </Button>
+          ) : (
+            ""
+          )}
+        </Container>
+      </Container>
+    );
+  };
+
   return (
     <div {...props}>
-      <div>관광/맛집</div>
-      <div>
+      <h1 style={{ textAlign: "center" }}>버스 노선 장소 추천 서비스</h1>
+      <Container maxWidth="md">
         <Select size="lg" placeholder="시/군 선택" className="select-city">
           {citis.map((op, index) => {
             return (
@@ -321,9 +559,18 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
             getRecommend();
           }}
         >
-          ddd
+          추천 받기
         </Button>
-      </div>
+      </Container>
+      {/* <div>
+        {isexistResult ? (
+          Object.entries(tripData).map(([key, value], index) => {
+            <RouteTripList key={key} value={value} index={index}/>
+          })
+        ) : (
+          <div>검색된 데이터가 없습니다</div>
+        )}
+      </div> */}
     </div>
   );
 };
