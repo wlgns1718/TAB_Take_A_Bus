@@ -91,7 +91,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody @ApiParam(value = "로그인", required = true) UserLoginDto userLoginDto, HttpServletResponse response){
         Map<String, Object> resultMap = new HashMap<>();
-
         try{
             Map<String, String> result = us.login(userLoginDto.getId(), userLoginDto.getPw());// 발행된 토큰
             String accessToken = result.get("accessToken");
@@ -100,7 +99,6 @@ public class UserController {
             Cookie cookie = new Cookie("refreshToken",refreshToken);
             cookie.setMaxAge(refreshExpiredMs);
             response.addCookie(cookie);
-
             Map<String,String> data = new HashMap<>();
             data.put("accessToken",accessToken);
             data.put("role",role);
@@ -261,6 +259,7 @@ public class UserController {
             cookie.setMaxAge(refreshExpiredMs);
             response.addCookie(cookie);
             Map<String,String> data = new HashMap<>();
+            data.put("id", userInfo.get("id"));
             data.put("accessToken",accessToken);
             data.put("role","USER");
             resultMap.put("data",data);
@@ -269,6 +268,7 @@ public class UserController {
             resultMap.put("msg2", userInfo.get("msg"));
         }
         catch (Exception e){
+            e.printStackTrace();
             resultMap.put("code", "500");
             resultMap.put("msg","카카오 로그인 실패");
         }
