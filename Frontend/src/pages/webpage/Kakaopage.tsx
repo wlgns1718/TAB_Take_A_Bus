@@ -9,7 +9,7 @@ function Kakaopage() {
   useEffect(() => {
     const getkakao = new URL(window.location.href).searchParams.get("code");
     axios
-      .post("http://i9d111.p.ssafy.io:8000/tab/user/login/kakao", {
+      .post("https://i9d111.p.ssafy.io:8000/tab/user/login/kakao", {
         code: getkakao,
       })
       .then((response) => {

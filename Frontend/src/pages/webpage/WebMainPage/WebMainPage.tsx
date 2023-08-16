@@ -54,7 +54,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
               </div>
             }
           ></Route>
-          <Route path="kakao" element={<Kakaopage />}></Route>
+          <Route path="kakao/" element={<Kakaopage />}></Route>
           <Route path="signup" element={<WebSignupPage />}></Route>
           <Route path="login" element={<WebLoginPage />}></Route>
           <Route path="board/">
