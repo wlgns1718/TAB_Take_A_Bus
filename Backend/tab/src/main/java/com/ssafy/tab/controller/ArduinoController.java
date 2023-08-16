@@ -49,11 +49,9 @@ public class ArduinoController {
                 resultMap.put("code","200");
                 resultMap.put("msg","버스 정보가 있습니다.");
                 resultMap.put("data",busDto);
-
-
                 //조회 후 삭제 기능 추가
                 //Bus 데이터 베이스에 해당 데이터 삭제
-                arduinoService.deleteInfo(busDto.getId());
+//                arduinoService.deleteInfo(busDto.getId());
              }
         }catch (Exception e){
             e.printStackTrace();
