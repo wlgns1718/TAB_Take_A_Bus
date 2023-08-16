@@ -162,7 +162,7 @@ public class BusStationController {
             resultMap.put("code", "500");
             resultMap.put("msg", "API키가 만료 되었습니다. 다시 요청하면 자동으로 키가 바뀝니다. 다시 요청하세요.");
             resultMap.put("errorMessage", message);
-        } catch (IOException e){
+        } catch (Exception e){
 
             String message = e.getMessage();
             e.printStackTrace();
