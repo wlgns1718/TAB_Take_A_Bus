@@ -24,7 +24,7 @@ export const MobileSetting: FC<MobileSettingProps> = (props) => {
           >
             <input
               style={{ width: 1000, height: 100, fontSize: 40 }}
-              placeholder=" 00가0000 형식으로 입력해주세요"
+              placeholder=" 지역00가0000 형식으로 입력해주세요"
               onChange={(value) => {
                 setInputContent(value.target.value);
               }}
