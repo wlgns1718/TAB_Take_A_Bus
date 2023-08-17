@@ -36,7 +36,6 @@ public class ArduinoController {
 
         try{
             Optional<Bus> info = arduinoService.getInfo(vehicleNo);
-            System.out.println(info);
             if(!info.isPresent()){
                 resultMap.put("code","401");
                 resultMap.put("msg","버스 정보가 없습니다.");
@@ -44,7 +43,6 @@ public class ArduinoController {
                 //만약 해당 버스 정보가 있다면 조회 후 삭제 하기
                 Bus busEntity = info.get();
                 BusDto busDto = BusDto.toEntity(busEntity);
-                System.out.println("daslkdjalskdlksa"+busDto);
                 resultMap.put("code","200");
                 resultMap.put("msg","버스 정보가 있습니다.");
                 resultMap.put("data",busDto);

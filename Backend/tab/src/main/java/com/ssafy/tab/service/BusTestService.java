@@ -323,7 +323,7 @@ public class BusTestService {
         URL apiurl = null;
         HttpURLConnection conn = null;
         BufferedReader br = null;
-        JSONParser jsonParser = new JSONParser();;
+        JSONParser jsonParser = new JSONParser();
         for (String[] gps : infos) {
 
                 StringBuilder sb = new StringBuilder();
