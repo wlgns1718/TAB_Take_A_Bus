@@ -43,17 +43,13 @@ export const ArrivalBusList: FC<ArrivalBusListProps> = ({ pages }) => {
           return;
         }}
       >
-        {pages.length ? (
-          pages.map((page) => {
-            return page.map((item: BusStoreData, index: number) => {
-              return <ArrivalBusListItem item={item} key={index} />;
-            });
-          })
-        ) : (
-          <Container sx={{ fontSize: 60, marginTop: 20, textAlign: "center" }}>
-            도착 예정 정보가 없습니다..
-          </Container>
-        )}
+
+      {pages.map((page) => {
+        return page.map((item: BusStoreData, index: number) => {
+          return <ArrivalBusListItem item={item} key={index} />;
+        });
+      })}
+          
       </Carousel>
     </div>
   );

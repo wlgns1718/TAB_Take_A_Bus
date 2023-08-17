@@ -88,10 +88,12 @@ function WebSurveyMaster() {
     <div id="result">
       <div className="surveyResult">
         <h1 style={{marginBottom:"20px"}}>설문결과</h1>
-        <hr style={{width:"300px", marginBottom:"30px"}} />
+       
         <p>대구광역시 버스 이용객을 대상으로한 수요조사 결과가 아래에 표시됩니다.
         </p>
+        <hr style={{width:"700px", marginBottom:"30px"}} />
        <br />
+       
       </div>
       
       <div id="resultMap" style={{ width: "100%", height: "700px" ,marginBottom:"100px"}}></div>
