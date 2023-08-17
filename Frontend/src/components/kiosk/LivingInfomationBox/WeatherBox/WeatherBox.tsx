@@ -87,7 +87,6 @@ export const WeatherBox: FC<WeatherBoxProps> = (props) => {
       .get(url)
       .then((response) => {
         setWeatherData(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching weather data:", error);
