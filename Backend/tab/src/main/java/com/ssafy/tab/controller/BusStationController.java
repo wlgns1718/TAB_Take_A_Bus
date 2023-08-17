@@ -98,7 +98,7 @@ public class BusStationController {
                 resultMap.put("code", "200");
                 resultMap.put("msg", "성공적으로 현재 버스정류장에 정차하는 노선의 정보를 DB에 저장했습니다.");
             }
-        } catch (JsonProcessingException e) {
+        } catch (JsonParseException e) {
             String message = e.getMessage();
             keyIndex = (keyIndex + 1) % 5;
             e.printStackTrace();
@@ -106,6 +106,12 @@ public class BusStationController {
             resultMap.put("msg", "API키가 만료 되었습니다. 다시 요청하면 자동으로 키가 바뀝니다. 다시 요청하세요.");
             resultMap.put("errorMessage", message);
         } catch (IOException e) {
+            String message = e.getMessage();
+            e.printStackTrace();
+            resultMap.put("code", "500");
+            resultMap.put("msg", "API 호출에 실패하였습니다.");
+            resultMap.put("errorMessage", message);
+        }   catch (Exception e) {
             String message = e.getMessage();
             e.printStackTrace();
             resultMap.put("code", "500");
