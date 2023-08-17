@@ -30,7 +30,6 @@ public class Bus {
     @Column(name = "VEHICLE_NO", length = 20)
     private String vehicleNo;
 
-
     @Column(name = "ROUTE_NO", length = 20)
     private String routeNo;
 
@@ -48,6 +47,7 @@ public class Bus {
                 .vehicleNo(busDto.getVehicleNo())
                 .routeNo(busDto.getRouteNo())
                 .createDate(LocalDateTime.now())
+                .stationId(busDto.getStationId())
                 .vulnerable(busDto.isVulnerable())
                 .build();
     }

@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 public class BusDataDto {
-    private String vehicleNo;
-    private String routeNo;
-    private String stationId;
-    private int count;
-    private boolean vulnerable;
+        private String vehicleNo;
+        private String routeNo;
+        private String stationId;
+        private int count;
+        private boolean vulnerable;
 
     @Override
     public String toString() {
