@@ -210,13 +210,27 @@ public class BusTestService {
                 String vehicleno = "";
                 for (JsonNode item : items) {
                     nodeord = item.path("nodeord").asInt();
-                    if (nodeord < bustestApi.getStationOrder()){
-                        vehicleno = item.path("vehicleno").asText();
+                    //2전역까지는 적은 경우만 탐색
+                    if(bustestApi.getRemainingStops() > 1 ){
+                        if (nodeord < bustestApi.getStationOrder()){
+                            vehicleno = item.path("vehicleno").asText();
 
+                        }
+                        else{
+                            break;
+                        }
+                        //1전역까지는 오차 범위를 생각해서 같은 경우까지 탐색
+                    }else{
+                        if (nodeord <= bustestApi.getStationOrder()){
+                            vehicleno = item.path("vehicleno").asText();
+                        }
+                        else{
+                            break;
+                        }
                     }
-                    else{
-                        break;
-                    }
+                    //1전역까지는 같은 경우까지 탐색
+                    nodeord = item.path("nodeord").asInt();
+
                 }
                 bustestApi.setVehicleNo(vehicleno);
             } else if (items.isObject()) {
