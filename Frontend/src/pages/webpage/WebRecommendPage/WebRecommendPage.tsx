@@ -1,10 +1,24 @@
 import { FC, useEffect, useState } from "react";
-import { WebHeader } from "@/components/web/WebHeader";
 import { WebRecommendPageProps } from ".";
 import axios from "axios";
-import { Button, Option, Select } from "@mui/joy";
-import { webAPI } from "@/store/api/api";
-import './WebRecommendPage.css'
+import {
+  AspectRatio,
+  Button,
+  Card,
+  CardContent,
+  CardOverflow,
+  CircularProgress,
+  Container,
+  Divider,
+  Option,
+  Select,
+  Stack,
+  Typography,
+} from "@mui/joy";
+import { busAPI, webAPI } from "@/store/api/api";
+import "./WebRecommendPage.css";
+import MapIcon from "@mui/icons-material/Map";
+import Carousel from "react-material-ui-carousel";
 
 export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   // citycode 리스트
@@ -12,6 +26,26 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   // 노선 리스트
   //  https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&pageNo=1&numOfRows=100&_type=xml&cityCode=37050
+  type TripPlace = {
+    addr1: string;
+    firstimage: string;
+    firstimage2: string;
+    mapx: number | null;
+    mapy: number | null;
+    tel: string;
+    title: string;
+  };
+
+  type Route = {
+    endnodenm: string;
+    endvehicletime: number;
+    routeid: string;
+    routeno: string;
+    routetp: string;
+    startnodenm: string;
+    startvehicletime: string;
+  };
+
   const citis = [
     { cityname: "가평군", citycode: "31370" },
     { cityname: "강릉시", citycode: "32030" },
@@ -202,10 +236,69 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       code: 39,
       text: "음식점",
     },
-  ];  
+  ];
+
+  const TripImgs = [
+    { src: "/Trip_강원_속초아이_1920x1080.png?url", name: "강원 속초아이" },
+    {
+      src: "/Trip_경기_포천_허브아일랜드_1920x1080.png?url",
+      name: "포천 허브아일랜드",
+    },
+    { src: "/Trip_경남_거제_외도_1920x1080.png?url", name: "경남_거제_외도" },
+    {
+      src: "/Trip_경남_남해_상상양떼목장편백숲_1920x1080.png?url",
+      name: "남해 상상양떼목장편백숲",
+    },
+    {
+      src: "/Trip_경북_포항_이가리닻전망대_1920x1080.png?url",
+      name: "포항 이가리닻전망대",
+    },
+    {
+      src: "/Trip_대구_군위_화본역_1920x1080.png?url",
+      name: "대구 군위 화본역",
+    },
+    {
+      src: "/Trip_대구_달서구_이월드_1920x1080.png?url",
+      name: "대구 달서구 이월드",
+    },
+    { src: "/Trip_대구_이월드_1920x1080.png?url", name: "대구 이월드" },
+    { src: "/Trip_부산_감지해변_1920x1080.png?url", name: "부산 감지해변" },
+    { src: "/Trip_부산_미포철길_1920x1080.png?url", name: "부산 미포철길" },
+    {
+      src: "/Trip_부산_송도해상케이블카_1920x1080.png?url",
+      name: "부산 송도해상케이블카",
+    },
+    {
+      src: "/Trip_인천_송도_센트럴파크_1920x1080.png?url",
+      name: "인천 송도 센트럴파크",
+    },
+    {
+      src: "/Trip_인천_트리플스트리트_1920x1080.png?url",
+      name: "인천 트리플스트리트",
+    },
+    { src: "/Trip_전남_여수_백도_1920x1080.png?url", name: "전남 여수 백도" },
+    {
+      src: "/Trip_전북_고창_고창갯벌_1920x1080.png?url",
+      name: "전북 고창 고창갯벌",
+    },
+    { src: "/Trip_제주_비양도_1920x1080.png?url", name: "제주 비양도" },
+    { src: "/Trip_제주_수월봉_1920x1080.png?url", name: "제주 수월봉" },
+    {
+      src: "/Trip_제주_신창풍차해안도로_1920x1080.png?url",
+      name: "제주 신창풍차해안도로",
+    },
+  ];
   const [routes, setRoutes] = useState([]);
 
-  const [selectedTripType, setSelectedTripType] = useState<{code:number, text:string}>();
+  const [tripData, setTripData] = useState<object>({});
+
+  const [isexistResult, setIsexistResult] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [selectedTripType, setSelectedTripType] = useState<{
+    code: number;
+    text: string;
+  }>();
 
   const [selectedCity, setSelectedCity] = useState({
     citycode: null,
@@ -213,20 +306,12 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   });
 
   const [isSelectCity, setIsSelectCity] = useState(false);
-  const [selectedRouteId, setSelectedRouteId] = useState({
-    endnodenm: "세종고속시외버스터미널",
-    endvehicletime: 2300,
-    routeid: "SJB293000024",
-    routeno: 430,
-    routetp: "간선버스",
-    startnodenm: "가톨릭꽃동네대학교",
-    startvehicletime: "0620",
-  });
-
+  const [selectedRouteId, setSelectedRouteId] = useState<Route>();
+  const [clickedRoute,setClickedRoute] = useState<boolean>(false);
   useEffect(() => {
-    if (selectedCity.citycode != null) setIsSelectCity(true);
+    if (routes != null) setIsSelectCity(true);
     else setIsSelectCity(false);
-  }, [selectedCity]);
+  }, [routes]);
   useEffect(() => {
     if (citis.length > 0) {
       axios
@@ -239,12 +324,38 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         });
     }
   }, [selectedCity]);
+  useEffect(() => {
+    if (Object.keys(tripData).length === 0) {
+      setIsexistResult(false);
+    } else {
+      setIsexistResult(true);
+    }
+  }, [tripData]);
 
   const getRecommend = () => {
-    // axios
-    webAPI.get(`/trip/${selectedCity.citycode}/${selectedRouteId.routeno}/${selectedTripType.code}`).then((response) => {
-      console.log(response.data);
-    });
+    if (!selectedCity) {
+      alert("도시를 선택해주세요");
+      return;
+    }
+    if (!selectedRouteId) {
+      alert("노선을 선택해주세요");
+      return;
+    }
+    if (!selectedTripType) {
+      alert("관광지을 선택해주세요");
+      return;
+    }
+    setIsLoading(true);
+    busAPI
+      .get(
+        `/trip/${selectedCity?.citycode}/${selectedRouteId?.routeid}/${selectedTripType?.code}`,
+        { timeout: 10000 }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setTripData(response.data.data);
+        setIsLoading(false);
+      });
   };
 
   const handleCityChange = (value) => {
@@ -260,17 +371,220 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
     setSelectedTripType(value);
   };
 
+  const RouteTripList = ({ title, value, key }) => {
+    console.log(title, value);
+    const [maxIndex, setMaxIndex] = useState<number>(4);
+    return (
+      <Container sx={{ marginTop: 10 }} key={key}>
+        <Container sx={{ fontSize: 30, marginY: 2 }}>
+          <div className="underline-title fromLeft">{title}에서 내리면</div>
+        </Container>
+        <Container
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 2,
+            justifyContent: "left",
+          }}
+        >
+          {value?.slice(0, maxIndex).map((el: TripPlace, idx) => {
+            return (
+              <Card variant="outlined" sx={{ width: "45%" }} key={idx}>
+                <CardOverflow>
+                  <AspectRatio ratio="2">
+                    <img
+                      src={
+                        el.firstimage
+                          ? `${el.firstimage}`
+                          : `/place_basic.jpg?url`
+                      }
+                      srcSet={`${el.firstimage}`}
+                      loading="lazy"
+                      alt=""
+                    />
+                  </AspectRatio>
+                </CardOverflow>
+                <CardContent>
+                  <Stack direction={"row"} justifyContent={"space-between"}>
+                    <div>
+                      <Stack direction={"row"}>
+                        <Typography level="title-md">
+                          <a
+                            href={`https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${el.title}`}
+                          >
+                            {el.title}
+                          </a>
+                        </Typography>
+                        {el?.tel ? (
+                          <Typography level="body-sm" marginLeft={2}>
+                            {el.tel}
+                          </Typography>
+                        ) : (
+                          ""
+                        )}
+                      </Stack>
+                      <Typography level="body-sm">{el.addr1}</Typography>
+                    </div>
+                    <Button
+                      style={{ flexShrink: 1 }}
+                      disabled={el.mapx ? false : true}
+                      onClick={() => {
+                        window.open(
+                          `http://maps.naver.com/?menu=location&mapMode=0&lat=${el.mapx}&lng=${el.mapy}&dlevel=12&enc=b64mapMode`
+                        );
+                      }}
+                    >
+                      <MapIcon />
+                    </Button>
+                  </Stack>
+                </CardContent>
+              </Card>
+            );
+          })}
+          <Container sx={{ display: "flex", justifyContent: "right" }}>
+            {value.length > 4 ? (
+              <Button
+                onClick={() => {
+                  if (maxIndex == 4) {
+                    setMaxIndex(100);
+                  } else {
+                    setMaxIndex(4);
+                  }
+                }}
+              >
+                {maxIndex == 4 ? "더보기" : "접어두기"}
+              </Button>
+            ) : (
+              ""
+            )}
+          </Container>
+        </Container>
+      </Container>
+    );
+  };
+
   return (
     <div {...props}>
-      <div>관광/맛집</div>
-      <div>
+      <Carousel
+        duration={500}
+        cycleNavigation={true}
+        swipe={true}
+        animation="fade"
+        height={600}
+        interval={10000}
+        stopAutoPlayOnHover={true}
+        navButtonsAlwaysVisible={false}
+        sx={{ marginTop: -3.5 }}
+        IndicatorIcon={false}
+      >
+        {TripImgs.map((img, index) => {
+          return (
+            <div style={{display:"flex",
+            justifyContent:"center",
+            alignItems:"center",
+            flexDirection:"column"}}>
+              <h1
+            style={{
+              textAlign: "center",
+              // fontWeight: "normal",
+              color: "black",
+              fontFamily:'Noto Sans KR, sans-serif',
+              marginBottom:"20px",
+              marginTop:"60px",
+              fontWeight:"bold"
+            }}
+          >
+            TAB 플레이스
+          </h1>
+          
+         
+          <p style={{fontFamily:'Noto Sans KR, sans-serif',}}>대한민국 버스가 다니는 구석구석
+          <br />
+          정류장별 핫플레이스와 맛집 정보를 확인해 보세요
+          </p>
+          <hr style={{width:"500px", marginBottom:"40px"}} />
+              <div
+                style={{
+                  marginTop:"5px",
+                  backgroundImage: `url(${img.src})`,
+                  width: "80%",
+                  height: '400px',
+                  backgroundSize: "cover",
+                  filter: "brightness(60%)"
+
+                }}
+                key={index}
+              ></div>
+              <div
+                style={{
+                  color: "white",
+                  fontSize: "11px",
+                  position: "relative",
+                  fontFamily: "fantasy",
+                  top: -60,
+                  left: 20,
+                }}
+              >
+                {img.name} @대한민국 구석구석
+              </div>
+            </div>
+          );
+        })}
+      </Carousel>
+      <div
+        style={{
+          marginBottom:"30px",
+          position: "relative",
+          top: -550,
+          zIndex: 2,
+          userSelect: "none",
+        }}
+      >
+        <div
+          style={{
+            // backgroundColor: "rgba(0,0,0,0.3) ",
+            width: 400,
+            padding: 1,
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginBottom: -200,
+          }}
+        >
+          
+        </div>
+        <div
+          style={{
+            textAlign: "center",
+            fontWeight: "normal",
+            position: "relative",
+            top: 400,
+            fontSize: 25,
+            color: "white",
+            opacity: 1,
+          }}
+        >
+          {/* <span>요즘 인기 있는 곳는 다 모였네!</span> */}
+          <br />
+        
+          <br />
+        </div>
+      </div>
+
+      <Container 
+        maxWidth="md"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <Select size="lg" placeholder="시/군 선택" className="select-city">
           {citis.map((op, index) => {
             return (
               <Option
                 key={index}
                 value={op.cityname}
-                onClick={() => handleCityChange(op)}
+                onClick={() => {handleCityChange(op)}}
                 className="options-city"
               >
                 {op.cityname}
@@ -319,11 +633,34 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         <Button
           onClick={() => {
             getRecommend();
+            setClickedRoute(true);
           }}
+          color="primary"
+          variant="soft"
+          size="lg"
+          style={{marginTop:"20px", marginBottom:"20px"}}
         >
-          ddd
+          TAB 해서 추천받기
         </Button>
-      </div>
+      </Container>
+      {clickedRoute ? <div>
+        {isLoading ? (
+          <Container
+            sx={{ display: "flex", justifyContent: "center", marginY: 5 }}
+          >
+            <CircularProgress color="primary" variant="plain" />
+          </Container>
+        ) : isexistResult ? (
+          Object.entries(tripData).map(([key, value], index) => {
+            return <RouteTripList title={key} value={value} key={index} />;
+          })
+        ) : (
+          <Container sx={{ marginTop: 10, textAlign: "center" }}>
+            추천받은 데이터가 없습니다
+          </Container>
+        )}
+      </div> : '' }
+      
     </div>
   );
 };

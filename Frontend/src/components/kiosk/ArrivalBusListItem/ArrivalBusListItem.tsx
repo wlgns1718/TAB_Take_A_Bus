@@ -154,7 +154,7 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
             dispatch(
               increasePassenger({
                 vehicleNo: item.vehicleNo,
-                remainingStops: item.remainingStops,
+                // remainingStops: item.remainingStops,
               })
             );
           }}

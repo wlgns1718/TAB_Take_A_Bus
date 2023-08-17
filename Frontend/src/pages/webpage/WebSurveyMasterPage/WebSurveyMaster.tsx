@@ -38,7 +38,6 @@ function WebSurveyMaster() {
         },
       })
       .then((res) => {
-
         res.data.data.map((mapindex)=>{
           arr.push(
             [mapindex.longtitude,mapindex.latitude]
