@@ -39,13 +39,13 @@ public class ArduinoService {
         //DB의 BusData정보 busdata_no, boarding_time, count, route_no, vehicle_no, vulerable, station_no
         try {
             //아두이노 통신을 위한 데이터 넣어주기
+            busDataDto.setStationId(busDataDto.getStationId());
             BusDto busDto = BusDto.toEntity(busDataDto);
             Bus bus = Bus.toEntity(busDto);
             busRepository.save(bus);
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     public void deleteInfo(Long id) {

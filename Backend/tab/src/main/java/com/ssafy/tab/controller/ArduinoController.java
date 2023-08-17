@@ -52,8 +52,10 @@ public class ArduinoController {
              }
         }catch (Exception e){
             e.printStackTrace();
+            String error = e.getMessage();
             resultMap.put("code", "500");
             resultMap.put("msg","정보 불러오기 실패!!");
+            resultMap.put("error", error);
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
@@ -72,15 +74,11 @@ public class ArduinoController {
                 resultMap.put("code","200");
                 resultMap.put("msg","탑승 인원이 0명이라 등록되지 않습니다.");
             }
-
-
         }catch (Exception e){
             e.printStackTrace();
             resultMap.put("code","500");
             resultMap.put("msg","버스 정보 등록 실패!");
-
         }
-
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 

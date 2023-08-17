@@ -189,7 +189,14 @@ public class BusTestService {
                 for (JsonNode item : items) {
                     String nodenm = item.path("nodenm").asText();
                     if (nodenm.equals(bustestApi.getStationName())) {
-                        bustestApi.setVehicleNo(item.path("vehicleno").asText());
+                        String vehicleno = item.path("vehicleno").asText();
+                        for(int i = 0 ; i < vehicleno.length(); i++){
+                            if(vehicleno.charAt(i) >= '0' && vehicleno.charAt(i) <= '9'){
+                                vehicleno = vehicleno.substring(i);
+                                break;
+                            }
+                        }
+                        bustestApi.setVehicleNo(vehicleno);
                         break;
                     }
                 }
