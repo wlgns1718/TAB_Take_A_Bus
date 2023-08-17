@@ -59,7 +59,8 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
             path="/"
             element={
               <div>
-                <h1>Take A Bus</h1>
+                {/* <h1>Take A Bus</h1> */}
+                <hr style={{marginBottom:"40px", minWidth:"1000px"}}/>
                 <Grid
                   container
                   direction="row"
@@ -67,6 +68,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
                 >
                   <Grid item xs={6} className="main-content-text">
                     <div>
+                  
                       <Stack direction={"row"} sx={{justifyContent:'space-between', marginBottom:0}}>
                         <div style={{fontSize:30, fontWeight:"Bold"}}>공지사항</div>
                         <Link to={'board'} style={{margin:0, paddingTop:15}} onClick={()=>{dispatch(changeSelectedNoticeId(null));}}>더보기</Link>
@@ -79,6 +81,7 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
                             sx={{
                               padding: 1,
                               justifyContent: "space-between",
+                              cursor:"pointer"
                             }}
                             onClick={(e) => {
                               window.scrollTo(0, 0);
@@ -96,16 +99,25 @@ export const WebMainPage: FC<WebMainPageProps> = (props) => {
                         );
                       })}
                     </div>
-                    <h2>서비스 소개</h2>
-                    <p>키오스크</p>
+                      <hr style={{marginBottom:'50px'}} />
+                      <div style={{backgroundColor:"white",padding:"50px", display:"flex",flexDirection:"column",alignItems:'center',borderRadius:"12px"}}>
+                      <h2>서비스 개요</h2>
+                    <h3 style={{ fontFamily:'Noto Sans KR'}}><span style={{color:"red",fontSize:"30px"}}>TAB</span>은 자체 개발 IOT 통신 서비스로 모든 버스 승객과 버스 운전사님의 편익 을 증진시키고 궁극적으로는 사회 전체의 교통 편익을 최대화 하는것을 목표로 합니다.</h3>
                     <Button
                       color="primary"
-                      onClick={function () {}}
+                      onClick={()=>{
+                        alert('관광/맛집, 수요조사 순으로 발표가 진행됩니다. 같이 해봐요!')
+                      }}
                       size="lg"
                       variant="soft"
                     >
                       TAB
                     </Button>
+                    <br />
+                    하세요
+
+                      </div>
+                   
                   </Grid>
                   <Grid item xs={6}>
                     <img src="/main_bus.png?url" style={{ width: "100%" }} />
