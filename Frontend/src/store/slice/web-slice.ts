@@ -34,6 +34,43 @@ export type NoticeDetailData = NoticeData & {
   content: string;
 };
 
+export type TripPlace = {
+  addr1: string;
+  firstimage: string;
+  firstimage2: string;
+  mapx: number | null;
+  mapy: number | null;
+  tel: string;
+  title: string;
+};
+
+export type RouteTripPlace = {
+  [key: string]: TripPlace[];
+};
+
+export type TripType = {
+  code: number;
+  text: string;
+};
+
+export type Route = {
+  endnodenm: string;
+  endvehicletime: number;
+  routeid: string;
+  routeno: string;
+  routetp: string;
+  startnodenm: string;
+  startvehicletime: string;
+};
+export type SelectInfo = {
+  selectedCity: {
+    citycode: string;
+    cityname: string;
+  };
+  selectedRoute: Route;
+  selectedTripType: TripType;
+};
+
 export enum BOARD_KOR {
   REPORT = "신고",
   COMPLAIN = "불만사항",
@@ -48,7 +85,7 @@ export enum BOARD_ENG {
 }
 
 export interface WebState {
-  selectedBoard : string;
+  selectedBoard: string;
   noticeData: NoticeData[];
   noticeDetailData: NoticeDetailData | null;
   boardData: BoardData[];
@@ -58,10 +95,12 @@ export interface WebState {
   selectedPostId: number | null;
   isUserIn: boolean;
   loginData: LoginData | null;
+  tripData: RouteTripPlace;
+  selectedRecommendInfo: SelectInfo | null;
 }
 
 const initialState: WebState = {
-  selectedBoard: '공지사항',
+  selectedBoard: "공지사항",
   noticeData: [],
   noticeDetailData: null,
   boardData: [],
@@ -74,6 +113,8 @@ const initialState: WebState = {
     id: null,
     role: null,
   },
+  tripData: {},
+  selectedRecommendInfo : null,
 };
 
 const webSlice = createSlice({
@@ -136,6 +177,12 @@ const webSlice = createSlice({
         console.log("delete one");
       }
     },
+    saveTripData(state, action) {
+      state.tripData = action.payload;
+    },
+    saveRecommendInfo(state, action) {
+      state.selectedRecommendInfo = action.payload;
+    },
   },
 });
 
@@ -153,6 +200,8 @@ export const {
   setToken,
   setLoginUser,
   setLogoutUser,
+  saveTripData,
+  saveRecommendInfo,
 } = webSlice.actions;
 
 export default webSlice;

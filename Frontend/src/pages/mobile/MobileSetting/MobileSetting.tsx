@@ -24,15 +24,15 @@ export const MobileSetting: FC<MobileSettingProps> = (props) => {
           >
             <input
               style={{ width: 1000, height: 100, fontSize: 40 }}
-              placeholder="지역00가0000 형식으로 입력해주세요"
+              placeholder=" 00가0000 형식으로 입력해주세요"
               onChange={(value) => {
                 setInputContent(value.target.value);
               }}
-							onKeyDown={(e)=>{
-								if(e.key == 'Enter'){
-									navigate(inputContent);
-								}
-							}}
+              onKeyDown={(e) => {
+                if (e.key == "Enter") {
+                  navigate(inputContent);
+                }
+              }}
             ></input>
             <Button
               sx={{ width: 160, height: 110, fontSize: 40 }}

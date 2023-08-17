@@ -172,7 +172,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
   }
 
   const CommentItem: React.FC<CommentProps> = ({ el }) => {
-    const [commentNewContent, setCommentNewContent] = useState();
+    const [commentNewContent, setCommentNewContent] = useState("");
 
     const handleCommentNewContent = (val) => {
       setCommentNewContent(val);
@@ -197,7 +197,7 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
               {updateCommentId == el.id ? (
                 <Stack direction={"row"} gap={1}>
                   <Input
-                    size="md"
+                    size="sm"
                     variant="outlined"
                     color="neutral"
                     defaultValue={el.content}
@@ -212,6 +212,14 @@ export const WebBoardDetailPage: FC<WebBoardDetailPageProps> = ({ postId }) => {
                     onClick={() => updateComment(el.id, commentNewContent)}
                   >
                     수정
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outlined"
+                    color="warning"
+                    onClick={() => setUpdateCommentId(null)}
+                  >
+                    취소
                   </Button>
                 </Stack>
               ) : (
