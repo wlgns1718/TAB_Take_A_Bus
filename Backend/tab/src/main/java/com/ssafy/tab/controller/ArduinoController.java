@@ -43,7 +43,6 @@ public class ArduinoController {
              }else{
                 //만약 해당 버스 정보가 있다면 조회 후 삭제 하기
                 Bus busEntity = info.get();
-
                 BusDto busDto = BusDto.toEntity(busEntity);
                 System.out.println("daslkdjalskdlksa"+busDto);
                 resultMap.put("code","200");
@@ -55,8 +54,10 @@ public class ArduinoController {
              }
         }catch (Exception e){
             e.printStackTrace();
+            String error = e.getMessage();
             resultMap.put("code", "500");
             resultMap.put("msg","정보 불러오기 실패!!");
+            resultMap.put("error", error);
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
