@@ -85,7 +85,7 @@ export const WebHeader: FC<WebHeaderProps> = (props) => {
   );
 };
 
-function NavLinkForm(props) {
+export function NavLinkForm(props) {
   return (
     <NavLink
       to={props.dest}
