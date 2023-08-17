@@ -11,7 +11,7 @@
 
 ## 배포 주소
 
-> **프론트 서버** : [https://i9d111.p.ssafy.io](https://i9d111.p.ssafy.io) <br> > **백엔드 서버** : [https://i9d111.p.ssafy.io/tab](https://i9d111.p.ssafy.io/tab)<br>
+> **프론트 서버** : [https://i9d111.p.ssafy.io](https://i9d111.p.ssafy.io) <br> **백엔드 서버** : [https://i9d111.p.ssafy.io/tab](https://i9d111.p.ssafy.io/tab)<br>
 
 ## 개발팀 소개
 
