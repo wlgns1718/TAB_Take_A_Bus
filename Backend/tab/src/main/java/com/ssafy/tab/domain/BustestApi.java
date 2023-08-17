@@ -17,13 +17,15 @@ public class BustestApi {
     private String busNo; // 버스번호 "급행2"와 같이 숫자와 문자가 섞인 경우 때문에 String x
     private String routeType; // 노선유형 x
     private String vehicleType; // 도착예정버스 차량유형 x
-
-    private int stationOrder; // 정류소 순서 x
+    private int stationOrder; // 현재 정류장에 도착하기까지 남은 정류소 순서
+    
     private String vehicleNo; // 차량번호
     private String stationId; // 현재 위치 정류소ID x
     private String stationName; // 현재 위치 정류소명 x
     private Double latitude; // 현재 버스가 출발한 정류장의 위도 x
     private Double longtitude; //현재 버스가 출바한 정류장의 경도 x
+    private String myStationId; //도착하고자 하는 정류소의 id
+    private String myStationName; //도착하고자 하는 정류소의 이름
 
     @Override
     public String toString() {

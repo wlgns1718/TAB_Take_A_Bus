@@ -1,5 +1,6 @@
 package com.ssafy.tab.service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.tab.domain.*;
 import com.ssafy.tab.dto.TripInfoDto;
@@ -37,7 +38,7 @@ public class BusTestService {
     public List<Map<String, String>> saveAllBus(String cityCode, String nodeId, int keyIndex) throws IOException, JsonProcessingException {
         busTestRepository.deleteAll();
         String apiUrl = API_BASE_URL + "/1613000/BusSttnInfoInqireService/getSttnThrghRouteList" +
-                "?serviceKey=" + keyList.get(keyIndex)  +
+                "?serviceKey=" + keyList.get(keyIndex) +
                 "&cityCode=" + cityCode +
                 "&nodeid=" + nodeId +
                 "&numOfRows=" + "1000" +
@@ -108,7 +109,24 @@ public class BusTestService {
             JsonNode items = jsonResponse.path("response").path("body").path("items").path("item");
             //하나의 버스만 있을 경우와 여러 대의 버스가 있을 경우를 따로 처리해줘야함.
             if (items.isArray()) {
+                outer :
                 for (JsonNode item : items) {
+                    String routeno = item.path("routeno").asText();
+                    int arrprevstationcnt = item.path("arrprevstationcnt").asInt();
+                    for (BustestApi bustestApi : bustestApiList) {
+                        //동일한 노선이 존재할 때 하나만 가져오도록 구현
+                        if(bustestApi.getRouteNo().equals(routeno)){
+                            //만약 먼저 나온 것이 앞 정류장에 존재하면
+                            if(bustestApi.getRemainingStops() < arrprevstationcnt){
+                                continue outer;
+                            }
+                            //다음 번 나온 것이 앞 정류장에 존재하면
+                            else{
+                                bustestApiList.remove(bustestApi);
+                                break;
+                            }
+                        }
+                    }
                     BustestApi bustestApi = BustestApi.builder()
                             .remainingStops(item.path("arrprevstationcnt").asInt())
                             .eta(item.path("arrtime").asInt())
@@ -163,16 +181,19 @@ public class BusTestService {
                 break;
             }
         }
+
         BusTest tempbus = busTestRepository.findByRouteNoAndOrderStopAndRouteId(bustestApi.getRouteNo(), presentOrder, bustestApi.getRouteId());
         bustestApi.setLatitude(tempbus.getLatitude());
         bustestApi.setLongtitude(tempbus.getLongtitude());
-        bustestApi.setStationOrder(presentOrder);
+        bustestApi.setStationOrder(temp);
+        bustestApi.setMyStationId(findBusTest.getStationId());
+        bustestApi.setMyStationName(findBusTest.getStationName());
         bustestApi.setStationId(tempbus.getStationId());
         bustestApi.setStationName(tempbus.getStationName());
         return bustestApi;
     }
 
-    public BustestApi findVehicleNo(BustestApi bustestApi, String cityCode, int keyIndex) {
+    public BustestApi findVehicleNo(BustestApi bustestApi, String cityCode, int keyIndex) throws IOException, JsonProcessingException {
         String apiUrl = API_BASE_URL + "/1613000/BusLcInfoInqireService/getRouteAcctoBusLcList" +
                 "?serviceKey=" + keyList.get(keyIndex) +
                 "&cityCode=" + cityCode +
@@ -180,37 +201,41 @@ public class BusTestService {
                 "&numOfRows=" + "1000" +
                 "&pageNo=" + "1" +
                 "&_type=" + "json";
-        try {
             String apiResponse = callApi(apiUrl);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonResponse = objectMapper.readTree(apiResponse);
             JsonNode items = jsonResponse.path("response").path("body").path("items").path("item");
             if (items.isArray()) {
+                int nodeord;
+                String vehicleno = "";
                 for (JsonNode item : items) {
-                    String nodenm = item.path("nodenm").asText();
-                    if (nodenm.equals(bustestApi.getStationName())) {
-                        String vehicleno = item.path("vehicleno").asText();
-                        for(int i = 0 ; i < vehicleno.length(); i++){
-                            if(vehicleno.charAt(i) >= '0' && vehicleno.charAt(i) <= '9'){
-                                vehicleno = vehicleno.substring(i);
-                                break;
-                            }
-                        }
-                        bustestApi.setVehicleNo(vehicleno);
-                        break;
-                    }
-                }
-            } else if (items.isObject()) {
-                // Process as a single object
-                String nodenm = items.path("nodenm").asText();
-                if (nodenm.equals(bustestApi.getStationName())) {
-                    bustestApi.setVehicleNo(items.path("vehicleno").asText());
-                }
-            }
+                    nodeord = item.path("nodeord").asInt();
+                    //2전역까지는 적은 경우만 탐색
+                    if(bustestApi.getRemainingStops() > 1 ){
+                        if (nodeord < bustestApi.getStationOrder()){
+                            vehicleno = item.path("vehicleno").asText();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                        }
+                        else{
+                            break;
+                        }
+                        //1전역까지는 오차 범위를 생각해서 같은 경우까지 탐색
+                    }else{
+                        if (nodeord <= bustestApi.getStationOrder()){
+                            vehicleno = item.path("vehicleno").asText();
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    //1전역까지는 같은 경우까지 탐색
+                    nodeord = item.path("nodeord").asInt();
+
+                }
+                bustestApi.setVehicleNo(vehicleno);
+            } else if (items.isObject()) {
+                bustestApi.setVehicleNo(items.path("vehicleno").asText());
+            }
         return bustestApi;
     }
 
@@ -236,7 +261,7 @@ public class BusTestService {
         }
     }
 
-    public Map<String, List<TripInfoDto>> getTripInfo(String cityCode, String routeId, String tripType, int keyIndex)throws JsonProcessingException {
+    public Map<String, List<TripInfoDto>> getTripInfo(String cityCode, String routeId, String tripType, int keyIndex) throws IOException, ParseException {
 
         //공공데이터 포털 Key
         String key = keyList.get(keyIndex);
@@ -318,7 +343,7 @@ public class BusTestService {
 
         return tripInfos;
     }
-    public Map<String,List<TripInfoDto>> findAllTripInfo(List<String[]> infos,int keyIndex,String tripType)throws JsonProcessingException, IOException,ParseException{
+    public Map<String,List<TripInfoDto>> findAllTripInfo(List<String[]> infos,int keyIndex,String tripType)throws IOException, ParseException {
         Map<String,List<TripInfoDto>> list = new HashMap<>();
         URL apiurl = null;
         HttpURLConnection conn = null;
