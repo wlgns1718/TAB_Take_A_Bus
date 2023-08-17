@@ -101,7 +101,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                     recordedItem.isPosted == false &&
                     newdata.remainingStops == 1
                   ) {
-                    postBusList.push();
+                    postBusList.push({...newdata});
                     newdata = { ...newdata, isPosted: true };
                   }
                   return newdata;

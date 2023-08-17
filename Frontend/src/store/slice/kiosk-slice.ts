@@ -29,8 +29,8 @@ type BusStopId = string | null;
 export interface KioskState {
   cityCode: number;
   stationName: string;
-  stationLat:number | null;
-  stationLon:number | null;
+  stationLat: number | null;
+  stationLon: number | null;
   busStopId: BusStopId;
   busData: BusStoreData[];
   nowCarouselPage: number;
@@ -40,9 +40,9 @@ export interface KioskState {
 }
 
 const initialState: KioskState = {
-  cityCode: 11,
-  busStopId: "SEB114000267",
-  stationName: "양천공영차고지",
+  cityCode: 22,
+  busStopId: "DGB7111019300",
+  stationName: "다사고등학교앞 ",
   stationLat: 35.86897,
   stationLon: 128.5936,
   masterkey: "123123123",
@@ -60,33 +60,33 @@ const kioskSlice = createSlice({
       state.busData = action.payload;
     },
     updateLockedBusData(state) {
-      const lockbus = state.busData.map((el)=>{
-        if(el.isPosted == false && el.remainingStops == 1){
-          return{
+      const lockbus = state.busData.map((el) => {
+        if (el.isPosted == false && el.remainingStops == 1) {
+          return {
             ...el,
-            isPosted: true
-          }}
-        }) 
-      state.busData = lockbus
+            isPosted: true,
+          };
+        }
+      });
+      state.busData = lockbus;
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
       const busNo = action.payload.busNo;
       const plusBus = state.busData.map((el) => {
         if (el.vehicleNo == vehicleNo) {
-          console.log(el.busNo)
-          return{
+          console.log(el.busNo);
+          return {
             ...el,
-            passengerNumber : el.passengerNumber +1,
-            isStopHere : true,
+            passengerNumber: el.passengerNumber + 1,
+            isStopHere: true,
           };
-         
-        }else{
-          return el
+        } else {
+          return el;
         }
       });
-      state.busData = plusBus
-      console.log(vehicleNo)
+      state.busData = plusBus;
+      console.log(vehicleNo);
     },
     syncCarouselPage(state, action) {
       state.nowCarouselPage = action.payload.now;
@@ -95,17 +95,17 @@ const kioskSlice = createSlice({
       const vehicleNo = action.payload.vehicleNo;
       const plusVulnerBus = state.busData.map((el) => {
         if (el.vehicleNo == vehicleNo) {
-          console.log(el.busNo)
-          return{
+          console.log(el.busNo);
+          return {
             ...el,
-            isVulnerable : true,
-            passengerNumber: el.passengerNumber+ 1,
-            isStopHere : true,
+            isVulnerable: true,
+            passengerNumber: el.passengerNumber + 1,
+            isStopHere: true,
           };
         }
         return el;
-      }); 
-      state.busData = plusVulnerBus
+      });
+      state.busData = plusVulnerBus;
     },
     checkMaster(state, action) {
       state.busStopId = action.payload.busStopId;
