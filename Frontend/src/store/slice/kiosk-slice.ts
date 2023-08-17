@@ -40,14 +40,13 @@ export interface KioskState {
 }
 
 const initialState: KioskState = {
-  cityCode: 22,
-  busStopId: "DGB7001004100",
-  stationName: "약령시앞",
+  cityCode: 11,
+  busStopId: "SEB114000267",
+  stationName: "양천공영차고지",
   stationLat: 35.86897,
   stationLon: 128.5936,
   masterkey: "123123123",
-  busData: [
-   ],
+  busData: [],
   nowCarouselPage: 0,
   loading: false,
   error: null,
