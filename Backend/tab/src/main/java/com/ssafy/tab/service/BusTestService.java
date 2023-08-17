@@ -356,13 +356,25 @@ public class BusTestService {
                 for(int i = 0; i<jsonArray.size(); i++){
                     JSONObject json = (JSONObject) jsonArray.get(i);
                     TripInfoDto tripDto = new TripInfoDto();
-                    tripDto.setFirstimage(String.valueOf(json.get("firstimage")));
+                    String image = String.valueOf(json.get("firstimage"));
+                    StringBuilder img = new StringBuilder();
+                    if(!image.equals("")){
+                        img.append("https://");
+                        img.append(image.substring(7));
+                    }
+                    tripDto.setFirstimage(img.toString());
                     tripDto.setAddr1(String.valueOf(json.get("addr1")));
                     tripDto.setMapx(String.valueOf(json.get("mapx")));
                     tripDto.setMapy(String.valueOf(json.get("mapy")));
                     tripDto.setTel(String.valueOf(json.get("tel")));
                     tripDto.setTitle(String.valueOf(json.get("title")));
-                    tripDto.setFirstimage2(String.valueOf(json.get("firstimage2")));
+                    StringBuilder img2 = new StringBuilder();
+                    String image2 = String.valueOf(json.get("firstimage2"));
+                    if(!image2.equals("")){
+                        img2.append("https://");
+                        img2.append(image2.substring(7));
+                    }
+                    tripDto.setFirstimage2(img2.toString());
                     trips.add(tripDto);
                 }
                 list.put(gps[0],trips);
