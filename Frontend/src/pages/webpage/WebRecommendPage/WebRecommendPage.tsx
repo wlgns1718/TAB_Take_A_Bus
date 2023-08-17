@@ -14,6 +14,7 @@ import {
   Select,
   Stack,
   Typography,
+  colors,
 } from "@mui/joy";
 import { busAPI, webAPI } from "@/store/api/api";
 import "./WebRecommendPage.css";
@@ -48,8 +49,8 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   const citis = [
     { cityname: "가평군", citycode: "31370" },
-    { cityname: "강릉시", citycode: "32030" },
-    { cityname: "강진군", citycode: "36390" },
+    // { cityname: "강릉시", citycode: "32030" },
+    // { cityname: "강진군", citycode: "36390" },
     { cityname: "거제시", citycode: "38090" },
     { cityname: "거창군", citycode: "38390" },
     { cityname: "경산시", citycode: "37100" },
@@ -307,7 +308,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   const [isSelectCity, setIsSelectCity] = useState(false);
   const [selectedRouteId, setSelectedRouteId] = useState<Route>();
-  const [clickedRoute,setClickedRoute] = useState<boolean>(false);
+  const [clickedRoute, setClickedRoute] = useState<boolean>(false);
   useEffect(() => {
     if (routes != null) setIsSelectCity(true);
     else setIsSelectCity(false);
@@ -316,7 +317,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
     if (citis.length > 0) {
       axios
         .get(
-          `https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&pageNo=1&numOfRows=100&_type=json&cityCode=${selectedCity.citycode}`
+          `https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&pageNo=1&numOfRows=1000&_type=json&cityCode=${selectedCity.citycode}`
         )
         .then((response) => {
           console.log(response.data);
@@ -353,6 +354,11 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       )
       .then((response) => {
         console.log(response.data);
+        setIsLoading(false);
+        if (response.data.code == "500") {
+          alert("다시시도해주세요");
+          return;
+        }
         setTripData(response.data.data);
         setIsLoading(false);
       });
@@ -409,11 +415,16 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
                     <div>
                       <Stack direction={"row"}>
                         <Typography level="title-md">
-                          <a
-                            href={`https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${el.title}`}
+                          <div 
+                            style={{color:"blue"}}
+                            onClick={() => {
+                              window.open(
+                                `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${el.title}`
+                              );
+                            }}
                           >
                             {el.title}
-                          </a>
+                          </div>
                         </Typography>
                         {el?.tel ? (
                           <Typography level="body-sm" marginLeft={2}>
@@ -430,7 +441,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
                       disabled={el.mapx ? false : true}
                       onClick={() => {
                         window.open(
-                          `http://maps.naver.com/?menu=location&mapMode=0&lat=${el.mapx}&lng=${el.mapy}&dlevel=12&enc=b64mapMode`
+                          `http://maps.naver.com/?menu=location&mapMode=0&lat=${el.mapy}&lng=${el.mapx}&dlevel=12&enc=b64mapMode`
                         );
                       }}
                     >
@@ -475,43 +486,53 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         stopAutoPlayOnHover={true}
         navButtonsAlwaysVisible={false}
         sx={{ marginTop: -3.5 }}
+        navButtonsProps={{
+          style: {
+            backgroundColor: "#8f34eb",
+            opacity: 0,
+          },
+        }}
         IndicatorIcon={false}
       >
         {TripImgs.map((img, index) => {
           return (
-            <div style={{display:"flex",
-            justifyContent:"center",
-            alignItems:"center",
-            flexDirection:"column"}}>
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
               <h1
-            style={{
-              textAlign: "center",
-              // fontWeight: "normal",
-              color: "black",
-              fontFamily:'Noto Sans KR, sans-serif',
-              marginBottom:"20px",
-              marginTop:"60px",
-              fontWeight:"bold"
-            }}
-          >
-            TAB 플레이스
-          </h1>
-          
-         
-          <p style={{fontFamily:'Noto Sans KR, sans-serif',}}>대한민국 버스가 다니는 구석구석
-          <br />
-          정류장별 핫플레이스와 맛집 정보를 확인해 보세요
-          </p>
-          <hr style={{width:"500px", marginBottom:"40px"}} />
+                style={{
+                  textAlign: "center",
+                  // fontWeight: "normal",
+                  color: "black",
+                  fontFamily: "Noto Sans KR, sans-serif",
+                  marginBottom: "20px",
+                  marginTop: "60px",
+                  fontWeight: "bold",
+                }}
+              >
+                TAB 플레이스
+              </h1>
+
+              <p style={{ fontFamily: "Noto Sans KR, sans-serif" }}>
+                대한민국 버스가 다니는 구석구석
+                <br />
+                정류장별 핫플레이스와 맛집 정보를 확인해 보세요
+              </p>
+              <hr style={{ width: "500px", marginBottom: "40px" }} />
               <div
                 style={{
-                  marginTop:"5px",
+                  marginTop: "5px",
                   backgroundImage: `url(${img.src})`,
                   width: "80%",
-                  height: '400px',
+                  height: "400px",
                   backgroundSize: "cover",
-                  filter: "brightness(60%)"
-
+                  filter: "brightness(60%)",
                 }}
                 key={index}
               ></div>
@@ -533,7 +554,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       </Carousel>
       <div
         style={{
-          marginBottom:"30px",
+          marginBottom: "30px",
           position: "relative",
           top: -550,
           zIndex: 2,
@@ -549,9 +570,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
             marginRight: "auto",
             marginBottom: -200,
           }}
-        >
-          
-        </div>
+        ></div>
         <div
           style={{
             textAlign: "center",
@@ -565,12 +584,12 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         >
           {/* <span>요즘 인기 있는 곳는 다 모였네!</span> */}
           <br />
-        
+
           <br />
         </div>
       </div>
 
-      <Container 
+      <Container
         maxWidth="md"
         sx={{
           display: "flex",
@@ -584,7 +603,9 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
               <Option
                 key={index}
                 value={op.cityname}
-                onClick={() => {handleCityChange(op)}}
+                onClick={() => {
+                  handleCityChange(op);
+                }}
                 className="options-city"
               >
                 {op.cityname}
@@ -638,29 +659,32 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
           color="primary"
           variant="soft"
           size="lg"
-          style={{marginTop:"20px", marginBottom:"20px"}}
+          style={{ marginTop: "20px", marginBottom: "20px" }}
         >
           TAB 해서 추천받기
         </Button>
       </Container>
-      {clickedRoute ? <div>
-        {isLoading ? (
-          <Container
-            sx={{ display: "flex", justifyContent: "center", marginY: 5 }}
-          >
-            <CircularProgress color="primary" variant="plain" />
-          </Container>
-        ) : isexistResult ? (
-          Object.entries(tripData).map(([key, value], index) => {
-            return <RouteTripList title={key} value={value} key={index} />;
-          })
-        ) : (
-          <Container sx={{ marginTop: 10, textAlign: "center" }}>
-            추천받은 데이터가 없습니다
-          </Container>
-        )}
-      </div> : '' }
-      
+      {clickedRoute ? (
+        <div>
+          {isLoading ? (
+            <Container
+              sx={{ display: "flex", justifyContent: "center", marginY: 5 }}
+            >
+              <CircularProgress color="primary" variant="plain" />
+            </Container>
+          ) : isexistResult ? (
+            Object.entries(tripData).map(([key, value], index) => {
+              return <RouteTripList title={key} value={value} key={index} />;
+            })
+          ) : (
+            <Container sx={{ marginTop: 10, textAlign: "center" }}>
+              추천받은 데이터가 없습니다
+            </Container>
+          )}
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

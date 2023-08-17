@@ -148,19 +148,21 @@ export const ArrivalBusListItem: FC<ArrivalBusListItemProps> = ({ item }) => {
             {item.stationName}
           </div>
         </div>
-        <button
+        {item.isPosted ?
+         <button disabled className={`tap-button ${item.isStopHere ? "tap-on" : "tap-off"}`}><p>잠김</p></button>  :
+         <button
           className={`tap-button ${item.isStopHere ? "tap-on" : "tap-off"}`}
           onClick={() => {
             dispatch(
               increasePassenger({
                 vehicleNo: item.vehicleNo,
-                // remainingStops: item.remainingStops,
               })
             );
           }}
         >
-          <p>탑승</p>
-        </button>
+        <p>탑승</p>
+        </button> }
+        
       </div>
       <div className="guide-message">
         {item.isStopHere ? (

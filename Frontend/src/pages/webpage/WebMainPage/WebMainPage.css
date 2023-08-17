@@ -1,4 +1,4 @@
-.web-body{
+.web-body {
   width: 80%;
   /* display: flex; */
   min-width: 960px;
@@ -6,7 +6,36 @@
   justify-content: center;
 }
 
-.main-content-text{
+.main-content-text {
   background-color: whitesmoke;
   padding: 30px;
+}
+
+.main-notice-title {
+  flex: 3;
+  flex-shrink: 1;
+  font-size: 20px;
+  font-weight: bolder !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+  /*        height: 4.8em;*/
+  text-align: left;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.main-notice-time {
+  font-size: 20px;
+  font-weight: bolder !important;
+  white-space: normal;
+  line-height: 1.2;
+  /*        height: 4.8em;*/
+  flex: 1;
+  text-align: left;
+  word-wrap: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
 }

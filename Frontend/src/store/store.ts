@@ -11,7 +11,7 @@ import storage from 'redux-persist/lib/storage'
 const persistConfig = {
   key: "root", // localStorage key 
   storage, // session
-  whitelist: ["kiosk","web"], // target (reducer name)
+  whitelist: ["web"] // target (reducer name)
 }
 
 const rootReducer = combineReducers({

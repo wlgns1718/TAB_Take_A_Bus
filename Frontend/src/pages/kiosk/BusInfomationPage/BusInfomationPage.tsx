@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { arduinoAPI, busAPI } from "../../../store/api/api";
 import { useQuery, QueryClient } from "react-query";
 import { AxiosError } from "axios";
+import { RootState } from "@/store/store";
 
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   const [comingSoonBusList, setComingSoonBusList] = useState<BusStoreData[]>([]);
@@ -25,7 +26,7 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
   const dispatch = useDispatch();
 
   const data: KioskState = useSelector(
-    (state: { kiosk: KioskState; web: object }) => {
+    (state: RootState) => {
       return state.kiosk;
     }
   );
@@ -46,14 +47,12 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     "fetchBus",
     () => {
       busAPI
-        .get(`/${data.cityCode}/${data.busStopId}/api`, {
-          timeout: 10000,
-        })
+        .get(`/${data.cityCode}/${data.busStopId}/api`)
         .then((response) => {
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
-          } else if (response.data.code == "200") {
-            console.log(response.data)
+          } else {
+ 
             // 도착예정시간 순으로 정렬해서 저장.
             const addData: BusStoreData[] = response.data.data.map((el) => {
               el.isStopHere = false;
@@ -63,12 +62,18 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
               return el;
             });
 
+            // const filteredData:BusStoreData[] = addData.filter((el)=>{
+            //   return el.vehicleNo != null
+            // }) 
+
+
             const stateBusData: BusStoreData[] = addData.map(
               (newdata: BusStoreData) => {
+
                 const recordedItem = data.busData.find((old: BusStoreData) => {
-                  return old.busNo == newdata.busNo;
+                  return old.busNo == newdata.busNo && old.vehicleNo == newdata.vehicleNo
                 });
-                if (recordedItem) {
+                if (recordedItem){
                   if (recordedItem.isStopHere == true) {
                     newdata = {
                       ...newdata,
@@ -89,46 +94,16 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                   }
                   if (recordedItem.isPosted == true) {
                     newdata = { ...newdata, isPosted: recordedItem.isPosted };
-                    return newdata
                   }
-                  else{
-                    console.log(recordedItem.isPosted);
-                    if (newdata.remainingStops == 1) {
-                      arduinoAPI
-                        .post(
-                          `regist`,
-                          {
-                            busStation: `${data.busStopId}`,
-                            count: `${recordedItem.passengerNumber}`,
-                            vehicleNo: `${recordedItem.vehicleNo}`,
-                            routeNo: `${recordedItem.routeId}`,
-                            vulnerable: `${recordedItem.isVulnerable}`,
-                          }
-                        )
-                        .then((response) => {
-                          console.log(
-                            `${recordedItem.vehicleNo}`,
-                            response.data
-                          );
-                          newdata = { ...newdata, isPosted: true };
-                          return newdata;
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                          return newdata;
-                        });
+                  if (recordedItem.isPosted == false && newdata.remainingStops == 1 ) {
+                    newdata = { ...newdata, isPosted: true }
                     }
-                    else{
-                      return newdata;
-                    }
-                  }
+                return newdata;
                 } else {
                   return newdata;
                 }
               }
             );
-            console.log(stateBusData);
-            
 
             dispatch(
               updateBusData(
@@ -140,17 +115,33 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
           }
         })
         .catch((error) => {
-          const err = error as AxiosError;
-          console.error("Error fetching buslist data:");
-          throw err;
+          console.log(error);
         });
     },
-    { staleTime: 10000, refetchInterval: 10000 }
+    { staleTime: 21000, refetchInterval: 21000 }
   );
 
   useEffect(() => {
-  //  console.log(data.busData)
-  }, [fetchBusData]);
+    
+    const locked = data.busData.filter((el)=>{
+      el.isPosted = true
+    })
+
+   locked.map((el)=>{
+    arduinoAPI.post('regist',{
+      count :el.passengerNumber,
+      routeNo:el.routeId,
+      stationId:el.stationName,
+      vehicleNo:el.vehicleNo,
+      vulnerable:el.isVulnerable,
+    }).then((response)=>{
+      console.log(response)
+    }).catch((err)=>{
+      console.log(err)
+    })
+   },[fetchBusData]);
+  }
+  )
 
   const paginateArray = (arr: BusStoreData[], pageSize: number) => {
     const pageCount = Math.ceil(arr.length / pageSize);

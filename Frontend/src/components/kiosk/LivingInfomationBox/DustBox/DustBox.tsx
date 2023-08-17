@@ -54,7 +54,6 @@ export const DustBox: FC<DustBoxProps> = (props) => {
 
   const fetchMeasuringStation = async () => {
     const [tmx, tmy] = convertLatLngToTM(data.stationLon, data.stationLat);
-    console.log("tmx, tmy :", tmx, tmy);
     axios
       .get(
         `https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=vg04G9ynpCLz1hobrfscOxzbc5l7eekaJGTiY6DeHxeEND3j%2FJ%2BTtcVlTP1%2F0OPAvW%2FsnRPZBDDLR9cXKpPzpg%3D%3D&returnType=json&tmX=${tmx}&tmY=${tmy}&ver=1.0`
@@ -80,7 +79,7 @@ export const DustBox: FC<DustBoxProps> = (props) => {
   // const latitude: number = 36.12;
   // const longitude: number = 128.34;
 
-  const useTempData = false;
+  const useTempData = true;
 
   const tempDustData = {
     pm25Grade1h: "1",
@@ -172,7 +171,6 @@ export const DustBox: FC<DustBoxProps> = (props) => {
       )
       .then((response) => {
         // API 응답 데이터를 추출하여 미세먼지 정보 객체로 변환
-        console.log(response.data);
 
         const data: DustData = {
           dataTime: response.data.response.body.items[0].dataTime,
