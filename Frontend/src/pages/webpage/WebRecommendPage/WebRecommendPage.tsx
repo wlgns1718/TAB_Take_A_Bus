@@ -20,6 +20,17 @@ import { busAPI, webAPI } from "@/store/api/api";
 import "./WebRecommendPage.css";
 import MapIcon from "@mui/icons-material/Map";
 import Carousel from "react-material-ui-carousel";
+import {
+  Route,
+  RouteTripPlace,
+  SelectInfo,
+  TripPlace,
+  TripType,
+  WebState,
+  saveRecommendInfo,
+  saveTripData,
+} from "@/store/slice/web-slice";
+import { useDispatch, useSelector } from "react-redux";
 
 export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   // citycode 리스트
@@ -27,25 +38,9 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
 
   // 노선 리스트
   //  https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&pageNo=1&numOfRows=100&_type=xml&cityCode=37050
-  type TripPlace = {
-    addr1: string;
-    firstimage: string;
-    firstimage2: string;
-    mapx: number | null;
-    mapy: number | null;
-    tel: string;
-    title: string;
-  };
-
-  type Route = {
-    endnodenm: string;
-    endvehicletime: number;
-    routeid: string;
-    routeno: string;
-    routetp: string;
-    startnodenm: string;
-    startvehicletime: string;
-  };
+  const data: WebState = useSelector((state: { web: WebState }) => {
+    return state.web;
+  });
 
   const citis = [
     { cityname: "가평군", citycode: "31370" },
@@ -289,44 +284,59 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       name: "제주 신창풍차해안도로",
     },
   ];
+
+  const dispatch = useDispatch();
   const [routes, setRoutes] = useState([]);
 
-  const [tripData, setTripData] = useState<object>({});
+  const [tripData, setTripData] = useState<RouteTripPlace>(data.tripData);
 
   const [isexistResult, setIsexistResult] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [selectedTripType, setSelectedTripType] = useState<{
-    code: number;
-    text: string;
-  }>();
+  const [selectedTripType, setSelectedTripType] = useState<TripType>();
 
   const [selectedCity, setSelectedCity] = useState({
     citycode: null,
     cityname: null,
   });
-
   const [isSelectCity, setIsSelectCity] = useState(false);
-  const [selectedRouteId, setSelectedRouteId] = useState<Route>();
-  const [clickedRoute, setClickedRoute] = useState<boolean>(false);
+  const [selectedRoute, setSelectedRoute] = useState<Route>();
+
+  const [selectInfo, setSelectInfo] = useState<SelectInfo>(null);
+
   useEffect(() => {
-    if (routes != null) setIsSelectCity(true);
+    console.log(data.tripData);
+    setTripData(data.tripData);
+  }, [data.tripData]);
+  useEffect(() => {
+    console.log(data.selectedRecommendInfo);
+    setSelectInfo(data.selectedRecommendInfo);
+  }, [data.selectedRecommendInfo]);
+
+  useEffect(() => {
+    if (routes.length) setIsSelectCity(true);
     else setIsSelectCity(false);
   }, [routes]);
-  useEffect(() => {
+
+  const getRoute = ({ cityname, citycode }) => {
     if (citis.length > 0) {
       axios
         .get(
-          `https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&pageNo=1&numOfRows=1000&_type=json&cityCode=${selectedCity.citycode}`
+          `https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList?serviceKey=5ts%2Baf9Tv7mT28mcFD0Y8pzBg7sy1TYdLve4W7vJd5pt44kEEAkpi8AbNEVKnb%2Fk2z79M9WDxTozeVzNWlPkdA%3D%3D&pageNo=1&numOfRows=1000&_type=json&cityCode=${citycode}`
         )
         .then((response) => {
           console.log(response.data);
           setRoutes(response.data.response.body.items.item);
         });
     }
-  }, [selectedCity]);
+  };
+
   useEffect(() => {
-    if (Object.keys(tripData).length === 0) {
+    if (!tripData) {
+      setIsexistResult(false);
+      return;
+    }
+    if (Object?.keys(tripData)?.length === 0) {
       setIsexistResult(false);
     } else {
       setIsexistResult(true);
@@ -338,7 +348,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
       alert("도시를 선택해주세요");
       return;
     }
-    if (!selectedRouteId) {
+    if (!selectedRoute) {
       alert("노선을 선택해주세요");
       return;
     }
@@ -349,8 +359,8 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
     setIsLoading(true);
     busAPI
       .get(
-        `/trip/${selectedCity?.citycode}/${selectedRouteId?.routeid}/${selectedTripType?.code}`,
-        { timeout: 10000 }
+        `/trip/${selectedCity?.citycode}/${selectedRoute?.routeid}/${selectedTripType?.code}`,
+        { timeout: 20000 }
       )
       .then((response) => {
         console.log(response.data);
@@ -359,7 +369,7 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
           alert("다시시도해주세요");
           return;
         }
-        setTripData(response.data.data);
+        dispatch(saveTripData(response.data.data));
         setIsLoading(false);
       });
   };
@@ -367,10 +377,11 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   const handleCityChange = (value) => {
     console.log(value);
     setSelectedCity(value);
+    getRoute(value);
   };
   const handleRouteChange = (value) => {
     console.log(value);
-    setSelectedRouteId(value);
+    setSelectedRoute(value);
   };
   const handleTripTypeChange = (value) => {
     console.log(value);
@@ -378,7 +389,6 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
   };
 
   const RouteTripList = ({ title, value, key }) => {
-    console.log(title, value);
     const [maxIndex, setMaxIndex] = useState<number>(4);
     return (
       <Container sx={{ marginTop: 10 }} key={key}>
@@ -415,8 +425,8 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
                     <div>
                       <Stack direction={"row"}>
                         <Typography level="title-md">
-                          <div 
-                            style={{color:"blue"}}
+                          <div
+                            style={{ color: "blue" }}
                             onClick={() => {
                               window.open(
                                 `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${el.title}`
@@ -441,8 +451,11 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
                       disabled={el.mapx ? false : true}
                       onClick={() => {
                         window.open(
-                          `http://maps.naver.com/?menu=location&mapMode=0&lat=${el.mapy}&lng=${el.mapx}&dlevel=12&enc=b64mapMode`
+                          `https://map.naver.com/v5/search/${el.title}`
                         );
+                        // window.open(
+                        //   `http://maps.naver.com/?menu=location&mapMode=0&lat=${el.mapy}&lng=${el.mapx}&dlevel=12&enc=b64mapMode`
+                        // );
                       }}
                     >
                       <MapIcon />
@@ -654,7 +667,13 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
         <Button
           onClick={() => {
             getRecommend();
-            setClickedRoute(true);
+            dispatch(
+              saveRecommendInfo({
+                selectedCity,
+                selectedRoute,
+                selectedTripType,
+              })
+            );
           }}
           color="primary"
           variant="soft"
@@ -664,27 +683,33 @@ export const WebRecommendPage: FC<WebRecommendPageProps> = (props) => {
           TAB 해서 추천받기
         </Button>
       </Container>
-      {clickedRoute ? (
-        <div>
-          {isLoading ? (
-            <Container
-              sx={{ display: "flex", justifyContent: "center", marginY: 5 }}
-            >
-              <CircularProgress color="primary" variant="plain" />
-            </Container>
-          ) : isexistResult ? (
-            Object.entries(tripData).map(([key, value], index) => {
-              return <RouteTripList title={key} value={value} key={index} />;
-            })
-          ) : (
-            <Container sx={{ marginTop: 10, textAlign: "center" }}>
-              추천받은 데이터가 없습니다
-            </Container>
-          )}
-        </div>
+      {selectInfo ? (
+        <Stack  direction={"row"} gap={2} sx={{ display: "flex", marginTop: 5, marginLeft: 20, fontSize: 40 }}>
+          <span>{selectInfo.selectedCity.cityname}</span> {">"}
+          <span>{selectInfo.selectedRoute.routeno}</span> {">"}
+          <span>{selectInfo.selectedTripType.text}</span> {""}
+          {"추천 정보"}
+        </Stack>
       ) : (
         ""
       )}
+      <div>
+        {isLoading ? (
+          <Container
+            sx={{ display: "flex", justifyContent: "center", marginY: 5 }}
+          >
+            <CircularProgress color="primary" variant="plain" />
+          </Container>
+        ) : isexistResult ? (
+          Object.entries(tripData).map(([key, value], index) => {
+            return <RouteTripList title={key} value={value} key={index} />;
+          })
+        ) : (
+          <Container sx={{ marginTop: 10, textAlign: "center" }}>
+            추천받은 데이터가 없습니다
+          </Container>
+        )}
+      </div>
     </div>
   );
 };

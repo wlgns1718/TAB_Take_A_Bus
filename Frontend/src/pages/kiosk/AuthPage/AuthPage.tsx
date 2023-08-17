@@ -233,7 +233,7 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
         return;
       }
       busAPI
-        .get(`${selectedCity.도시코드}/${busStopId}`, { timeout: 10000 })
+        .get(`${selectedCity.도시코드}/${busStopId}`, { timeout: 60000 })
         .then((response) => {
           console.log(response.data);
           dispatch(
@@ -257,7 +257,7 @@ export const AuthPage: FC<AuthPageProps> = (props) => {
 
   const handleCityChange = (value) => {
     console.log(value);
-    if (isCitySelect && selectedCity.도시명 == value) {
+    if (isCitySelect && selectedCity.도시명 == value.도시명) {
       return;
     }
     updateBusStopList(value.도시명);
