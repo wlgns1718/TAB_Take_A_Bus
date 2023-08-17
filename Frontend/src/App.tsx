@@ -4,6 +4,7 @@ import { MobileMain } from "./pages/mobile/MobileMain";
 import { BusInfomationPage } from "./pages/kiosk/BusInfomationPage";
 import { AuthPage } from "./pages/kiosk/AuthPage";
 import "./App.css";
+import { MobileSetting } from "./pages/mobile/MobileSetting";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
         </div>
         <Routes>
           <Route path="/*" element={<WebMainPage />}></Route>
-          <Route path="/mobile/*" element={<MobileMain />}></Route>
+          <Route path="/mobile/" element={<MobileSetting />}></Route>
+          <Route path="/mobile/:vehicleNo" element={<MobileMain />}></Route>
           <Route path="/kiosk">
             <Route path="info/:id" element={<BusInfomationPage />}></Route>
             <Route path="auth" element={<AuthPage />}></Route>

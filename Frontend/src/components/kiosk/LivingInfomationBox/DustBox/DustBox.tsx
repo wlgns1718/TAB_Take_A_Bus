@@ -61,7 +61,7 @@ export const DustBox: FC<DustBoxProps> = (props) => {
       )
       .then((response) => {
         // 가까운 측정소 이름을 저장
-        console.log(response);
+        // console.log(response.data.response.body.items[0].stationName);
         setMeasuringStation(response.data.response.body.items[0].stationName);
       })
       .catch((error) => {
