@@ -1,2 +1,2 @@
-export * from './ArrivalBusListItem';
-export * from './ArrivalBusListItem.props';
+export * from "./ArrivalBusListItem";
+export * from "./ArrivalBusListItem.props";

@@ -29,6 +29,8 @@ type BusStopId = string | null;
 export interface KioskState {
   cityCode: number;
   stationName: string;
+  stationLat: number | null;
+  stationLon: number | null;
   busStopId: BusStopId;
   busData: BusStoreData[];
   nowCarouselPage: number;
@@ -39,29 +41,12 @@ export interface KioskState {
 
 const initialState: KioskState = {
   cityCode: 22,
-  busStopId: "DGB7001004100",
-  stationName: "약령시앞",
+  busStopId: "DGB7111019300",
+  stationName: "다사고등학교앞 ",
+  stationLat: 35.86897,
+  stationLon: 128.5936,
   masterkey: "123123123",
-  busData: [
-    {
-      busNo: "급행2",
-      eta: 501,
-      remainingStops: 2,
-      routeId: "DGB1000002000",
-      routeType: "급행버스",
-      vehicleNo: "대구70자2401",
-      vehicleType: "일반차량",
-      stationId: "DGB7021015400",
-      stationName: "대구삼성창조캠퍼스",
-      stationOrder: 123,
-      isStopHere: false,
-      latitude: 35.88114,
-      longtitude: 128.59603,
-      passengerNumber: 0,
-      isVulnerable: false,
-      isPosted: false,
-    },
-  ],
+  busData: [],
   nowCarouselPage: 0,
   loading: false,
   error: null,
@@ -74,38 +59,60 @@ const kioskSlice = createSlice({
     updateBusData(state, action) {
       state.busData = action.payload;
     },
-    updateLockedBusData(state, action) {
-      // state.busData.forEach(bus=>{
-      //   if(action.payload.find())
-      // })
+    updateLockedBusData(state) {
+      const lockbus = state.busData.map((el) => {
+        if (el.isPosted == false && el.remainingStops == 1) {
+          return {
+            ...el,
+            isPosted: true,
+          };
+        }
+      });
+      state.busData = lockbus;
     },
     increasePassenger(state, action) {
       const vehicleNo = action.payload.vehicleNo;
-      state.busData.map((el) => {
+      const busNo = action.payload.busNo;
+      const plusBus = state.busData.map((el) => {
         if (el.vehicleNo == vehicleNo) {
-          el.passengerNumber += 1;
-          el.isStopHere = true;
+          console.log(el.busNo);
+          return {
+            ...el,
+            passengerNumber: el.passengerNumber + 1,
+            isStopHere: true,
+          };
+        } else {
+          return el;
         }
-        return el;
       });
+      state.busData = plusBus;
+      console.log(vehicleNo);
     },
     syncCarouselPage(state, action) {
       state.nowCarouselPage = action.payload.now;
     },
     SetVulnerable(state, action) {
       const vehicleNo = action.payload.vehicleNo;
-      const remainingStops = action.payload.remainingStops;
-      state.busData.map((el) => {
+      const plusVulnerBus = state.busData.map((el) => {
         if (el.vehicleNo == vehicleNo) {
-          el.isVulnerable = true;
-          el.passengerNumber += 1;
-          el.isStopHere = true;
-          return el;
+          console.log(el.busNo);
+          return {
+            ...el,
+            isVulnerable: true,
+            passengerNumber: el.passengerNumber + 1,
+            isStopHere: true,
+          };
         }
+        return el;
       });
+      state.busData = plusVulnerBus;
     },
     checkMaster(state, action) {
-      state.busStopId = action.payload;
+      state.busStopId = action.payload.busStopId;
+      state.cityCode = action.payload.cityCode;
+      state.stationName = action.payload.stationName;
+      state.stationLat = action.payload.stationLat;
+      state.stationLon = action.payload.stationLon;
       console.log(state.busStopId);
     },
   },

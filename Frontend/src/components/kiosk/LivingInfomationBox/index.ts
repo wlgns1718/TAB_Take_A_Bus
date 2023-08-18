@@ -1,1 +1,1 @@
-export * from "./LivingInfomationBox"
+export * from "./LivingInfomationBox";

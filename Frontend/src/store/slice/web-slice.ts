@@ -1,13 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export type user = {
-  email :string;
-  id : string;
-  name: string;
-  password :string;
-  role: string;
-}
-
 export type CommentData = {
   id: number;
   boardId: number;
@@ -16,12 +8,10 @@ export type CommentData = {
   createTime: number[];
 };
 
-
-export type loginuser = {
-  id : string;
-  password:string;
-  token : string;
-}
+export type LoginData = {
+  id: string | null;
+  role: string | null;
+};
 
 export type BoardData = {
   id: number;
@@ -44,6 +34,43 @@ export type NoticeDetailData = NoticeData & {
   content: string;
 };
 
+export type TripPlace = {
+  addr1: string;
+  firstimage: string;
+  firstimage2: string;
+  mapx: number | null;
+  mapy: number | null;
+  tel: string;
+  title: string;
+};
+
+export type RouteTripPlace = {
+  [key: string]: TripPlace[];
+};
+
+export type TripType = {
+  code: number;
+  text: string;
+};
+
+export type Route = {
+  endnodenm: string;
+  endvehicletime: number;
+  routeid: string;
+  routeno: string;
+  routetp: string;
+  startnodenm: string;
+  startvehicletime: string;
+};
+export type SelectInfo = {
+  selectedCity: {
+    citycode: string;
+    cityname: string;
+  };
+  selectedRoute: Route;
+  selectedTripType: TripType;
+};
+
 export enum BOARD_KOR {
   REPORT = "신고",
   COMPLAIN = "불만사항",
@@ -58,6 +85,7 @@ export enum BOARD_ENG {
 }
 
 export interface WebState {
+  selectedBoard: string;
   noticeData: NoticeData[];
   noticeDetailData: NoticeDetailData | null;
   boardData: BoardData[];
@@ -65,31 +93,53 @@ export interface WebState {
   Token: string | null;
   selectedNoticeId: number | null;
   selectedPostId: number | null;
-  isUserIn:boolean;
+  isUserIn: boolean;
+  loginData: LoginData | null;
+  tripData: RouteTripPlace;
+  selectedRecommendInfo: SelectInfo | null;
 }
 
 const initialState: WebState = {
+  selectedBoard: "공지사항",
   noticeData: [],
   noticeDetailData: null,
   boardData: [],
   boardDetailData: null,
-  Token:
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJzdHJpbmciLCJpYXQiOjE2OTE3MzIwNTcsImV4cCI6MTY5MTczNTY1N30.1tAqLkg3IDExjUP6fecr5Gm-DD-ukwlFJWtYSCbbidc",
+  Token: "",
   selectedNoticeId: null,
   selectedPostId: null,
-  isUserIn :false,
-
-}
+  isUserIn: false,
+  loginData: {
+    id: null,
+    role: null,
+  },
+  tripData: {},
+  selectedRecommendInfo : null,
+};
 
 const webSlice = createSlice({
   name: "web",
   initialState,
   reducers: {
-    setIsUserIn(state){
-      state.isUserIn = !state.isUserIn
+    setIsUserIn(state, action) {
+      state.isUserIn = action.payload;
     },
     setToken(state, action) {
       state.Token = action.payload;
+    },
+    setLoginUser(state, action) {
+      state.loginData = action.payload.loginData;
+    },
+    setLogoutUser(state) {
+      state.loginData = {
+        id: null,
+        role: null,
+      };
+      state.Token = null;
+      state.isUserIn = false;
+    },
+    changeSelectedBoard(state, action) {
+      state.selectedBoard = action.payload;
     },
     changeSelectedNoticeId(state, action) {
       state.selectedNoticeId = action.payload;
@@ -127,11 +177,18 @@ const webSlice = createSlice({
         console.log("delete one");
       }
     },
+    saveTripData(state, action) {
+      state.tripData = action.payload;
+    },
+    saveRecommendInfo(state, action) {
+      state.selectedRecommendInfo = action.payload;
+    },
   },
 });
 
 export const {
   setIsUserIn,
+  changeSelectedBoard,
   changeSelectedNoticeId,
   changeSelectedPostId,
   saveBoardData,
@@ -141,6 +198,10 @@ export const {
   deleteOneNotice,
   deleteOneBoard,
   setToken,
+  setLoginUser,
+  setLogoutUser,
+  saveTripData,
+  saveRecommendInfo,
 } = webSlice.actions;
 
 export default webSlice;

@@ -4,19 +4,10 @@ import Paper from "@mui/material/Paper";
 import { Pagination } from "@mui/material";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
-import {
-  Autocomplete,
-  Button,
-  FormControl,
-  FormLabel,
-  IconButton,
-  Input,
-  Stack,
-  dividerClasses,
-} from "@mui/joy";
+import { Button, IconButton, Input, Stack } from "@mui/joy";
 import SearchIcon from "@mui/icons-material/Search";
 import "./WebBoard.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BoardTable } from "@/components/web/BoardTable";
 import { NoticeTable } from "@/components/web/NoticeTable";
 import { boardAPI, noticeAPI } from "@/store/api/api";
@@ -25,21 +16,40 @@ import {
   BoardData,
   NoticeData,
   WebState,
+  changeSelectedBoard,
   saveBoardData,
   saveNoticeData,
 } from "@/store/slice/web-slice";
 import { WebBoardDetailPage } from "../WebBoardDetailPage";
 import { useDispatch, useSelector } from "react-redux";
 import { WebNoticeDetailPage } from "../WebNoticeDetailPage";
-import { fillZero } from "@/components/kiosk/KioskHeader";
 
 export const POSTPERPAGE: number = 10;
 
-export const prettyTime = (createTime) => {
+export const prettyTime = (createTime, sec = false) => {
   if (createTime) {
-    return `${createTime[0]}-${fillZero(createTime[1])}-${fillZero(
-      createTime[2]
-    )} ${fillZero(createTime[3])}:${fillZero(createTime[4])}`;
+    const dateTime = new Date(createTime);
+
+    const options: {
+      year: string;
+      month: string;
+      day: string;
+      hour: string;
+      minute: string;
+      second?: string;
+    } = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    if (sec) {
+      options["second"] = "2-digit";
+    }
+    // @ts-ignore
+    const formattedDateTime = dateTime.toLocaleString("ko-KR", options);
+    return formattedDateTime;
   } else {
     return " ";
   }
@@ -60,7 +70,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   const [noticeData, setNoticeData] = useState<NoticeData[]>([]);
   const [boardData, setBoardData] = useState<BoardData[]>([]);
 
-  const options: string[] = [
+  const categorys: string[] = [
     "전체게시판",
     "건의사항",
     "칭찬합니다",
@@ -76,8 +86,6 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
 
   const boards: string[] = ["공지사항", "게시판"];
 
-  const [currentBoard, setCurrentBoard] = useState(BOARD.NOTICE);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [currentFreePage, setFreeCurrentPage] = useState(1);
 
@@ -90,7 +98,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
   const [selectedPostId, setSelectedPostId] = useState(data.selectedPostId);
 
   const handleCurrentBoard = (value) => {
-    setCurrentBoard(value);
+    dispatch(changeSelectedBoard(value));
   };
 
   const paginateBoard = (arr: BoardData[], pageSize: number) => {
@@ -139,7 +147,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
       .get(`${CATEGORY[searchCategory]}/${searchKeyword}`)
       .then((response) => {
         console.log(response.data);
-        setBoardData(response.data.data.content);
+        setBoardData(response.data.data.content.reverse());
       });
   };
 
@@ -150,19 +158,24 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
     }
     boardAPI.get(url).then((response) => {
       console.log(response.data);
-      setBoardData(response.data.data.content);
+      setBoardData(response.data.data.content.reverse());
     });
   };
 
   useEffect(() => {
     if (!noticeData?.length) {
-      noticeAPI.get("list", {params:{
-        page:0, size:1000
-      }}).then((response) => {
-        console.log(response.data);
-        // setNoticeData(response.data.content);
-        dispatch(saveNoticeData(response.data.content));
-      });
+      noticeAPI
+        .get("list", {
+          params: {
+            page: 0,
+            size: 1000,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          // setNoticeData(response.data.content);
+          dispatch(saveNoticeData(response.data.content.reverse()));
+        });
     }
   }, []);
 
@@ -178,7 +191,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         .then((response) => {
           console.log(response.data.data.content);
           // setBoardData(response.data.data.content);
-          dispatch(saveBoardData(response.data.data.content));
+          dispatch(saveBoardData(response.data.data.content.reverse()));
         });
     }
   }, []);
@@ -214,8 +227,9 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         {boards.map((name, index) => {
           return (
             <div
+              style={{ cursor: "pointer" }}
               className={`board-header-item ${
-                currentBoard == name ? "board-selected" : null
+                data.selectedBoard == name ? "board-selected" : null
               }`}
               key={index}
               onClick={() => handleCurrentBoard(name)}
@@ -226,7 +240,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
         })}
         <div className="board-header-space"> </div>
       </div>
-      {currentBoard == "공지사항" ? (
+      {data.selectedBoard == "공지사항" ? (
         selectedNoticeId ? (
           <WebNoticeDetailPage postId={selectedNoticeId}></WebNoticeDetailPage>
         ) : (
@@ -239,7 +253,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
       )}
       {/* 공지사항 */}
       <div>
-        {currentBoard == "공지사항" ? (
+        {data.selectedBoard == "공지사항" ? (
           <div>
             <div className="board-select-space"></div>
             <NoticeTable pages={pages} currentPage={currentPage}></NoticeTable>
@@ -266,7 +280,7 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
               placeholder="전체게시판"
               size="md"
             >
-              {options.map((op, index) => {
+              {categorys.map((op, index) => {
                 return (
                   <Option
                     value={op}
@@ -325,16 +339,19 @@ export const WebBoardPage: FC<WebBoardPageProps> = (props) => {
             </form>
           </div>
         )}
-
-        <div className="board-notice-button">
-          <Button
-            onClick={() => {
-              navigate("post");
-            }}
-          >
-            글 작성
-          </Button>
-        </div>
+        {data.isUserIn ? (
+          <div className="board-notice-button">
+            <Button
+              onClick={() => {
+                navigate("post");
+              }}
+            >
+              글 작성
+            </Button>
+          </div>
+        ) : (
+          " "
+        )}
       </div>
     </div>
   );

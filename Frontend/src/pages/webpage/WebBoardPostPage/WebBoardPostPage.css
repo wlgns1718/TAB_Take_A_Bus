@@ -1,16 +1,16 @@
-.quill .ql-container{
+.quill .ql-container {
   min-width: 50%;
   /* max-width: 800px; */
   min-height: 400px;
   max-height: 800px;
 }
 
-.tb_data.tb_write{
+.tb_data.tb_write {
   max-width: 100%;
   min-width: 100%;
 }
 
-.post-bottom-buttons{
+.post-bottom-buttons {
   display: flex;
   justify-content: center;
   gap: 50px;

@@ -1,17 +1,17 @@
-.weather-box{
+.weather-box {
   flex: 4;
   height: 450px;
 }
 
-.weather-box-detail{
+.weather-box-detail {
   display: flex;
 }
-.weather-icon{
+.weather-icon {
   flex: 4;
   /* width: 500px; */
 }
 
-.weather-textbox{
+.weather-textbox {
   flex: 5;
   display: flex;
   flex-direction: column;

@@ -17,18 +17,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { arduinoAPI, busAPI } from "../../../store/api/api";
 import { useQuery, QueryClient } from "react-query";
 import { AxiosError } from "axios";
+import { RootState } from "@/store/store";
 
 export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
-  const [comingSoonBusList, setComingSoonBusList] = useState<BusStoreData[]>([]);
+  const [comingSoonBusList, setComingSoonBusList] = useState<BusStoreData[]>(
+    []
+  );
   const [oldData, setOldData] = useState<BusStoreData[]>([]);
 
   const dispatch = useDispatch();
 
-  const data: KioskState = useSelector(
-    (state: { kiosk: KioskState; web: object }) => {
-      return state.kiosk;
-    }
-  );
+  const data: KioskState = useSelector((state: RootState) => {
+    return state.kiosk;
+  });
 
   const [pages, setPage] = useState<BusStoreData[][]>([]);
 
@@ -46,13 +47,12 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
     "fetchBus",
     () => {
       busAPI
-        .get(`/${data.cityCode}/${data.busStopId}/api`, {
-          timeout: 10000,
-        })
+        .get(`/${data.cityCode}/${data.busStopId}/api`)
         .then((response) => {
           if (response.data.code == "500") {
             console.log("500 Error: " + response.data.msg);
-          } else if (response.data.code == "200") {
+          } else {
+            console.log(response.data);
             // 도착예정시간 순으로 정렬해서 저장.
             const addData: BusStoreData[] = response.data.data.map((el) => {
               el.isStopHere = false;
@@ -62,10 +62,18 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
               return el;
             });
 
-            const stateBusData: BusStoreData[] = addData.map(
+            const filteredData: BusStoreData[] = addData.filter((el) => {
+              return el.vehicleNo;
+            });
+
+            const postBusList = [];
+            const stateBusData: BusStoreData[] = filteredData.map(
               (newdata: BusStoreData) => {
                 const recordedItem = data.busData.find((old: BusStoreData) => {
-                  return old.busNo == newdata.busNo;
+                  return (
+                    old.busNo == newdata.busNo &&
+                    old.vehicleNo == newdata.vehicleNo
+                  );
                 });
                 if (recordedItem) {
                   if (recordedItem.isStopHere == true) {
@@ -89,27 +97,12 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
                   if (recordedItem.isPosted == true) {
                     newdata = { ...newdata, isPosted: recordedItem.isPosted };
                   }
-                  if (recordedItem.isPosted == false) {
-                    if (newdata.remainingStops == 1) {
-                      arduinoAPI
-                        .post(
-                          `regist`,
-                          {
-                            busStation: `${data.busStopId}`,
-                            count: `${recordedItem.passengerNumber}`,
-                            vehicleNo: `${recordedItem.vehicleNo}`,
-                            routeNo: `${recordedItem.routeId}`,
-                            vulnerable: `${recordedItem.isVulnerable}`,
-                          }
-                        )
-                        .then((response) => {
-                          console.log(response.data);
-                          newdata = { ...newdata, isPosted: true };
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    }
+                  if (
+                    recordedItem.isPosted == false &&
+                    newdata.remainingStops == 1
+                  ) {
+                    postBusList.push({...newdata});
+                    newdata = { ...newdata, isPosted: true };
                   }
                   return newdata;
                 } else {
@@ -118,27 +111,67 @@ export const BusInfomationPage: FC<BusInfomationPageProps> = (props) => {
               }
             );
 
-            dispatch(
-              updateBusData(
-                stateBusData.sort((a: BusStoreData, b: BusStoreData) => {
-                  return a.eta - b.eta;
+            console.log("postList", postBusList);
+
+            postBusList.map((el) => {
+              console.log(el.vehicleNo, ": 탑승 정보 보냄");
+              
+              arduinoAPI
+                .post("regist", {
+                  count: el.passengerNumber,
+                  routeNo: el.routeId,
+                  stationId: el.stationName,
+                  vehicleNo: el.vehicleNo,
+                  vulnerable: el.isVulnerable,
                 })
-              )
-            );
+                .then((response) => {
+                  console.log(response);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }),
+              dispatch(
+                updateBusData(
+                  stateBusData.sort((a: BusStoreData, b: BusStoreData) => {
+                    return a.eta - b.eta;
+                  })
+                )
+              );
           }
         })
         .catch((error) => {
-          const err = error as AxiosError;
-          console.error("Error fetching buslist data:");
-          throw err;
+          console.log(error);
         });
     },
-    { staleTime: 10000, refetchInterval: 10000 }
+    { staleTime: 21000, refetchInterval: 21000 }
   );
 
-  useEffect(() => {
-  //  console.log(data.busData)
-  }, [fetchBusData]);
+  // useEffect(() => {
+  //   const locked = data.busData.filter((el) => {
+  //     el.isPosted == true;
+  //   });
+
+  //   locked.map(
+  //     (el) => {
+  //       arduinoAPI
+  //         .post("regist", {
+  //           count: el.passengerNumber,
+  //           routeNo: el.routeId,
+  //           stationId: el.stationName,
+  //           vehicleNo: el.vehicleNo,
+  //           vulnerable: el.isVulnerable,
+  //         })
+  //         .then((response) => {
+  //           console.log(response);
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     },
+  //     [fetchBusData]
+  //   );
+  // });
 
   const paginateArray = (arr: BusStoreData[], pageSize: number) => {
     const pageCount = Math.ceil(arr.length / pageSize);

@@ -1,27 +1,33 @@
-
 .bus-item-container {
   width: 2000px;
   height: 340px;
   padding: 30px;
-  margin: 20px 0 40px 0 ;
-  background-color: #E4E1E1;
+  margin: 20px 0 40px 0;
+  background-color: #e4e1e1;
   border-radius: 30px;
   box-shadow: 0px 6px 11px rgb(122, 119, 119);
 }
 
+.bus-stop-on {
+  background-color: #ff8282;
+}
+.bus-stop-off {
+  background-color: #e4e1e1;
+}
+
 /* 버스 정보 상단부 */
-.bus-item-top{
+.bus-item-top {
   display: flex;
   justify-content: space-around;
 }
 
-.bus-detail{
+.bus-detail {
   width: 500px;
   height: 250px;
   display: flex;
 }
 
-.bus-eta{
+.bus-eta {
   width: 250px;
   height: 250px;
   display: flex;
@@ -30,43 +36,43 @@
   font-weight: bold;
 }
 
-.bus-eta-title{
+.bus-eta-title {
   font-size: 35px;
   flex: 1;
 }
 
-.bus-eta-eta{
+.bus-eta-eta {
   font-size: 30px;
   flex: 1;
   /* position: absolute; */
-} 
+}
 
-.bus-eta-text{
+.bus-eta-text {
   text-align: right;
   font-size: 40px;
   display: flex;
   flex: 5;
-} 
+}
 
-.bus-eta-num{
+.bus-eta-num {
   text-align: right;
   font-size: 60px;
   flex: 5;
 }
-.bus-eta-min{
+.bus-eta-min {
   text-align: right;
   font-size: 40px;
   line-height: 100px;
   text-align: center;
   flex: 3;
 }
-.bus-eta-min-eng{
+.bus-eta-min-eng {
   font-size: 30px;
   line-height: 0px;
   text-align: center;
 }
 
-.tap-button{
+.tap-button {
   font-weight: 600;
   display: flex;
   justify-content: center;
@@ -79,34 +85,33 @@
   box-shadow: 5px 6px 16px rgba(36, 35, 35, 0.5); /* 그림자 효과 추가 */
 }
 
-.tap-on{
+.tap-on {
   background-color: #ff0000;
- 
 }
 
-.tap-off{
+.tap-off {
   background-color: #f30b0b;
 }
 
-.bg-white{
+.bg-white {
   background-color: white;
 }
 
-.round-10{
+.round-10 {
   border-radius: 10px;
 }
-.guide-message{
+.guide-message {
   margin-top: 20px;
   font-size: 50px;
   text-align: center;
 }
 
-.text-center{
+.text-center {
   text-align: center;
 }
 
 /* 버스 맵 */
-.bus-routeinfo{
+.bus-routeinfo {
   position: relative;
   width: 850px;
   height: 250px;
@@ -118,13 +123,13 @@
   justify-content: space-between;
 }
 /* 가로선 */
-.bus-map-line{
+.bus-map-line {
   background-color: #3498db;
   width: 600px;
   height: 20px;
   left: 120px;
   position: absolute;
-  content: '';
+  content: "";
 }
 /* 정류장 circle */
 .station-circle {
@@ -142,7 +147,6 @@
   position: relative;
   /* box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); */
   border: 4px solid white;
-  
 }
 
 .current-station {
@@ -166,10 +170,10 @@
 
 @keyframes marquee {
   0% {
-      left: 20%;
+    left: 20%;
   }
   100% {
-      left: -60%;
+    left: -60%;
   }
 }
 
@@ -194,12 +198,15 @@
   margin-left: 15px;
 }
 
-@keyframes blink-effect { 50% { opacity: 0; } } 
-.stopbusText{
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
+}
+.stopbusText {
   font-size: 55px;
-  font-family:'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   font-weight: bold;
-  animation: blink-effect 1.5s step-end infinite; 
+  animation: blink-effect 1.5s step-end infinite;
   color: rgb(255, 255, 255);
 }
-

@@ -13,6 +13,19 @@
     font-size: 130px;
     width: 1450px;
 }
+.select-city{
+    display: flex;
+    justify-content: center;
+}
+
+.options-city{
+    width: 1300px;
+    height: 100px;
+}
+.MuiOption-root.options-city.css-fb4yl8-JoyOption-root{
+    width: 1300px;
+    height: 150px;
+}
 
 #outlined-basic-label{
     margin: 10px;

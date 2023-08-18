@@ -1,5 +1,50 @@
-.mobile-body{
-  max-width: 360px;
-  min-height: 740px;
-  background-color: #208EF4;
+.mobile-body {
+  width: 1920px;
+  height: 1080px;
+  max-width: 1920px;
+  min-height: 1080px;
+  margin : 0;
+  position: relative;
+  background-color: #208ef4;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#clock{
+  color : white;
+}
+.content-header{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.white{
+  color:white;
+}
+.yellow{
+  color:#ffd923;
+}
+.content{
+  height: 100%;
+}
+.content-body{
+    display: flex;
+    flex-direction: column;
+    height: 63%;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes blink {
+  0%, 100% {
+    color: #000000; /* Starting and ending color */
+  }
+  50% {
+    color: rgb(255, 255, 255); /* Color during the blink */
+  }
+}
+
+.blinking-text {
+  animation: blink 2s infinite; /* Animation duration and infinite loop */
 }
