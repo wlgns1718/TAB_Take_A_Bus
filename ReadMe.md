@@ -115,11 +115,15 @@ $ npm run dev
 
 ## 화면 구성 📺
 
-|                                                   정류장 키오스크 페이지                                                   |                                        라즈베리파이 페이지(버스 기사님이 보는 화면)                                        |
+|                                                   정류장 키오스크 페이지                                                   |                                                노선 별 관광/맛집 추천 기능                                                 |
 | :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
-| <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/95ee9157-8864-476b-8436-b1ec62fea830"/> |
+| <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/934dc44e-7dce-4323-b47a-e0365bf30b1a"/> |
 |                                                      게시판,공지사항                                                       |                                                    수요조사 결과 페이지                                                    |
-| <img width="800" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/6546eb80-a6a3-4cc8-85ed-934fef478c49"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
+| <img width="800" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/0ab9090b-c720-455d-a8f0-3741ecfd818a"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
+
+## 시연 영상 📺
+
+[![TAB](http://img.youtube.com/vi/Uo2cmRsgWEA/0.jpg)](https://youtu.be/Uo2cmRsgWEA)
 
 ---
 
