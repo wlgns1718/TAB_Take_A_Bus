@@ -119,7 +119,7 @@ $ npm run dev
 | :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
 | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/95ee9157-8864-476b-8436-b1ec62fea830"/> |
 |                                                      게시판,공지사항                                                       |                                                    수요조사 결과 페이지                                                    |
-| <img width="800" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/11ec9586-2453-40df-9675-3943db85c09d"/> | <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
+| <img width="800" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/af914a30-074c-4dcd-b656-3699b331b3dc"/> | <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
 
 ---
 
