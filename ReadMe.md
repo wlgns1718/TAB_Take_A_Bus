@@ -117,9 +117,9 @@ $ npm run dev
 
 |                                                   정류장 키오스크 페이지                                                   |                                        라즈베리파이 페이지(버스 기사님이 보는 화면)                                        |
 | :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
-| <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/95ee9157-8864-476b-8436-b1ec62fea830"/> |
+| <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/95ee9157-8864-476b-8436-b1ec62fea830"/> |
 |                                                      게시판,공지사항                                                       |                                                    수요조사 결과 페이지                                                    |
-| <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/ad60e89e-8c3c-49ef-b599-e3b6328bf669"/> | <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
+| <img width="800" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/11ec9586-2453-40df-9675-3943db85c09d"/> | <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
 
 ---
 
