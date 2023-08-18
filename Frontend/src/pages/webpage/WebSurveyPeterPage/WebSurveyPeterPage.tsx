@@ -5,6 +5,7 @@ import webSlice from "@/store/slice/web-slice";;
 import { WebState } from "@/store/slice/web-slice";
 import { KioskState } from "@/store/slice/kiosk-slice";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -18,7 +19,7 @@ function WebSurveyPerterPage() {
   const [dest, setDest] = useState<LatLng>({ lat: 0, lng: 0 });
   const [reset,setReset] = useState<boolean>(false);
 
-
+  const navigate = useNavigate()
   const webdata: WebState = useSelector(
     (state: { kiosk: KioskState; web: WebState }) => {
       return state.web;
@@ -164,37 +165,40 @@ function WebSurveyPerterPage() {
     <button
         className="peterSurveyBtn"
         onClick={() => {
-          axios
-            .post(
-              "https://i9d111.p.ssafy.io/tab/survey",
-              {
-                destinationLatitude: dest.lat,
-                destinationLongtitude: dest.lng,
-                startLatitude: start.lat,
-                startLongtitude: start.lng,
-              },
-              {
-                headers: {
-                  Authorization:
-                    `Bearer ${webdata.Token}`,
+          if (!webdata.isUserIn){
+            alert("로그인이 필요한 기능입니다.")
+            navigate("../login")
+            return
+          }
+            axios
+              .post(
+                "https://i9d111.p.ssafy.io/tab/survey",
+                {
+                  destinationLatitude: dest.lat,
+                  destinationLongtitude: dest.lng,
+                  startLatitude: start.lat,
+                  startLongtitude: start.lng,
                 },
-              }
-            )
-            .then((res) => {
-              alert("설문조사 성공!");
-              console.log(res);
-            })
-            .catch((err) => {
-              alert("설문조사 실패ㅜㅜ");
-              console.log(err);
-            });
+                {
+                  headers: {
+                    Authorization: `Bearer ${webdata.Token}`,
+                  },
+                }
+              )
+              .then((res) => {
+                alert("설문조사 성공!");
+                console.log(res);
+              })
+              .catch((err) => {
+                alert("설문조사 실패ㅜㅜ 다시 시도해 주세요");
+                console.log(err);
+              });
         }}
       >
         설문제출
       </button>
 
       <button 
-      
       className="resetBtn"
       onClick={()=>{
         setReset(true)
