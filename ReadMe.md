@@ -88,7 +88,7 @@ $ npm run dev
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
 ![IntelliJ](https://img.shields.io/badge/IntelliJ-181717?style=for-the-badge&logo=intellijidea&logoColor=#000000)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
-![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
+![gitlab](https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=BLACK)
 
 ### CI/CD
 
@@ -115,11 +115,11 @@ $ npm run dev
 
 ## 화면 구성 📺
 
-|                                                          메인 페이지                                                           |                                                          소개 페이지                                                           |
-| :----------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: |
-| <img width="329" src="https://user-images.githubusercontent.com/50205887/208036155-a57900f7-c68a-470d-923c-ff3c296ea635.png"/> | <img width="329" src="https://user-images.githubusercontent.com/50205887/208036645-a76cf400-85bc-4fa2-af72-86d2abf61366.png"/> |
-|                                                        강좌 소개 페이지                                                        |                                                      수요조사 결과 페이지                                                      |
-| <img width="329" src="https://user-images.githubusercontent.com/50205887/208038737-2b32b7d2-25f4-4949-baf5-83b5c02915a3.png"/> |   <img width="329" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/>   |
+|                                                   정류장 키오스크 페이지                                                   |                                        라즈베리파이 페이지(버스 기사님이 보는 화면)                                        |
+| :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
+| <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/95ee9157-8864-476b-8436-b1ec62fea830"/> |
+|                                                      게시판,공지사항                                                       |                                                    수요조사 결과 페이지                                                    |
+| <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/ad60e89e-8c3c-49ef-b599-e3b6328bf669"/> | <img width="500" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
 
 ---
 
