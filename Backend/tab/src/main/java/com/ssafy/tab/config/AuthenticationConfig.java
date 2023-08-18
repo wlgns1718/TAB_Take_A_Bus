@@ -53,7 +53,6 @@ public class AuthenticationConfig {
                 .and()
                 .addFilterBefore(new JwtFilter(userService,tokenBlacklistService,secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 }
 

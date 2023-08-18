@@ -36,27 +36,26 @@ public class ArduinoController {
 
         try{
             Optional<Bus> info = arduinoService.getInfo(vehicleNo);
-            System.out.println(info);
             if(!info.isPresent()){
                 resultMap.put("code","401");
                 resultMap.put("msg","버스 정보가 없습니다.");
              }else{
                 //만약 해당 버스 정보가 있다면 조회 후 삭제 하기
                 Bus busEntity = info.get();
-
                 BusDto busDto = BusDto.toEntity(busEntity);
-                System.out.println("daslkdjalskdlksa"+busDto);
                 resultMap.put("code","200");
                 resultMap.put("msg","버스 정보가 있습니다.");
                 resultMap.put("data",busDto);
                 //조회 후 삭제 기능 추가
                 //Bus 데이터 베이스에 해당 데이터 삭제
-//                arduinoService.deleteInfo(busDto.getId());
+                arduinoService.deleteInfo(busDto.getId());
              }
         }catch (Exception e){
             e.printStackTrace();
+            String error = e.getMessage();
             resultMap.put("code", "500");
             resultMap.put("msg","정보 불러오기 실패!!");
+            resultMap.put("error", error);
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
@@ -65,24 +64,21 @@ public class ArduinoController {
     @PostMapping("/regist")
     public ResponseEntity<Map<String, Object>> registInfo(@RequestBody @ApiParam(value = "버스 탑승정보를 위한 데이터", required = true)BusDataDto busDataDto){
         Map<String,Object> resultMap = new HashMap<>();
-        //bus정보 등록하기
-        //만약 count가 1이상이라면 Bus 테이블에 INSERT
-        System.out.println("컨트롤러단에서 확인해보겠습니다"+busDataDto);
         try{
-            //==================================
-            arduinoService.createBus(busDataDto);
-            //==================================
-
-            resultMap.put("code","200");
-            resultMap.put("msg","버스 정보 등록 완료!");
-
+            if(busDataDto.getCount() >= 1){
+                arduinoService.createBus(busDataDto);
+                resultMap.put("code","200");
+                resultMap.put("msg","버스 정보 등록 완료!");
+            }
+            else{
+                resultMap.put("code","200");
+                resultMap.put("msg","탑승 인원이 0명이라 등록되지 않습니다.");
+            }
         }catch (Exception e){
             e.printStackTrace();
             resultMap.put("code","500");
             resultMap.put("msg","버스 정보 등록 실패!");
-
         }
-
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
