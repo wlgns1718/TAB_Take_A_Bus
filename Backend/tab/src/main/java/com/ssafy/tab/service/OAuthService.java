@@ -134,6 +134,7 @@ public class OAuthService {
                 User user = userService.findByUserId(id);
                 String accessToken = JwtUtil.createToken(id, secretKey, accessExpiredMs);
                 String refreshToken = JwtUtil.createToken(id, secretKey, refreshExpiredMs);
+                userInfo.put("id", id);
                 userInfo.put("accessToken", accessToken);
                 userInfo.put("refreshToken", refreshToken);
                 user.setRefreshToken(refreshToken);
