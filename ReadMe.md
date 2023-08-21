@@ -7,7 +7,7 @@
 
 # Take A Bus (TAB)
 
-> **삼성청년SW아카데미(SSAFY)** <br/> **개발기간: 2023.07.04 ~ 2023.8.18**
+> **개발기간: 2023.07.04 ~ 2023.8.18**
 
 ## 배포 주소
 
@@ -18,13 +18,11 @@
 
 |                                                            신지훈                                                             |                                                            성연석                                                             |                                                            송민철                                                            |
 | :---------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: |
-| <img width="160px" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/c360d31a-8cb9-4fce-b222-36a0fecdd823" /> | <img width="160px" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/3979382c-5861-47e6-911f-acb04f291d08" /> | <img width="160px" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/80c14b21-1c83-4cd9-a468-16a1b788e42e"/> |
 |                                         [@wlgns1718](https://lab.ssafy.com/wlgns1718)                                         |                                          [@abcd9351](https://lab.ssafy.com/abcd9351)                                          |                                      [@thdalscjf05](https://lab.ssafy.com/thdalscjf05)                                       |
 |                                                            BackEnd                                                            |                                                            BackEnd                                                            |                                                           BackEnd                                                            |
 
 |                                                            신제형                                                             |                                                            이정훈                                                             |
 | :---------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------: |
-| <img width="160px" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/92b88fb9-cedb-44d5-b927-3790a0bad669" /> | <img width="160px" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/fe025bdc-e1b6-494b-a8c3-320facb3a783" /> |
 |                                        [@tlswpgud22](https://lab.ssafy.com/tlswpgud22)                                        |                                        [@wjdgns0631](https://lab.ssafy.com/wjdgns0631)                                        |
 |                                                           FrontEnd                                                            |                                                           FrontEnd                                                            |
 
