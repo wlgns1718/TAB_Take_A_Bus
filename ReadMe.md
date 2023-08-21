@@ -116,8 +116,8 @@ $ npm run dev
 ## 화면 구성 📺
 
 |                                                       로그인 페이지                                                        |                                                      회원가입 페이지                                                       |
-| :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: | --- |
-| <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/4043b9e4-09b3-4d9d-b6a9-58037efee0ed"/> | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/5b86e309-4ace-479b-a8ec-49767e713643"/> |
+| :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
+ <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/4043b9e4-09b3-4d9d-b6a9-58037efee0ed"/> | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/5b86e309-4ace-479b-a8ec-49767e713643"/> |
 |                                                   정류장 키오스크 페이지                                                   |                                                노선 별 관광/맛집 추천 기능                                                 |     |
 | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/934dc44e-7dce-4323-b47a-e0365bf30b1a"/> |
 |                                                           게시판                                                           |                                                          공지사항                                                          |
