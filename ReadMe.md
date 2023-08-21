@@ -115,11 +115,15 @@ $ npm run dev
 
 ## 화면 구성 📺
 
-|                                                   정류장 키오스크 페이지                                                   |                                                노선 별 관광/맛집 추천 기능                                                 |
-| :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
+|                                                       로그인 페이지                                                        |                                                      회원가입 페이지                                                       |
+| :------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: | --- |
+| <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/4043b9e4-09b3-4d9d-b6a9-58037efee0ed"/> | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/5b86e309-4ace-479b-a8ec-49767e713643"/> |
+|                                                   정류장 키오스크 페이지                                                   |                                                노선 별 관광/맛집 추천 기능                                                 |     |
 | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/9d69109f-6ea4-4f3a-9be2-94c467e7668f"/> | <img width="600" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/934dc44e-7dce-4323-b47a-e0365bf30b1a"/> |
-|                                                      게시판,공지사항                                                       |                                                    수요조사 결과 페이지                                                    |
-| <img width="800" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/0ab9090b-c720-455d-a8f0-3741ecfd818a"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
+|                                                           게시판                                                           |                                                          공지사항                                                          |
+| <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/a67769b2-41fa-437d-9dd5-52807ae67dd1"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/78a2d5b7-74b5-40aa-bd90-a579cb7a6b74"/> |
+|                                                     게시물 작성 페이지                                                     |                                                    수요조사 결과 페이지                                                    |
+| <img width="800" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/b020306a-315e-4ff5-ad0f-266305eea7f7"/> | <img width="700" src="https://github.com/mincheolsong/mincheolsong/assets/80660585/66faeb6b-02f6-48a3-94a5-7c6d12e783e9"/> |
 
 ## 시연 영상 📺
 
