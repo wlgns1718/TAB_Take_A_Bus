@@ -127,8 +127,11 @@ $ npm run dev
 
 ## 시연 영상 📺
 
+### 정류장 키오스크 시연
+
 [![TAB](http://img.youtube.com/vi/Uo2cmRsgWEA/0.jpg)](https://youtu.be/Uo2cmRsgWEA)
 
+### 웹 서비스 시연
 [![TAB](http://img.youtube.com/vi/W16VZ3EgW0g/0.jpg)](https://youtu.be/W16VZ3EgW0g)
 
 
