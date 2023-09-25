@@ -1,7 +1,7 @@
 # Take A Bus (TAB)
 
 <div align="center">
-<img width="329" alt="image" src="https://i9d111.p.ssafy.io/TAB_logo.png?url">
+<img width="329" alt="image" src="https://github.com/Yeon-seok/Take_A_Bus/assets/56334468/65d75fca-5ef5-45fe-a325-5059841aabfe">
  
 </div>
 
