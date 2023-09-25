@@ -199,7 +199,7 @@ $ npm run dev
 
 ![image](https://github.com/mincheolsong/mincheolsong/assets/80660585/07e5456e-3cc3-4817-a426-15da6598950c)
 
-##ERD
+## ERD
 ![image](https://github.com/Yeon-seok/Take_A_Bus/assets/56334468/2638361e-6a17-4bb8-a9c7-0a5380506e37)
 
 ## 디렉토리 구조
