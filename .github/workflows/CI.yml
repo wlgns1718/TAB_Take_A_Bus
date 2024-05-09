@@ -19,6 +19,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '1.8'
+
+      - name: Setup MySQL
+        uses: actions/mysql-action@v1
+        with:
+          character set server: 'utf8'
+          mysql database: 'ssafy_web_db'
+          mysql user: 'ssafy'
+          mysql password: 'ssafy'
+
+      
       - name: gradlew 권한 부여
         run: chmod +x ./gradlew
 
