@@ -1,9 +1,10 @@
 name: CI
 
 # main, develop 브랜치에 push시 동작
-on:
-  push:
-    branches: [develop, frontend]
+# on:
+#   push:
+#     branches: [develop, frontend]
+on: workflow_dispatch
 jobs:
   backend:
     name: CI with Gradle
