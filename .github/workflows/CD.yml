@@ -1,9 +1,9 @@
 name: CD
 
-on:
-  pull_request:
-    branches: [master]
-
+# on:
+#   pull_request:
+#     branches: [master]
+on:  workflow_dispatch
 jobs:
 
   backend:
