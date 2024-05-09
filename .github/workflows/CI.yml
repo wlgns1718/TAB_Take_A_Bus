@@ -1,4 +1,4 @@
-name: 배포하기
+name: CI
 
 # main, develop 브랜치에 push시 동작
 on:
