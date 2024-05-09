@@ -3,7 +3,7 @@ name: 배포하기
 # main, develop 브랜치에 push시 동작
 on:
   push:
-    branches: [master, develop, frontend]
+    branches: [develop, frontend]
 jobs:
   backend:
     name: CI with Gradle
