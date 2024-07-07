@@ -44,10 +44,6 @@ public class UserService {
             String dtoName = userUpdateDto.getName();
             String dtoEmail = userUpdateDto.getEmail();
 
-            System.out.println(dtoPw);
-            System.out.println(dtoName);
-            System.out.println(dtoEmail);
-
             if(dtoPw!=null){
                 String findedPw = hashing(dtoPw, user.getSalt());
                 if(!findedPw.equals(user.getUserPw())){

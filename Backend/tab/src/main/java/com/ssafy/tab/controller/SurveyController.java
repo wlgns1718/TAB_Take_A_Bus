@@ -40,23 +40,6 @@ public class SurveyController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
-    //모든 수요조사를 가져와서 google api로 뿌려주기
-//    @ApiOperation(value = "모든 수요조사 가져오기", notes = "등록된 모든 수요조사를 가져와서 구글 API로 뿌려주기.", response = Map.class)
-//    @GetMapping("/all")
-//    public ResponseEntity<Map<String, Object>> selectAllSurvey(Authentication authentication) {
-//        Map<String, Object> resultMap = new HashMap<>();
-//        try{
-//            List<SurveyDto> surveyList = surveyService.selectAllSurvey();
-//            resultMap.put("msg", "모든 수요조사를 성공적으로 가져왔습니다.");
-//            resultMap.put("code", "200");
-//            resultMap.put("data", surveyList);
-//        }catch (Exception e){
-//            resultMap.put("msg", "수요조사를 가져오는데 실패했습니다.");
-//            resultMap.put("code", "500");
-//        }
-//        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-//    }
-
     //수요조사 저장
     @ApiOperation(value = "수요조사 등록", notes = "출발지 경도 위도, 목적지 경도 위도를 설정해 수요조사를 합니다.", response = Map.class)
     @PostMapping("")

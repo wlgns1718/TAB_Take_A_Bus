@@ -63,7 +63,6 @@ public class UserController {
     @ApiOperation(value = "회원가입", notes = "회원가입 진행.", response = Map.class)
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> join(@RequestBody @ApiParam(value = "회원가입에 필요한 정보", required = true) UserJoinDto userJoinDto){
-        //logger.debug("join user : {} ", userDto);
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
@@ -78,7 +77,6 @@ public class UserController {
             resultMap.put("msg","회원가입 실패");
             resultMap.put("code", "401");
         } catch (Exception e) {
-            //logger.error("정보조회 실패 : {}", e);
             resultMap.put("code", "500");
             resultMap.put("msg","회원가입 실패");
         }
@@ -217,33 +215,6 @@ public class UserController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
-
-
-/*
-    @ApiOperation(value = "회원정보 by id", notes = "id를 이용하여 회원 정보를 반환한다.", response = Map.class)
-    @GetMapping("/info/{userId}")
-    public ResponseEntity<Map<String, Object>> getInfo(
-            @PathVariable("userId") @ApiParam(value = "조회할 회원의 아이디.", required = true) Long userId,
-            HttpServletRequest request) {
-
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-
-        try {
-            User user = us.findById(userId).get();
-
-            resultMap.put("userInfo", userDto);
-            resultMap.put("code", "200");
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            logger.error("정보조회 실패 : {}", e);
-            resultMap.put("code", "500");
-            status = HttpStatus.ACCEPTED;
-        }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
-
- */
 
     @ApiOperation(value = "카카오 로그인", notes = "카카오에서 인증 코드를 받아와서 서버에서 처리", response = Map.class)
     @PostMapping(value="/login/kakao")

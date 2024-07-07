@@ -65,9 +65,6 @@ public class OAuthService {
             bw.flush();
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-            System.out.println();
-
             if(responseCode != 200){
                 throw new Exception();
             }
@@ -111,7 +108,6 @@ public class OAuthService {
             conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -145,18 +141,13 @@ public class OAuthService {
                 //이메일은 가입한 사람이 동의해야 얻어 올 수 있음.
                 User joinUser = new User(id, nickname, email, USER);
                 if (!hasEmail) {
-                    System.out.println(4);
+
                     email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
                     joinUser.setEmail(email);
-                    System.out.println(email);
                     userService.joinUserKakao(joinUser);
-                    System.out.println(5);
                 } else {
-                    System.out.println(6);
                     userService.joinUserKakao(joinUser);
-                    System.out.println(7);
                 }
-                System.out.println(8);
                 userInfo.put("msg", "새로운 회원으로 가입 되었습니다!");
                 String accessToken = JwtUtil.createToken(id, secretKey, accessExpiredMs);
                 String refreshToken = JwtUtil.createToken(id, secretKey, refreshExpiredMs);

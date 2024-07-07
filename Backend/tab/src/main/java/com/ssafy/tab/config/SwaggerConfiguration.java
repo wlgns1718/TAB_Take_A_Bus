@@ -47,33 +47,6 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 		return new ApiInfoBuilder().title(title).description(descript)
 				.licenseUrl("psg19lee@gmail.com").version("1.0").build();
 	}
-
-	/*
-
-	//  Swagger에 Authorization 설정
-	private static final String REFERENCE="Authorization 헤더 값";
-	@Bean
-	public Docket api(){
-		return new Docket(DocumentationType.SWAGGER_2)
-				.select()
-				.apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
-				.paths(PathSelectors.any())
-				.build()
-				.securityContexts(Arrays.asList(securityContext()))
-	}
-
-	private SecurityContext securityContext(){
-		return springfox.documentation.spi.service.contexts.SecurityContext.builder().securityReferences(defaultAuth())
-				.operationSelector
-	}
-
-	private List<SecurityReference> defaultAuth() {
-		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-		authorizationScopes[0] = new AuthorizationScope("global", "accessEverything");
-		return Arrays.asList(new SecurityReference(REFERENCE, authorizationScopes));
-	}
-	*/
-
 	// API마다 구분짓기 위한 설정.
 	@Bean
 	public Docket allApi() {
@@ -105,15 +78,10 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 	public Docket ArduinoApi(){ return getDocket("아두이노" , Predicates.or(PathSelectors.regex("/tab/arduino.*")));}
 
 	public Docket getDocket(String groupName, Predicate<String> predicate) {
-//		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
-//		responseMessages.add(new ResponseMessageBuilder().code(200).message("OK !!!").build());
-//		responseMessages.add(new ResponseMessageBuilder().code(500).message("서버 문제 발생 !!!").responseModel(new ModelRef("Error")).build());
-//		responseMessages.add(new ResponseMessageBuilder().code(404).message("페이지를 찾을 수 없습니다 !!!").build());
+
 		return new Docket(DocumentationType.SWAGGER_2).groupName(groupName).apiInfo(apiInfo()).select()
 				.apis(RequestHandlerSelectors.basePackage("com.ssafy")).paths(predicate)
 				.apis(RequestHandlerSelectors.any()).build();
-//				.useDefaultResponseMessages(false)
-//				.globalResponseMessage(RequestMethod.GET,responseMessages);
 	}
 
 	// swagger ui 설정.

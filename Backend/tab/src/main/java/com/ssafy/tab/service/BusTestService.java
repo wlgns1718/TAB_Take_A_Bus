@@ -326,7 +326,7 @@ public class BusTestService {
                 else{
                     //두 거리 계산
                     double dist = distance(gpsy,gpsx,temp_gpsy,temp_gpsx);
-                    //System.out.println("두 지점 사이의 거리는 : " + dist+"Km");
+
                     if(dist > 1){
                         gpsy = temp_gpsy;
                         gpsx = temp_gpsx;

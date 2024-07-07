@@ -32,7 +32,7 @@ public class NoticeService {
     @Transactional(readOnly = true) // 공지사항 상세 조회
     public NoticeResponseDto findById(Long id){
         Optional<Notice> notice = noticeRepository.findById(id);
-        System.out.println(notice.get());
+
         if(notice.isPresent()){ // 결과가 있으면 return
             Notice n = notice.get();
             return new NoticeResponseDto(n.getId(),n.getUser().getName(),n.getTitle(),n.getContent(),n.getCreateTime());

@@ -25,18 +25,6 @@ public class CommentResponseDto {
     String content;
     LocalDateTime createTime;
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setBoardId(Long boardId) {
-        this.boardId = boardId;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
     public static CommentResponseDto toDto(Comment comment) {
         return CommentResponseDto.builder()
                 .id(comment.getId())

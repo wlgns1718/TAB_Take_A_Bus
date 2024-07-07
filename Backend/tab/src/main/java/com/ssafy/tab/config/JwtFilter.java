@@ -50,12 +50,6 @@ public class JwtFilter extends OncePerRequestFilter { // 토큰이 있는지 매
         if(authorization==null || !authorization.startsWith("Bearer ")){ // 토큰이 null이거나 Bearer으로 시작하지 않으면
 
             log.error("authorization을 잘못 보냈습니다.");
-//            response.setCharacterEncoding("UTF-8");
-//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//
-//            String errorResponse = "{\"code\" : \"401\", \"msg\":\"accessToken이 없습니다.\"}";
-//            response.getWriter().write(errorResponse);
             filterChain.doFilter(request,response);
             return;
         }

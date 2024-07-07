@@ -68,7 +68,6 @@ public class BusStationController {
         String presentStationName = null;
         try{
             presentStationName = busStationService.presentStationName(stationId);
-            System.out.println(presentStationName);
             resultMap.put("code", "200");
             resultMap.put("msg", "성공적으로 정류장 이름을 불러왔습니다.");
             resultMap.put("presentStationName", presentStationName);

@@ -76,7 +76,6 @@ public class NoticeController {
             // Authentication으로 사용자 정보 가져오기
             String userId = authentication.getName(); // Authentication.getName()으로 토큰에 담긴 정보를 받아올 수 있음
             User user = userService.findByUserId(userId);
-            //System.out.println("authentication.getName() = " + userId);
 
             // MANAGER 인지 체크
             if(user.getRole() == Role.MANAGER){
@@ -147,7 +146,6 @@ public class NoticeController {
             // Authentication으로 사용자 정보 가져오기
             String userId = authentication.getName(); // Authentication.getName()으로 토큰에 담긴 정보를 받아올 수 있음
             User user = userService.findByUserId(userId);
-            //System.out.println("authentication.getName() = " + userId);
 
             // MANAGER 인지 체크
             if(user.getRole() == Role.MANAGER){
